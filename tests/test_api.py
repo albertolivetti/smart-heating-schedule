@@ -17,13 +17,12 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry, async_
 
 from custom_components.smart_heating_schedule.const import (
     CONF_ADMIN_ONLY,
-    CONF_PRESENCE_ENTITY,
+    CONF_AWAY_TEMPERATURE,
     DOMAIN,
 )
 from custom_components.smart_heating_schedule.diagnostics import (
     async_get_config_entry_diagnostics,
 )
-from custom_components.smart_heating_schedule.models import default_room
 
 from .conftest import CLIMATE, setup_integration
 
@@ -32,10 +31,9 @@ TZ = ZoneInfo("Europe/Amsterdam")
 
 @pytest.fixture(autouse=True)
 async def setup(hass: HomeAssistant, freezer, heat_state) -> None:
-    """Fixed time, someone home and a thermostat."""
+    """Fixed time (autumn) and two thermostats."""
     await hass.config.async_set_time_zone("Europe/Amsterdam")
     freezer.move_to(datetime(2026, 10, 26, 12, 0, tzinfo=TZ))
-    hass.states.async_set("zone.home", "1")
     hass.states.async_set(CLIMATE, "heat", heat_state)
     hass.states.async_set("climate.bedroom", "heat", heat_state)
 
@@ -49,12 +47,21 @@ async def test_services(hass: HomeAssistant, config_entry: MockConfigEntry) -> N
             DOMAIN, "get_schedule", {"entity_id": CLIMATE}, blocking=True, return_response=True
         )
 
-    schedule = default_room(CLIMATE, "°C").as_dict()
-    schedule["home"]["days"]["mon"][1]["temperature"] = 21.5
+    autumn = [
+        {
+            "id": "p1",
+            "name": "Tutti i giorni",
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "blocks": [
+                {"start": "00:00", "temperature": 17},
+                {"start": "06:00", "temperature": 21.5},
+            ],
+        }
+    ]
     await hass.services.async_call(
         DOMAIN,
         "set_schedule",
-        {"entity_id": CLIMATE, "home": schedule["home"]},
+        {"entity_id": CLIMATE, "programs": {"autumn": autumn}},
         blocking=True,
     )
     await hass.async_block_till_done()
@@ -64,12 +71,28 @@ async def test_services(hass: HomeAssistant, config_entry: MockConfigEntry) -> N
         DOMAIN, "get_schedule", {"entity_id": CLIMATE}, blocking=True, return_response=True
     )
     assert response["unit"] == "°C"
-    assert response["home"]["days"]["mon"][1]["temperature"] == 21.5
+    assert response["programs"]["autumn"][0]["blocks"][1]["temperature"] == 21.5
+    assert [season["id"] for season in response["seasons"]] == [
+        "winter",
+        "spring",
+        "summer",
+        "autumn",
+    ]
 
-    schedule["home"]["days"]["mon"][0]["start"] = "01:00"
+    autumn[0]["blocks"][0]["start"] = "01:00"
     with pytest.raises(ServiceValidationError):
         await hass.services.async_call(
-            DOMAIN, "set_schedule", {"entity_id": CLIMATE, "home": schedule["home"]}, blocking=True
+            DOMAIN,
+            "set_schedule",
+            {"entity_id": CLIMATE, "programs": {"autumn": autumn}},
+            blocking=True,
+        )
+    with pytest.raises(ServiceValidationError):
+        await hass.services.async_call(
+            DOMAIN,
+            "set_schedule",
+            {"entity_id": CLIMATE, "programs": {"monsoon": []}},
+            blocking=True,
         )
 
     await hass.services.async_call(DOMAIN, "resume_schedule", {"entity_id": CLIMATE}, blocking=True)
@@ -88,7 +111,10 @@ async def test_websocket(
     event = (await client.receive_json())["event"]
     assert event["rooms"] == []
     assert event["unit"] == "°C"
-    assert event["presence"]["profile"] == "home"
+    assert event["away"] is False
+    assert event["away_temperature"] == 15.0
+    assert event["season"] == "autumn"
+    assert len(event["seasons"]) == 4
 
     await client.send_json_auto_id({"type": f"{DOMAIN}/room/add", "entity_id": CLIMATE})
     while "result" not in (msg := await client.receive_json()) and msg.get("type") != "result":
@@ -97,18 +123,27 @@ async def test_websocket(
     await hass.async_block_till_done()
     assert calls[-1].data["temperature"] == 20
 
-    room = default_room(CLIMATE, "°C").as_dict()
-    room["away"]["days"]["sat"] = [{"start": "00:00", "temperature": 12}]
+    winter = [
+        {
+            "id": "w1",
+            "name": "Feriali",
+            "days": ["mon", "tue"],
+            "blocks": [{"start": "00:00", "temperature": 12}],
+        }
+    ]
     await client.send_json_auto_id(
-        {"type": f"{DOMAIN}/room/save", "entity_id": CLIMATE, "away": room["away"]}
+        {"type": f"{DOMAIN}/room/save", "entity_id": CLIMATE, "programs": {"winter": winter}}
     )
     msg = await _result(client)
     assert msg["success"]
-    assert msg["result"]["away"]["days"]["sat"] == [{"start": "00:00", "temperature": 12.0}]
+    assert msg["result"]["programs"]["winter"][0]["blocks"] == [
+        {"start": "00:00", "temperature": 12.0}
+    ]
+    assert "autumn" in msg["result"]["programs"]  # other seasons are kept
 
-    room["home"]["days"]["mon"] = []
+    winter[0]["blocks"] = []
     await client.send_json_auto_id(
-        {"type": f"{DOMAIN}/room/save", "entity_id": CLIMATE, "home": room["home"]}
+        {"type": f"{DOMAIN}/room/save", "entity_id": CLIMATE, "programs": {"winter": winter}}
     )
     msg = await _result(client)
     assert not msg["success"]
@@ -119,11 +154,30 @@ async def test_websocket(
     )
     assert (await _result(client))["success"]
     engine = config_entry.runtime_data
-    assert engine.store.rooms["climate.bedroom"].away.blocks_for_weekday(5)[0].temperature == 12
+    assert engine.store.rooms["climate.bedroom"].programs["winter"][0].blocks[0].temperature == 12
 
-    await client.send_json_auto_id({"type": f"{DOMAIN}/presence/set", "mode": "away"})
+    await client.send_json_auto_id({"type": f"{DOMAIN}/away/set", "away": True})
     assert (await _result(client))["success"]
-    assert engine.profile == "away"
+    assert engine.away
+    await hass.async_block_till_done()
+    assert calls[-1].data["temperature"] == 15.0
+
+    seasons = [
+        {"id": "heating", "name": "Riscaldamento", "start": "10-15", "end": "04-15"},
+    ]
+    await client.send_json_auto_id({"type": f"{DOMAIN}/seasons/save", "seasons": seasons})
+    assert (await _result(client))["success"]
+    assert [s.id for s in engine.store.seasons] == ["heating"]
+    assert engine.store.rooms[CLIMATE].programs == {}
+
+    seasons.append({"id": "other", "name": "Altro", "start": "04-15", "end": "05-01"})
+    await client.send_json_auto_id({"type": f"{DOMAIN}/seasons/save", "seasons": seasons})
+    msg = await _result(client)
+    assert msg["error"]["code"] == "invalid_format"
+
+    await client.send_json_auto_id({"type": f"{DOMAIN}/seasons/reset"})
+    assert (await _result(client))["success"]
+    assert len(engine.store.seasons) == 4
 
     await client.send_json_auto_id({"type": f"{DOMAIN}/room/remove", "entity_id": CLIMATE})
     assert (await _result(client))["success"]
@@ -169,7 +223,7 @@ async def test_config_and_options_flow(hass: HomeAssistant) -> None:
     result = await hass.config_entries.flow.async_configure(result["flow_id"], {})
     assert result["type"] is FlowResultType.CREATE_ENTRY
     entry = result["result"]
-    assert entry.options == {CONF_PRESENCE_ENTITY: "zone.home", CONF_ADMIN_ONLY: False}
+    assert entry.options == {CONF_AWAY_TEMPERATURE: 15.0, CONF_ADMIN_ONLY: False}
     await hass.async_block_till_done()
 
     result = await hass.config_entries.flow.async_init(
@@ -178,17 +232,15 @@ async def test_config_and_options_flow(hass: HomeAssistant) -> None:
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "single_instance_allowed"
 
-    hass.states.async_set("binary_sensor.anyone_home", "off")
     result = await hass.config_entries.options.async_init(entry.entry_id)
     result = await hass.config_entries.options.async_configure(
         result["flow_id"],
-        {CONF_PRESENCE_ENTITY: "binary_sensor.anyone_home", CONF_ADMIN_ONLY: True},
+        {CONF_AWAY_TEMPERATURE: 14.5, CONF_ADMIN_ONLY: True},
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     await hass.async_block_till_done()
     engine = entry.runtime_data
-    assert engine.presence_entity == "binary_sensor.anyone_home"
-    assert engine.profile == "away"
+    assert engine.away_temperature == 14.5
     assert hass.data["frontend_panels"]["smart-heating-schedule"].require_admin
 
 

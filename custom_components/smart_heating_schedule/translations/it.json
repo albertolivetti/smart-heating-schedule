@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Smart Heating Schedule",
-        "description": "Aggiunge alla barra laterale una pagina Smart Heating Schedule in cui crei programmazioni settimanali A casa e Fuori casa per i tuoi termostati."
+        "title": "Cronotermostato stagionale",
+        "description": "Aggiunge una pagina nella barra laterale dove dividi l'anno in stagioni e dai a ogni stagione programmi settimanali con fasce orarie per il tuo termostato."
       }
     },
     "abort": {
@@ -13,36 +13,22 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opzioni di Smart Heating Schedule",
+        "title": "Opzioni del cronotermostato",
         "data": {
-          "presence_entity": "Entità di presenza",
+          "away_temperature": "Temperatura in assenza",
           "admin_only": "Mostra il pannello solo agli amministratori"
         },
         "data_description": {
-          "presence_entity": "Sceglie tra le programmazioni A casa e Fuori casa quando la modalità presenza è Auto. Una zona conta come fuori casa quando non c'è nessuno; una persona, un tracker di dispositivo o un gruppo quando non è a casa; un sensore binario o un input booleano quando è spento.",
-          "admin_only": "Gli utenti non amministratori possono vedere le programmazioni ma mai modificarle."
+          "away_temperature": "Usata quando Assenza è attiva, per i termostati senza il preset Fuori casa. I termostati con quel preset usano il preset.",
+          "admin_only": "Gli utenti non amministratori possono vedere i programmi ma non modificarli."
         }
       }
     }
   },
   "entity": {
-    "select": {
-      "presence_mode": {
-        "name": "Modalità presenza",
-        "state": {
-          "auto": "Auto",
-          "home": "A casa",
-          "away": "Fuori casa"
-        }
-      }
-    },
     "sensor": {
-      "active_profile": {
-        "name": "Programmazione attiva",
-        "state": {
-          "home": "A casa",
-          "away": "Fuori casa"
-        }
+      "active_season": {
+        "name": "Stagione attiva"
       },
       "scheduled_temperature": {
         "name": "Temperatura programmata"
@@ -50,16 +36,19 @@
     },
     "switch": {
       "smart_schedule": {
-        "name": "Programmazione intelligente"
+        "name": "Programmazione"
+      },
+      "away": {
+        "name": "Assenza"
       }
     }
   },
   "exceptions": {
     "not_loaded": {
-      "message": "Smart Heating Schedule non è configurato."
+      "message": "Il cronotermostato stagionale non è configurato."
     },
     "room_not_found": {
-      "message": "{entity_id} non ha una programmazione intelligente."
+      "message": "{entity_id} non ha una programmazione."
     },
     "invalid_schedule": {
       "message": "Programmazione non valida: {error}"
@@ -72,7 +61,7 @@
         "step": {
           "init": {
             "title": "Il termostato {entity_id} non esiste più",
-            "description": "Esiste una programmazione intelligente per {entity_id}, ma l'entità è stata rimossa. Sposta la programmazione su un altro termostato oppure eliminala.",
+            "description": "Esiste una programmazione per {entity_id}, ma l'entità è stata rimossa. Sposta la programmazione su un altro termostato o eliminala.",
             "menu_options": {
               "reassign": "Sposta la programmazione su un altro termostato",
               "remove": "Elimina la programmazione"
@@ -80,7 +69,7 @@
           },
           "reassign": {
             "title": "Sposta programmazione",
-            "description": "Scegli il termostato che deve ricevere la programmazione di {entity_id}.",
+            "description": "Scegli il termostato che riceve la programmazione di {entity_id}.",
             "data": {
               "entity_id": "Termostato"
             }
@@ -95,38 +84,34 @@
   },
   "services": {
     "resume_schedule": {
-      "name": "Riprendi programmazione",
-      "description": "Applica di nuovo la fascia oraria attuale, annullando le modifiche manuali fatte sul termostato."
+      "name": "Riprendi programma",
+      "description": "Applica di nuovo la fascia oraria in corso, annullando le modifiche manuali sul termostato."
     },
     "get_schedule": {
-      "name": "Ottieni programmazione",
-      "description": "Restituisce le programmazioni A casa e Fuori casa di un termostato.",
+      "name": "Leggi programmazione",
+      "description": "Restituisce le stagioni e i programmi di un termostato.",
       "fields": {
         "entity_id": {
           "name": "Termostato",
-          "description": "L'entità clima di cui restituire la programmazione."
+          "description": "L'entità climate di cui leggere la programmazione."
         }
       }
     },
     "set_schedule": {
       "name": "Imposta programmazione",
-      "description": "Crea o sostituisce la programmazione di un termostato. Usa l'output di Ottieni programmazione come esempio.",
+      "description": "Crea una programmazione o sostituisce i programmi di alcune stagioni. Usa il risultato di Leggi programmazione come esempio.",
       "fields": {
         "entity_id": {
           "name": "Termostato",
-          "description": "L'entità clima da programmare."
+          "description": "L'entità climate da programmare."
         },
         "enabled": {
           "name": "Attiva",
           "description": "Se la programmazione è attiva."
         },
-        "home": {
-          "name": "Programmazione A casa",
-          "description": "La programmazione settimanale usata quando c'è qualcuno in casa."
-        },
-        "away": {
-          "name": "Programmazione Fuori casa",
-          "description": "La programmazione settimanale usata quando non c'è nessuno in casa."
+        "programs": {
+          "name": "Programmi",
+          "description": "Programmi per id di stagione. Ogni programma ha un id, un nome, i giorni (mon … sun) e le fasce orarie."
         }
       }
     }

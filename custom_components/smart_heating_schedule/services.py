@@ -18,22 +18,19 @@ import voluptuous as vol
 
 from .const import (
     DOMAIN,
-    PROFILE_AWAY,
-    PROFILE_HOME,
     SERVICE_GET_SCHEDULE,
     SERVICE_RESUME_SCHEDULE,
     SERVICE_SET_SCHEDULE,
 )
 from .engine import ScheduleEngine
-from .models import default_room, week_from_dict
+from .models import RoomSchedule, programs_by_season
 
 GET_SCHEDULE_SCHEMA = vol.Schema({vol.Required(ATTR_ENTITY_ID): cv.entity_domain(CLIMATE_DOMAIN)})
 SET_SCHEDULE_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_ENTITY_ID): cv.entity_domain(CLIMATE_DOMAIN),
         vol.Optional("enabled"): cv.boolean,
-        vol.Optional(PROFILE_HOME): dict,
-        vol.Optional(PROFILE_AWAY): dict,
+        vol.Optional("programs"): dict,
     }
 )
 
@@ -64,36 +61,37 @@ def async_setup_services(hass: HomeAssistant) -> None:
                 translation_key="room_not_found",
                 translation_placeholders={"entity_id": entity_id},
             )
-        return {**room.as_dict(), "unit": engine.store.unit}
+        return {
+            **room.as_dict(),
+            "unit": engine.store.unit,
+            "seasons": [season.as_dict() for season in engine.store.seasons],
+        }
 
     async def set_schedule(call: ServiceCall) -> None:
         engine = get_engine(hass)
         entity_id = call.data[ATTR_ENTITY_ID]
         try:
-            weeks = {
-                profile: week_from_dict(call.data[profile])
-                for profile in (PROFILE_HOME, PROFILE_AWAY)
-                if profile in call.data
-            }
+            programs = (
+                programs_by_season(call.data["programs"]) if "programs" in call.data else None
+            )
+            if entity_id not in engine.store.rooms:
+                await engine.async_set_room(
+                    RoomSchedule(
+                        entity_id=entity_id,
+                        enabled=call.data.get("enabled", True),
+                        programs=programs or {},
+                    )
+                )
+                return
+            await engine.async_update_room(
+                entity_id, enabled=call.data.get("enabled"), programs=programs
+            )
         except vol.Invalid as err:
             raise ServiceValidationError(
                 translation_domain=DOMAIN,
                 translation_key="invalid_schedule",
                 translation_placeholders={"error": str(err)},
             ) from err
-        if entity_id not in engine.store.rooms:
-            room = default_room(entity_id, engine.store.unit)
-            room.enabled = call.data.get("enabled", True)
-            room.home = weeks.get(PROFILE_HOME, room.home)
-            room.away = weeks.get(PROFILE_AWAY, room.away)
-            await engine.async_set_room(room)
-            return
-        await engine.async_update_room(
-            entity_id,
-            enabled=call.data.get("enabled"),
-            home=weeks.get(PROFILE_HOME),
-            away=weeks.get(PROFILE_AWAY),
-        )
 
     hass.services.async_register(DOMAIN, SERVICE_RESUME_SCHEDULE, resume_schedule)
     hass.services.async_register(

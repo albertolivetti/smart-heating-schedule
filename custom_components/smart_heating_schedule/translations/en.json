@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Smart Heating Schedule",
-        "description": "Adds a Smart Heating Schedule page to the sidebar where you create weekly home and away schedules for your thermostats."
+        "title": "Seasonal heating schedule",
+        "description": "Adds a page to the sidebar where you divide the year into seasons and give each season weekly programs with time blocks for your thermostat."
       }
     },
     "abort": {
@@ -13,36 +13,22 @@
   "options": {
     "step": {
       "init": {
-        "title": "Smart Heating Schedule options",
+        "title": "Seasonal heating schedule options",
         "data": {
-          "presence_entity": "Presence entity",
+          "away_temperature": "Away temperature",
           "admin_only": "Only show the panel to administrators"
         },
         "data_description": {
-          "presence_entity": "Decides between the home and away schedules when the presence mode is Auto. A zone counts as away when nobody is in it; a person, device tracker or group when it is not home; a binary sensor or input boolean when it is off.",
+          "away_temperature": "Used while Away is on, for thermostats that have no away preset. Thermostats with an away preset use that instead.",
           "admin_only": "Non-admin users can view schedules but never change them."
         }
       }
     }
   },
   "entity": {
-    "select": {
-      "presence_mode": {
-        "name": "Presence mode",
-        "state": {
-          "auto": "Auto",
-          "home": "Home",
-          "away": "Away"
-        }
-      }
-    },
     "sensor": {
-      "active_profile": {
-        "name": "Active schedule",
-        "state": {
-          "home": "Home",
-          "away": "Away"
-        }
+      "active_season": {
+        "name": "Active season"
       },
       "scheduled_temperature": {
         "name": "Scheduled temperature"
@@ -50,16 +36,19 @@
     },
     "switch": {
       "smart_schedule": {
-        "name": "Smart schedule"
+        "name": "Schedule"
+      },
+      "away": {
+        "name": "Away"
       }
     }
   },
   "exceptions": {
     "not_loaded": {
-      "message": "Smart Heating Schedule is not set up."
+      "message": "The seasonal heating schedule is not set up."
     },
     "room_not_found": {
-      "message": "{entity_id} has no smart schedule."
+      "message": "{entity_id} has no schedule."
     },
     "invalid_schedule": {
       "message": "Invalid schedule: {error}"
@@ -72,7 +61,7 @@
         "step": {
           "init": {
             "title": "Thermostat {entity_id} no longer exists",
-            "description": "A smart schedule exists for {entity_id}, but that entity was removed. Move the schedule to another thermostat, or delete it.",
+            "description": "A schedule exists for {entity_id}, but that entity was removed. Move the schedule to another thermostat, or delete it.",
             "menu_options": {
               "reassign": "Move the schedule to another thermostat",
               "remove": "Delete the schedule"
@@ -100,7 +89,7 @@
     },
     "get_schedule": {
       "name": "Get schedule",
-      "description": "Returns the home and away schedule of a thermostat.",
+      "description": "Returns the seasons and the programs of a thermostat.",
       "fields": {
         "entity_id": {
           "name": "Thermostat",
@@ -110,7 +99,7 @@
     },
     "set_schedule": {
       "name": "Set schedule",
-      "description": "Creates or replaces the schedule of a thermostat. Use the output of Get schedule as an example.",
+      "description": "Creates a schedule or replaces the programs of some seasons. Use the output of Get schedule as an example.",
       "fields": {
         "entity_id": {
           "name": "Thermostat",
@@ -120,13 +109,9 @@
           "name": "Enabled",
           "description": "Whether the schedule is active."
         },
-        "home": {
-          "name": "Home schedule",
-          "description": "The week schedule used when someone is home."
-        },
-        "away": {
-          "name": "Away schedule",
-          "description": "The week schedule used when nobody is home."
+        "programs": {
+          "name": "Programs",
+          "description": "Programs keyed by season id. Each program has an id, a name, its weekdays (mon to sun) and its time blocks."
         }
       }
     }

@@ -12,9 +12,9 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 import voluptuous as vol
 
-from .const import DOMAIN, PRESENCE_MODES, PROFILE_AWAY, PROFILE_HOME, SIGNAL_UPDATED
+from .const import DOMAIN, SIGNAL_UPDATED
 from .engine import ScheduleEngine
-from .models import week_from_dict
+from .models import programs_by_season, seasons_from_list
 
 ENTITY_ID = vol.All(cv.entity_id, cv.entity_domain(CLIMATE_DOMAIN))
 
@@ -29,7 +29,9 @@ def async_setup_websocket(hass: HomeAssistant) -> None:
         ws_save_room,
         ws_copy_room,
         ws_resume_room,
-        ws_set_presence_mode,
+        ws_save_seasons,
+        ws_reset_seasons,
+        ws_set_away,
     ):
         websocket_api.async_register_command(hass, command)
 
@@ -39,7 +41,7 @@ def _engine(
 ) -> ScheduleEngine | None:
     entries = hass.config_entries.async_loaded_entries(DOMAIN)
     if not entries:
-        connection.send_error(msg_id, "not_loaded", "Smart Heating Schedule is not loaded")
+        connection.send_error(msg_id, "not_loaded", "The heating schedule is not loaded")
         return None
     return entries[0].runtime_data
 
@@ -122,8 +124,7 @@ async def ws_remove_room(
         vol.Required("type"): f"{DOMAIN}/room/save",
         vol.Required("entity_id"): ENTITY_ID,
         vol.Optional("enabled"): bool,
-        vol.Optional(PROFILE_HOME): dict,
-        vol.Optional(PROFILE_AWAY): dict,
+        vol.Optional("programs"): dict,
     }
 )
 @websocket_api.require_admin
@@ -131,13 +132,12 @@ async def ws_remove_room(
 async def ws_save_room(
     hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any]
 ) -> None:
-    """Save (part of) a room schedule."""
+    """Save the enabled flag and/or the programs of some seasons."""
 
     async def action(engine: ScheduleEngine) -> dict[str, Any]:
-        home = week_from_dict(msg[PROFILE_HOME]) if PROFILE_HOME in msg else None
-        away = week_from_dict(msg[PROFILE_AWAY]) if PROFILE_AWAY in msg else None
+        programs = programs_by_season(msg["programs"]) if "programs" in msg else None
         room = await engine.async_update_room(
-            msg["entity_id"], enabled=msg.get("enabled"), home=home, away=away
+            msg["entity_id"], enabled=msg.get("enabled"), programs=programs
         )
         return room.as_dict()
 
@@ -180,18 +180,45 @@ async def ws_resume_room(
 
 
 @websocket_api.websocket_command(
-    {
-        vol.Required("type"): f"{DOMAIN}/presence/set",
-        vol.Required("mode"): vol.In(PRESENCE_MODES),
-    }
+    {vol.Required("type"): f"{DOMAIN}/seasons/save", vol.Required("seasons"): list}
 )
+@websocket_api.require_admin
 @websocket_api.async_response
-async def ws_set_presence_mode(
+async def ws_save_seasons(
     hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any]
 ) -> None:
-    """Set the presence mode, like the select entity does."""
+    """Replace the seasons."""
 
     async def action(engine: ScheduleEngine) -> None:
-        await engine.async_set_presence_mode(msg["mode"])
+        await engine.async_set_seasons(seasons_from_list(msg["seasons"]))
+
+    await _run(hass, connection, msg, action)
+
+
+@websocket_api.websocket_command({vol.Required("type"): f"{DOMAIN}/seasons/reset"})
+@websocket_api.require_admin
+@websocket_api.async_response
+async def ws_reset_seasons(
+    hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any]
+) -> None:
+    """Go back to the meteorological seasons of Home Assistant."""
+
+    async def action(engine: ScheduleEngine) -> None:
+        await engine.async_reset_seasons()
+
+    await _run(hass, connection, msg, action)
+
+
+@websocket_api.websocket_command(
+    {vol.Required("type"): f"{DOMAIN}/away/set", vol.Required("away"): bool}
+)
+@websocket_api.async_response
+async def ws_set_away(
+    hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any]
+) -> None:
+    """Turn Away on or off, like the switch entity does."""
+
+    async def action(engine: ScheduleEngine) -> None:
+        await engine.async_set_away(msg["away"])
 
     await _run(hass, connection, msg, action)

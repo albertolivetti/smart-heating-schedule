@@ -1,4 +1,4 @@
-"""Fixtures for Smart Heating Schedule tests."""
+"""Fixtures for the seasonal heating schedule tests."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.smart_heating_schedule.const import (
     CONF_ADMIN_ONLY,
-    CONF_PRESENCE_ENTITY,
+    CONF_AWAY_TEMPERATURE,
     DOMAIN,
 )
 
@@ -38,12 +38,31 @@ def heat_state() -> dict[str, Any]:
 
 
 @pytest.fixture
+def boiler_state() -> dict[str, Any]:
+    """Attributes of a generic_thermostat driving a boiler, with presets."""
+    return {
+        "hvac_modes": [HVACMode.HEAT, HVACMode.OFF],
+        "min_temp": 7,
+        "max_temp": 35,
+        "target_temp_step": 0.1,
+        "preset_modes": ["none", "away", "comfort", "sleep"],
+        "preset_mode": "comfort",
+        "temperature": 20,
+        "current_temperature": 18.7,
+        "supported_features": ClimateEntityFeature.TARGET_TEMPERATURE
+        | ClimateEntityFeature.PRESET_MODE
+        | ClimateEntityFeature.TURN_OFF
+        | ClimateEntityFeature.TURN_ON,
+    }
+
+
+@pytest.fixture
 def config_entry(hass: HomeAssistant) -> MockConfigEntry:
     """Return a config entry added to hass."""
     entry = MockConfigEntry(
         domain=DOMAIN,
-        title="Smart Heating Schedule",
-        options={CONF_PRESENCE_ENTITY: "zone.home", CONF_ADMIN_ONLY: False},
+        title="Cronotermostato",
+        options={CONF_AWAY_TEMPERATURE: 15.0, CONF_ADMIN_ONLY: False},
     )
     entry.add_to_hass(hass)
     return entry

@@ -1,4 +1,4 @@
-"""Diagnostics for Smart Heating Schedule."""
+"""Diagnostics for the seasonal heating schedule."""
 
 from __future__ import annotations
 

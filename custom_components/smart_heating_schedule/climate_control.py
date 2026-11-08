@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import logging
 
 from homeassistant.components.climate import (
@@ -9,11 +10,15 @@ from homeassistant.components.climate import (
     ATTR_HVAC_MODES,
     ATTR_MAX_TEMP,
     ATTR_MIN_TEMP,
+    ATTR_PRESET_MODE,
+    ATTR_PRESET_MODES,
     ATTR_TARGET_TEMP_HIGH,
     ATTR_TARGET_TEMP_LOW,
     ATTR_TARGET_TEMP_STEP,
     DOMAIN as CLIMATE_DOMAIN,
+    PRESET_NONE,
     SERVICE_SET_HVAC_MODE,
+    SERVICE_SET_PRESET_MODE,
     SERVICE_SET_TEMPERATURE,
     ClimateEntityFeature,
     HVACMode,
@@ -31,6 +36,21 @@ _LOGGER = logging.getLogger(__name__)
 # Modes in which a device heats towards its setpoint, in order of preference.
 HEATING_MODES = (HVACMode.HEAT, HVACMode.HEAT_COOL, HVACMode.AUTO)
 _ACTIVE_HEATING_MODES = (HVACMode.HEAT, HVACMode.HEAT_COOL)
+
+
+@dataclass(slots=True, frozen=True)
+class PresetTarget:
+    """Switch the thermostat to a preset, e.g. "away".
+
+    ``fallback`` is the temperature used when the thermostat has no such preset.
+    """
+
+    preset: str
+    fallback: float
+
+
+# A temperature, None for heating off, or a preset.
+type Target = float | PresetTarget | None
 
 DEFAULT_LIMITS = {
     UnitOfTemperature.CELSIUS: (5.0, 30.0, 0.5),
@@ -62,19 +82,50 @@ def _heating_mode(state: State) -> HVACMode | None:
     return None
 
 
-def _service_calls(
-    state: State, temperature: float | None, unit: str
-) -> list[tuple[str, dict[str, object]]]:
-    """Return the climate service calls that make an entity follow a temperature.
+def _features(state: State) -> ClimateEntityFeature:
+    return ClimateEntityFeature(state.attributes.get(ATTR_SUPPORTED_FEATURES, 0))
+
+
+def _has_preset(state: State, preset: str) -> bool:
+    return ClimateEntityFeature.PRESET_MODE in _features(state) and preset in (
+        state.attributes.get(ATTR_PRESET_MODES) or []
+    )
+
+
+def _preset_calls(state: State, preset: str) -> list[tuple[str, dict[str, object]]]:
+    """Switch to heating with a preset."""
+    calls: list[tuple[str, dict[str, object]]] = []
+    if (hvac_mode := _heating_mode(state)) is not None:
+        calls.append(
+            (SERVICE_SET_HVAC_MODE, {ATTR_ENTITY_ID: state.entity_id, ATTR_HVAC_MODE: hvac_mode})
+        )
+    if state.attributes.get(ATTR_PRESET_MODE) != preset:
+        calls.append(
+            (SERVICE_SET_PRESET_MODE, {ATTR_ENTITY_ID: state.entity_id, ATTR_PRESET_MODE: preset})
+        )
+    return calls
+
+
+def _service_calls(state: State, target: Target, unit: str) -> list[tuple[str, dict[str, object]]]:
+    """Return the climate service calls that make an entity follow a target.
 
     ``None`` means heating off: the entity is switched off, or set to its
     minimum temperature (frost protection) when it cannot be switched off.
+    A preset is used when the entity has it, otherwise its fallback
+    temperature. Before a temperature is set, an active preset (comfort,
+    sleep, ...) is cleared, so the scheduled temperature is not mixed with it.
     The list is empty when the entity is already in the wanted state.
     """
     attrs = state.attributes
     entity_id = state.entity_id
     modes = attrs.get(ATTR_HVAC_MODES) or []
     min_temp, max_temp, step = temperature_limits(state, unit)
+
+    if isinstance(target, PresetTarget):
+        if _has_preset(state, target.preset):
+            return _preset_calls(state, target.preset)
+        target = target.fallback
+    temperature = target
 
     if temperature is None:
         if HVACMode.OFF in modes:
@@ -86,12 +137,19 @@ def _service_calls(
         temperature = min_temp
 
     temperature = min(max(temperature, min_temp), max_temp)
-    features = ClimateEntityFeature(attrs.get(ATTR_SUPPORTED_FEATURES, 0))
+    features = _features(state)
     hvac_mode = _heating_mode(state)
     data: dict[str, object] = {ATTR_ENTITY_ID: entity_id}
+    # generic_thermostat and friends: leave comfort/sleep/away first, otherwise
+    # the preset keeps (or later restores) its own temperature.
+    clear_preset: list[tuple[str, dict[str, object]]] = []
+    if _has_preset(state, PRESET_NONE) and attrs.get(ATTR_PRESET_MODE) not in (None, PRESET_NONE):
+        clear_preset = [
+            (SERVICE_SET_PRESET_MODE, {ATTR_ENTITY_ID: entity_id, ATTR_PRESET_MODE: PRESET_NONE})
+        ]
 
     if ClimateEntityFeature.TARGET_TEMPERATURE in features:
-        if hvac_mode is None and attrs.get(ATTR_TEMPERATURE) == temperature:
+        if not clear_preset and hvac_mode is None and attrs.get(ATTR_TEMPERATURE) == temperature:
             return []
         data[ATTR_TEMPERATURE] = temperature
     elif ClimateEntityFeature.TARGET_TEMPERATURE_RANGE in features:
@@ -99,7 +157,8 @@ def _service_calls(
         if high is None or high < temperature + step:
             high = min(max_temp, temperature + max(step, 1.0))
         if (
-            hvac_mode is None
+            not clear_preset
+            and hvac_mode is None
             and attrs.get(ATTR_TARGET_TEMP_LOW) == temperature
             and attrs.get(ATTR_TARGET_TEMP_HIGH) == high
         ):
@@ -108,33 +167,36 @@ def _service_calls(
         data[ATTR_TARGET_TEMP_HIGH] = high
     elif hvac_mode is None:
         # No setpoint support and already heating: nothing we can change.
-        return []
+        return clear_preset
     else:
-        return [(SERVICE_SET_HVAC_MODE, {ATTR_ENTITY_ID: entity_id, ATTR_HVAC_MODE: hvac_mode})]
+        return [
+            *clear_preset,
+            (SERVICE_SET_HVAC_MODE, {ATTR_ENTITY_ID: entity_id, ATTR_HVAC_MODE: hvac_mode}),
+        ]
 
     if hvac_mode is not None:
         data[ATTR_HVAC_MODE] = hvac_mode
-    return [(SERVICE_SET_TEMPERATURE, data)]
+    return [*clear_preset, (SERVICE_SET_TEMPERATURE, data)]
 
 
-def follows_temperature(state: State, temperature: float | None, unit: str) -> bool:
-    """Return whether a climate entity is already in the state a temperature asks for."""
-    return not _service_calls(state, temperature, unit)
+def follows_target(state: State, target: Target, unit: str) -> bool:
+    """Return whether a climate entity is already in the state a target asks for."""
+    return not _service_calls(state, target, unit)
 
 
-async def async_apply_temperature(
+async def async_apply_target(
     hass: HomeAssistant,
     state: State,
-    temperature: float | None,
+    target: Target,
     unit: str,
     context: Context | None = None,
 ) -> bool:
-    """Make a climate entity follow a scheduled temperature.
+    """Make a climate entity follow a scheduled target.
 
     Returns whether a service call was made; nothing is sent when the entity
     is already in the wanted state.
     """
-    calls = _service_calls(state, temperature, unit)
+    calls = _service_calls(state, target, unit)
     for service, data in calls:
         _LOGGER.debug("Setting %s to %s", state.entity_id, data)
         await hass.services.async_call(

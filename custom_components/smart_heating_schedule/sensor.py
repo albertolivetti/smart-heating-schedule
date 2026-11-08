@@ -1,4 +1,4 @@
-"""Sensors for the scheduled temperature and the active profile."""
+"""Sensors for the scheduled temperature and the active season."""
 
 from __future__ import annotations
 
@@ -8,9 +8,11 @@ from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.util import dt as dt_util
 
 from . import SmartHeatingConfigEntry
 from .const import (
+    ATTR_AWAY,
     ATTR_BLOCK_END,
     ATTR_BLOCK_START,
     ATTR_HEATING_OFF,
@@ -18,14 +20,13 @@ from .const import (
     ATTR_NEXT_TEMPERATURE,
     ATTR_OVERRIDDEN,
     ATTR_PENDING,
-    ATTR_PROFILE,
-    CONF_PRESENCE_ENTITY,
-    PRESENCE_AUTO,
-    PROFILES,
+    ATTR_PROGRAM,
+    ATTR_SEASON,
     SIGNAL_ROOM_ADDED,
 )
 from .engine import ScheduleEngine
 from .entity import GlobalEntity, RoomEntity
+from .models import format_month_day, season_for
 
 
 async def async_setup_entry(
@@ -37,7 +38,7 @@ async def async_setup_entry(
     engine = entry.runtime_data
     async_add_entities(
         [
-            ActiveProfileSensor(engine),
+            ActiveSeasonSensor(engine),
             *(ScheduledTemperatureSensor(engine, entity_id) for entity_id in engine.store.rooms),
         ]
     )
@@ -49,28 +50,27 @@ async def async_setup_entry(
     entry.async_on_unload(async_dispatcher_connect(hass, SIGNAL_ROOM_ADDED, _room_added))
 
 
-class ActiveProfileSensor(GlobalEntity, SensorEntity):
-    """Whether the home or the away schedules are in use."""
-
-    _attr_device_class = SensorDeviceClass.ENUM
-    _attr_options = PROFILES
+class ActiveSeasonSensor(GlobalEntity, SensorEntity):
+    """The season today falls in; unknown outside every season."""
 
     def __init__(self, engine: ScheduleEngine) -> None:
         """Initialize the sensor."""
-        super().__init__(engine, "active_profile")
+        super().__init__(engine, "active_season")
 
     @property
-    def native_value(self) -> str:
-        """Return the active profile."""
-        return self.engine.profile
+    def native_value(self) -> str | None:
+        """Return the name of today's season."""
+        season = season_for(self.engine.store.seasons, dt_util.now().date())
+        return season.name if season else None
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
-        """Return how the profile was decided."""
+        """Return the season id and dates."""
+        season = season_for(self.engine.store.seasons, dt_util.now().date())
         return {
-            "presence_mode": self.engine.presence_mode,
-            CONF_PRESENCE_ENTITY: self.engine.presence_entity,
-            "automatic": self.engine.presence_mode == PRESENCE_AUTO,
+            "season_id": season.id if season else None,
+            "start": format_month_day(season.start) if season else None,
+            "end": format_month_day(season.end) if season else None,
         }
 
 
@@ -101,7 +101,9 @@ class ScheduledTemperatureSensor(RoomEntity, SensorEntity):
         """Return details about the current and next block."""
         status = self.engine.room_status(self.climate_entity_id)
         return {
-            ATTR_PROFILE: status["profile"],
+            ATTR_SEASON: status["season"],
+            ATTR_PROGRAM: status["program"],
+            ATTR_AWAY: status["away"],
             ATTR_BLOCK_START: status["start"],
             ATTR_BLOCK_END: status["end"],
             ATTR_NEXT_TEMPERATURE: status["next_temperature"],

@@ -1,15 +1,14 @@
 {
   "domain": "smart_heating_schedule",
-  "name": "Smart Heating Schedule",
-  "after_dependencies": ["person", "zone"],
-  "codeowners": ["@talhaucar"],
+  "name": "Cronotermostato stagionale",
+  "codeowners": ["@albertolivetti"],
   "config_flow": true,
   "dependencies": ["frontend", "http", "panel_custom", "repairs", "websocket_api"],
-  "documentation": "https://github.com/talhaucar/smart-heating-schedule",
+  "documentation": "https://github.com/albertolivetti/smart-heating-schedule",
   "integration_type": "service",
   "iot_class": "calculated",
-  "issue_tracker": "https://github.com/talhaucar/smart-heating-schedule/issues",
+  "issue_tracker": "https://github.com/albertolivetti/smart-heating-schedule/issues",
   "requirements": [],
   "single_config_entry": true,
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

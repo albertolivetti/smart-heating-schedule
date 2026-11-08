@@ -1,4 +1,4 @@
-"""Smart Heating Schedule: Tado-style weekly heating schedules for any thermostat."""
+"""Seasonal heating schedules (cronotermostato) for any thermostat."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from .services import async_setup_services
 from .store import ScheduleStore
 from .websocket import async_setup_websocket
 
-PLATFORMS = [Platform.SELECT, Platform.SENSOR, Platform.SWITCH]
+PLATFORMS = [Platform.SENSOR, Platform.SWITCH]
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
@@ -30,7 +30,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: SmartHeatingConfigEntry) -> bool:
-    """Set up Smart Heating Schedule from a config entry."""
+    """Set up the integration from a config entry."""
     store = ScheduleStore(hass)
     await store.async_load()
     engine = ScheduleEngine(hass, entry, store)

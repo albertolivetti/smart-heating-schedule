@@ -21,9 +21,6 @@ set_schedule:
     enabled:
       selector:
         boolean:
-    home:
-      selector:
-        object:
-    away:
+    programs:
       selector:
         object:

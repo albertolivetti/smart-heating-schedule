@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from copy import deepcopy
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from enum import StrEnum
 import logging
 from typing import Any
@@ -31,21 +31,26 @@ from homeassistant.helpers.start import async_at_started
 from homeassistant.util import dt as dt_util
 import voluptuous as vol
 
-from .climate_control import async_apply_temperature, follows_temperature
+from .climate_control import PresetTarget, Target, async_apply_target, follows_target
 from .const import (
-    CONF_PRESENCE_ENTITY,
-    DEFAULT_PRESENCE_ENTITY,
+    AWAY_PRESET,
+    CONF_AWAY_TEMPERATURE,
+    DEFAULT_AWAY_TEMPERATURE,
     DOMAIN,
-    PRESENCE_AUTO,
-    PRESENCE_DEBOUNCE,
-    PROFILE_AWAY,
-    PROFILE_HOME,
     SIGNAL_ROOM_ADDED,
     SIGNAL_ROOM_REMOVED,
     SIGNAL_UPDATED,
 )
-from .models import RoomSchedule, WeekSchedule, default_room
-from .presence import is_home
+from .models import (
+    DayPlan,
+    Program,
+    RoomSchedule,
+    Season,
+    day_plan,
+    default_room,
+    default_seasons,
+    season_for,
+)
 from .resolver import Segment, segment_at
 from .store import ScheduleStore
 
@@ -59,7 +64,7 @@ class Reason(StrEnum):
 
     STARTUP = "startup"
     TRANSITION = "transition"
-    PRESENCE = "presence"
+    AWAY = "away"
     EDIT = "edit"
     RETRY = "retry"
     FORCE = "force"
@@ -69,8 +74,8 @@ class ScheduleEngine:
     """Applies room schedules to climate entities.
 
     Commands are only sent when the target changes (a block boundary, a
-    presence change or an edit), so manual changes on a thermostat are kept
-    until the next block and cloud APIs are not called needlessly.
+    season change, Away or an edit), so manual changes on a thermostat are
+    kept until the next block and cloud APIs are not called needlessly.
     """
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry, store: ScheduleStore) -> None:
@@ -78,8 +83,6 @@ class ScheduleEngine:
         self.hass = hass
         self.entry = entry
         self.store = store
-        self.presence_entity: str = entry.options.get(CONF_PRESENCE_ENTITY, DEFAULT_PRESENCE_ENTITY)
-        self.profile: str = PROFILE_HOME
         self.segments: dict[str, Segment] = {}
         self.pending: set[str] = set()
         self.overridden: set[str] = set()
@@ -91,19 +94,12 @@ class ScheduleEngine:
         self._locks: dict[str, asyncio.Lock] = {}
         self._unsubs: list[CALLBACK_TYPE] = []
         self._climate_unsub: CALLBACK_TYPE | None = None
-        self._presence_debounce: CALLBACK_TYPE | None = None
 
     # ------------------------------------------------------------------
     # Lifecycle
 
     async def async_start(self) -> None:
-        """Start tracking presence and schedule the rooms."""
-        self.profile = self._compute_profile()
-        self._unsubs.append(
-            async_track_state_change_event(
-                self.hass, [self.presence_entity], self._presence_changed
-            )
-        )
+        """Schedule the rooms."""
         self._unsubs.append(
             self.hass.bus.async_listen(er.EVENT_ENTITY_REGISTRY_UPDATED, self._registry_updated)
         )
@@ -136,57 +132,39 @@ class ScheduleEngine:
         if self._climate_unsub:
             self._climate_unsub()
             self._climate_unsub = None
-        if self._presence_debounce:
-            self._presence_debounce()
-            self._presence_debounce = None
 
     # ------------------------------------------------------------------
-    # Presence
+    # Away
 
     @property
-    def presence_mode(self) -> str:
-        """Return the presence mode: auto, home or away."""
-        return self.store.presence_mode
+    def away(self) -> bool:
+        """Return whether Away is on."""
+        return self.store.away
 
     @property
-    def detected_home(self) -> bool | None:
-        """Return what the presence entity says, None if unknown."""
-        return is_home(self.hass.states.get(self.presence_entity))
+    def away_temperature(self) -> float:
+        """Return the temperature used for Away on thermostats without an away preset."""
+        value = self.entry.options.get(CONF_AWAY_TEMPERATURE)
+        if value is None:
+            return DEFAULT_AWAY_TEMPERATURE.get(self.store.unit, DEFAULT_AWAY_TEMPERATURE["°C"])
+        return float(value)
 
-    def _compute_profile(self) -> str:
-        if self.store.presence_mode != PRESENCE_AUTO:
-            return self.store.presence_mode
-        # Unknown presence is treated as home: better warm than cold.
-        return PROFILE_AWAY if self.detected_home is False else PROFILE_HOME
-
-    @callback
-    def _presence_changed(self, _event: Event[EventStateChangedData]) -> None:
-        if self._presence_debounce:
-            self._presence_debounce()
-        self._presence_debounce = async_call_later(
-            self.hass, PRESENCE_DEBOUNCE, self._presence_settled
+    async def async_set_away(self, away: bool) -> None:
+        """Turn Away on or off."""
+        if away == self.store.away:
+            return
+        self.store.away = away
+        self.store.async_schedule_runtime_save()
+        await asyncio.gather(
+            *(self.async_evaluate(entity_id, Reason.AWAY) for entity_id in list(self.store.rooms))
         )
-
-    @callback
-    def _presence_settled(self, _now: datetime) -> None:
-        self._presence_debounce = None
-        self._async_update_profile()
-
-    @callback
-    def _async_update_profile(self) -> None:
-        profile = self._compute_profile()
-        if profile != self.profile:
-            _LOGGER.debug("Switching to %s schedule", profile)
-            self.profile = profile
-            for entity_id in list(self.store.rooms):
-                self.hass.async_create_task(self.async_evaluate(entity_id, Reason.PRESENCE))
         self._notify()
 
-    async def async_set_presence_mode(self, mode: str) -> None:
-        """Set the presence mode (auto follows the presence entity)."""
-        self.store.presence_mode = mode
-        self.store.async_schedule_runtime_save()
-        self._async_update_profile()
+    def _target(self, segment: Segment) -> tuple[str, Target]:
+        """Return the target key and what to send for a segment."""
+        if self.away:
+            return "away", PresetTarget(AWAY_PRESET, self.away_temperature)
+        return f"schedule|{segment.key}", segment.temperature
 
     # ------------------------------------------------------------------
     # Evaluating and applying
@@ -204,6 +182,10 @@ class ScheduleEngine:
             self._update_overridden(entity_id)
             self._notify()
 
+    def plan(self, room: RoomSchedule, day: date) -> DayPlan:
+        """Return what a room does on a date."""
+        return day_plan(room, self.store.seasons, day)
+
     def _update_segment(self, entity_id: str, now: datetime) -> Segment | None:
         """Recalculate the current segment and (re)schedule the next transition."""
         if timer := self._timers.pop(entity_id, None):
@@ -212,12 +194,14 @@ class ScheduleEngine:
         if room is None or not room.enabled:
             self.segments.pop(entity_id, None)
             return None
-        segment = segment_at(room.week(self.profile), now)
+        segment = segment_at(lambda day: self.plan(room, day).blocks, now)
         self.segments[entity_id] = segment
-        if segment.end is not None:
-            self._timers[entity_id] = async_track_point_in_time(
-                self.hass, self._transition_job(entity_id), segment.end
-            )
+        # Nothing changes within the resolver's window: look again tomorrow,
+        # when a season further away may have come into view.
+        when = segment.end or dt_util.start_of_local_day(now) + timedelta(days=1)
+        self._timers[entity_id] = async_track_point_in_time(
+            self.hass, self._transition_job(entity_id), when
+        )
         return segment
 
     def _transition_job(self, entity_id: str) -> Any:
@@ -230,18 +214,16 @@ class ScheduleEngine:
 
     async def _async_apply(self, room: RoomSchedule, segment: Segment, reason: Reason) -> None:
         entity_id = room.entity_id
-        target = {
-            "key": f"{self.profile}|{segment.key}",
-            "profile": self.profile,
-            "temperature": segment.temperature,
-        }
+        key, wanted = self._target(segment)
+        mode = "away" if self.away else "schedule"
+        target = {"key": key, "mode": mode, "temperature": segment.temperature}
         last = self.store.last_applied.get(entity_id)
         if reason is not Reason.FORCE and last:
             if last["key"] == target["key"]:
                 return
             if (
                 reason is Reason.EDIT
-                and last["profile"] == target["profile"]
+                and last.get("mode") == target["mode"]
                 and last["temperature"] == target["temperature"]
             ):
                 # The current block was moved but still wants the same
@@ -258,10 +240,10 @@ class ScheduleEngine:
             return
 
         try:
-            if await async_apply_temperature(
+            if await async_apply_target(
                 self.hass,
                 state,
-                segment.temperature,
+                wanted,
                 self.store.unit,
                 Context(),
             ):
@@ -328,21 +310,23 @@ class ScheduleEngine:
     def _is_overridden(self, entity_id: str) -> bool:
         """Return whether the thermostat no longer follows the block it was set to."""
         segment = self.segments.get(entity_id)
+        if segment is None:
+            return False
+        key, wanted = self._target(segment)
         last = self.store.last_applied.get(entity_id)
         state = self.hass.states.get(entity_id)
         sent_at = self._sent_at.get(entity_id)
         return (
             self._started
-            and segment is not None
             and entity_id not in self.pending
             and last is not None
-            and last["key"] == f"{self.profile}|{segment.key}"
+            and last["key"] == key
             and state is not None
             and state.state not in (STATE_UNAVAILABLE, STATE_UNKNOWN)
             # Cloud thermostats can report the new setpoint a while after the
             # command: only a state reported since then counts as a change.
             and (sent_at is None or state.last_updated >= sent_at)
-            and not follows_temperature(state, segment.temperature, self.store.unit)
+            and not follows_target(state, wanted, self.store.unit)
         )
 
     # ------------------------------------------------------------------
@@ -357,7 +341,9 @@ class ScheduleEngine:
         """Start scheduling a climate entity with the default schedule."""
         if entity_id in self.store.rooms:
             return self.store.rooms[entity_id]
-        room = default_room(entity_id, self.store.unit)
+        room = default_room(
+            entity_id, self.store.unit, self.store.seasons, self.hass.config.language
+        )
         self._set_room(room)
         await self.async_evaluate(entity_id, Reason.EDIT)
         return room
@@ -382,23 +368,27 @@ class ScheduleEngine:
         async_dispatcher_send(self.hass, SIGNAL_ROOM_REMOVED.format(entity_id))
         self._notify()
 
+    def _check_seasons(self, programs: dict[str, list[Program]]) -> None:
+        known = {season.id for season in self.store.seasons}
+        if unknown := set(programs) - known:
+            raise vol.Invalid(f"unknown season: {', '.join(sorted(unknown))}")
+
     async def async_update_room(
         self,
         entity_id: str,
         *,
         enabled: bool | None = None,
-        home: WeekSchedule | None = None,
-        away: WeekSchedule | None = None,
+        programs: dict[str, list[Program]] | None = None,
     ) -> RoomSchedule:
-        """Change a room's schedule and/or enabled flag."""
+        """Change a room's enabled flag and/or the programs of some seasons."""
         room = self._require_room(entity_id)
+        if programs is not None:
+            self._check_seasons(programs)
         was_enabled = room.enabled
         if enabled is not None:
             room.enabled = enabled
-        if home is not None:
-            room.home = home
-        if away is not None:
-            room.away = away
+        if programs is not None:
+            room.programs = {**room.programs, **programs}
         self.store.async_schedule_save()
         if room.enabled and not was_enabled:
             await self.async_evaluate(entity_id, Reason.FORCE)
@@ -408,17 +398,17 @@ class ScheduleEngine:
 
     async def async_set_room(self, room: RoomSchedule) -> None:
         """Create or replace a room schedule."""
+        self._check_seasons(room.programs)
         existing = self.store.rooms.get(room.entity_id)
         if existing is None:
             self._set_room(room)
             await self.async_evaluate(room.entity_id, Reason.EDIT)
             return
-        await self.async_update_room(
-            room.entity_id, enabled=room.enabled, home=room.home, away=room.away
-        )
+        existing.programs = {}
+        await self.async_update_room(room.entity_id, enabled=room.enabled, programs=room.programs)
 
     async def async_copy_room(self, source: str, targets: list[str]) -> None:
-        """Copy the home and away schedule of one room to other rooms."""
+        """Copy the programs of one room to other rooms."""
         room = self._require_room(source)
         for target in targets:
             if target == source:
@@ -428,8 +418,7 @@ class ScheduleEngine:
                 RoomSchedule(
                     entity_id=target,
                     enabled=existing.enabled if existing else True,
-                    home=deepcopy(room.home),
-                    away=deepcopy(room.away),
+                    programs=deepcopy(room.programs),
                 )
             )
 
@@ -437,6 +426,29 @@ class ScheduleEngine:
         """Re-apply the current block now, overriding manual changes."""
         self._require_room(entity_id)
         await self.async_evaluate(entity_id, Reason.FORCE)
+
+    # ------------------------------------------------------------------
+    # Seasons
+
+    async def async_set_seasons(self, seasons: list[Season]) -> None:
+        """Replace the seasons; programs of removed seasons are deleted."""
+        self.store.seasons = seasons
+        known = {season.id for season in seasons}
+        for room in self.store.rooms.values():
+            room.programs = {
+                season_id: programs
+                for season_id, programs in room.programs.items()
+                if season_id in known
+            }
+        self.store.async_schedule_save()
+        await asyncio.gather(
+            *(self.async_evaluate(entity_id, Reason.EDIT) for entity_id in list(self.store.rooms))
+        )
+        self._notify()
+
+    async def async_reset_seasons(self) -> None:
+        """Go back to the meteorological seasons of Home Assistant."""
+        await self.async_set_seasons(default_seasons(self.hass.config.language))
 
     def _set_room(self, room: RoomSchedule) -> None:
         self.store.rooms[room.entity_id] = room
@@ -495,8 +507,12 @@ class ScheduleEngine:
     def room_status(self, entity_id: str) -> dict[str, Any]:
         """Return the live status of a room."""
         segment = self.segments.get(entity_id)
+        room = self.store.rooms.get(entity_id)
+        plan = self.plan(room, dt_util.now().date()) if room else None
         return {
-            "profile": self.profile,
+            "season": plan.season.id if plan and plan.season else None,
+            "program": plan.program.id if plan and plan.program else None,
+            "away": self.away,
             "temperature": segment.temperature if segment else None,
             "start": segment.start.isoformat() if segment and segment.start else None,
             "end": segment.end.isoformat() if segment and segment.end else None,
@@ -508,14 +524,13 @@ class ScheduleEngine:
 
     def as_dict(self) -> dict[str, Any]:
         """Return everything the panel needs."""
+        today = season_for(self.store.seasons, dt_util.now().date())
         return {
             "unit": self.store.unit,
-            "presence": {
-                "mode": self.presence_mode,
-                "profile": self.profile,
-                "entity_id": self.presence_entity,
-                "detected_home": self.detected_home,
-            },
+            "away": self.away,
+            "away_temperature": self.away_temperature,
+            "season": today.id if today else None,
+            "seasons": [season.as_dict() for season in self.store.seasons],
             "rooms": [
                 {**room.as_dict(), "status": self.room_status(entity_id)}
                 for entity_id, room in self.store.rooms.items()

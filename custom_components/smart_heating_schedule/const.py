@@ -1,14 +1,14 @@
-"""Constants for Smart Heating Schedule."""
+"""Constants for the seasonal heating schedule."""
 
 from __future__ import annotations
 
 from typing import Final
 
 DOMAIN: Final = "smart_heating_schedule"
-TITLE: Final = "Smart Heating Schedule"
+TITLE: Final = "Cronotermostato"
 
 STORAGE_KEY: Final = DOMAIN
-STORAGE_VERSION: Final = 1
+STORAGE_VERSION: Final = 2
 RUNTIME_STORAGE_KEY: Final = f"{DOMAIN}.runtime"
 RUNTIME_STORAGE_VERSION: Final = 1
 SAVE_DELAY: Final = 1
@@ -19,25 +19,11 @@ PANEL_ICON: Final = "mdi:radiator"
 PANEL_FILENAME: Final = "smart-heating-schedule-panel.js"
 STATIC_URL: Final = "/smart_heating_schedule_static"
 
-CONF_PRESENCE_ENTITY: Final = "presence_entity"
 CONF_ADMIN_ONLY: Final = "admin_only"
-DEFAULT_PRESENCE_ENTITY: Final = "zone.home"
-PRESENCE_DOMAINS: Final = [
-    "zone",
-    "person",
-    "group",
-    "device_tracker",
-    "binary_sensor",
-    "input_boolean",
-]
-PRESENCE_DEBOUNCE: Final = 5
-
-PROFILE_HOME: Final = "home"
-PROFILE_AWAY: Final = "away"
-PROFILES: Final = [PROFILE_HOME, PROFILE_AWAY]
-
-PRESENCE_AUTO: Final = "auto"
-PRESENCE_MODES: Final = [PRESENCE_AUTO, PROFILE_HOME, PROFILE_AWAY]
+CONF_AWAY_TEMPERATURE: Final = "away_temperature"
+# Used when the thermostat has no "away" preset; °C and °F.
+DEFAULT_AWAY_TEMPERATURE: Final = {"°C": 15.0, "°F": 59.0}
+AWAY_PRESET: Final = "away"
 
 WEEKDAYS: Final = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
@@ -48,7 +34,9 @@ SIGNAL_UPDATED: Final = f"{DOMAIN}_updated"
 SIGNAL_ROOM_ADDED: Final = f"{DOMAIN}_room_added"
 SIGNAL_ROOM_REMOVED: Final = f"{DOMAIN}_room_removed_{{}}"
 
-ATTR_PROFILE: Final = "profile"
+ATTR_SEASON: Final = "season"
+ATTR_PROGRAM: Final = "program"
+ATTR_AWAY: Final = "away"
 ATTR_BLOCK_START: Final = "block_start"
 ATTR_BLOCK_END: Final = "block_end"
 ATTR_NEXT_TEMPERATURE: Final = "next_temperature"

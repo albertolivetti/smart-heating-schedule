@@ -1,21 +1,8 @@
 {
   "entity": {
-    "select": {
-      "presence_mode": {
-        "default": "mdi:home-account",
-        "state": {
-          "auto": "mdi:map-marker-radius",
-          "home": "mdi:home",
-          "away": "mdi:walk"
-        }
-      }
-    },
     "sensor": {
-      "active_profile": {
-        "default": "mdi:home",
-        "state": {
-          "away": "mdi:walk"
-        }
+      "active_season": {
+        "default": "mdi:calendar-range"
       },
       "scheduled_temperature": {
         "default": "mdi:thermometer-auto"
@@ -26,6 +13,12 @@
         "default": "mdi:calendar-clock",
         "state": {
           "off": "mdi:calendar-remove"
+        }
+      },
+      "away": {
+        "default": "mdi:home",
+        "state": {
+          "on": "mdi:home-export-outline"
         }
       }
     }

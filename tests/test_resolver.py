@@ -8,13 +8,8 @@ from zoneinfo import ZoneInfo
 from homeassistant.util import dt as dt_util
 import pytest
 
-from custom_components.smart_heating_schedule.const import WEEKDAYS
-from custom_components.smart_heating_schedule.models import (
-    Block,
-    WeekSchedule,
-    default_week,
-)
-from custom_components.smart_heating_schedule.resolver import segment_at
+from custom_components.smart_heating_schedule.models import Block
+from custom_components.smart_heating_schedule.resolver import BlocksForDate, segment_at
 
 TZ = ZoneInfo("Europe/Amsterdam")
 
@@ -28,8 +23,25 @@ def amsterdam() -> None:
     dt_util.set_default_time_zone(original)
 
 
-def every_day(blocks: list[Block]) -> WeekSchedule:
-    return WeekSchedule(days={day: list(blocks) for day in WEEKDAYS})
+HOME = [Block(0, 18), Block(7 * 60, 20), Block(22 * 60, 18)]
+
+
+class Week:
+    """A weekly schedule as a blocks-for-date function; ``days`` keyed 0 (Monday) to 6."""
+
+    def __init__(self, blocks: list[Block]) -> None:
+        self.days = {weekday: list(blocks) for weekday in range(7)}
+
+    def __call__(self, day) -> list[Block]:
+        return self.days[day.weekday()]
+
+
+def every_day(blocks: list[Block]) -> BlocksForDate:
+    return Week(blocks)
+
+
+def home_week() -> Week:
+    return Week(HOME)
 
 
 def at(*args: int) -> datetime:
@@ -37,7 +49,7 @@ def at(*args: int) -> datetime:
 
 
 def test_middle_of_block() -> None:
-    week = default_week("home", "°C")  # 00:00 18, 07:00 20, 22:00 18 every day
+    week = home_week()  # 00:00 18, 07:00 20, 22:00 18 every day
     segment = segment_at(week, at(2026, 10, 26, 12, 0))
     assert segment.start == at(2026, 10, 26, 7, 0)
     assert segment.end == at(2026, 10, 26, 22, 0)
@@ -46,7 +58,7 @@ def test_middle_of_block() -> None:
 
 
 def test_merges_across_midnight() -> None:
-    week = default_week("home", "°C")
+    week = home_week()
     segment = segment_at(week, at(2026, 10, 27, 1, 0))
     # 22:00 18° continues into 00:00-07:00 18° of the next day.
     assert segment.start == at(2026, 10, 26, 22, 0)
@@ -55,13 +67,13 @@ def test_merges_across_midnight() -> None:
 
 
 def test_boundary_is_inclusive_start() -> None:
-    week = default_week("home", "°C")
+    week = home_week()
     assert segment_at(week, at(2026, 10, 26, 7, 0)).temperature == 20
     assert segment_at(week, at(2026, 10, 26, 6, 59)).temperature == 18
 
 
 def test_constant_week() -> None:
-    segment = segment_at(default_week("away", "°C"), at(2026, 10, 26, 12, 0))
+    segment = segment_at(every_day([Block(0, 16)]), at(2026, 10, 26, 12, 0))
     assert segment.start is None
     assert segment.end is None
     assert segment.temperature == 16
@@ -69,7 +81,7 @@ def test_constant_week() -> None:
 
 def test_change_once_a_week() -> None:
     week = every_day([Block(0, 18)])
-    week.days["mon"] = [Block(0, 18), Block(600, None)]
+    week.days[0] = [Block(0, 18), Block(600, None)]
     # Thursday: the segment started after Monday's off block and lasts until next Monday.
     segment = segment_at(week, at(2026, 10, 29, 12, 0))  # Thursday
     assert segment.start == at(2026, 10, 27, 0, 0)
@@ -78,8 +90,8 @@ def test_change_once_a_week() -> None:
 
 
 def test_each_day_has_its_own_blocks() -> None:
-    week = default_week("home", "°C")
-    week.days["sat"] = [Block(0, 21)]
+    week = home_week()
+    week.days[5] = [Block(0, 21)]
     assert segment_at(week, at(2026, 10, 31, 3, 0)).temperature == 21  # Saturday
     assert segment_at(week, at(2026, 10, 30, 23, 0)).end == at(2026, 10, 31, 0, 0)
 
@@ -106,3 +118,25 @@ def test_dst_spring_forward() -> None:
     later = segment_at(week, before.end + timedelta(minutes=1))
     assert later.temperature == 20
     assert later.end == at(2026, 3, 29, 4, 0)
+
+
+def test_season_change_within_the_window() -> None:
+    from datetime import date
+
+    def seasonal(day: date) -> list[Block]:
+        return HOME if day >= date(2026, 9, 1) else [Block(0, None)]
+
+    # Off all of August until autumn starts on 1 September.
+    segment = segment_at(seasonal, at(2026, 8, 28, 12, 0))
+    assert segment.start is None  # off since before the window
+    assert segment.end == at(2026, 9, 1, 0, 0)
+    assert segment.temperature is None
+    assert segment.next_temperature == 18
+    # The key does not change from day to day while nothing happens.
+    assert segment_at(seasonal, at(2026, 8, 29, 12, 0)).key == segment.key
+
+
+def test_no_change_in_the_window() -> None:
+    segment = segment_at(lambda day: [Block(0, None)], at(2026, 7, 1, 12, 0))
+    assert segment.start is None
+    assert segment.end is None
