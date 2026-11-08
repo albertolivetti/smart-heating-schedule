@@ -574,3 +574,45 @@ async def test_migrates_forced_away(
     climate(hass, heat_state)
     await setup_integration(hass, config_entry)
     assert config_entry.runtime_data.away
+
+
+async def test_away_follows_the_thermostat_card(
+    hass: HomeAssistant, config_entry: MockConfigEntry, freezer, calls, boiler_state
+) -> None:
+    climate(hass, {**boiler_state, "preset_mode": "none"})
+    await setup_integration(hass, config_entry)
+    freezer.tick()
+    await add_room(hass)
+    engine = config_entry.runtime_data
+    set_temperature, _, set_preset = calls
+    sent = len(set_temperature), len(set_preset)
+
+    # "Away" picked on the thermostat card: Away turns on, nothing is sent back.
+    freezer.tick()
+    climate(hass, {**boiler_state, "preset_mode": "away"})
+    await hass.async_block_till_done()
+    assert engine.away
+    assert hass.states.get(AWAY).state == "on"
+    assert (len(set_temperature), len(set_preset)) == sent
+    assert not engine.room_status(CLIMATE)["overridden"]
+
+    # Comfort picked on the card: Away turns off, comfort is kept as a manual
+    # change until the next block.
+    freezer.tick()
+    climate(hass, {**boiler_state, "preset_mode": "comfort"})
+    await hass.async_block_till_done()
+    assert not engine.away
+    assert (len(set_temperature), len(set_preset)) == sent
+    assert engine.room_status(CLIMATE)["overridden"]
+
+    # Our own commands do not toggle Away.
+    await engine.async_resume(CLIMATE)
+    await hass.async_block_till_done()
+    climate(hass, {**boiler_state, "preset_mode": "none"})
+    await hass.async_block_till_done()
+    assert not engine.away
+    await engine.async_set_away(True)
+    await hass.async_block_till_done()
+    climate(hass, {**boiler_state, "preset_mode": "away"})
+    await hass.async_block_till_done()
+    assert engine.away

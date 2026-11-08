@@ -12,7 +12,7 @@ Il pannello nella barra laterale permette di:
 - dare a ogni stagione dei **programmi**. Un programma vale per **uno o più giorni** della settimana, scelti con i pulsanti L M M G V S D, e ogni giorno appartiene a un solo programma.
 - modificare le **fasce orarie** direttamente sulla barra delle 24 ore: tocchi una fascia per selezionarla, trascini i separatori per cambiare gli orari (a passi di 15 minuti), cambi la temperatura con − e +, oppure **Dividi** ed **Elimina** la fascia.
 - tenere la caldaia **spenta fuori stagione** e nei giorni senza programma. Di default l'estate non ha programmi.
-- attivare l'**Assenza**: il termostato passa al suo preset *Fuori casa* (`away`). Se non ha quel preset, usa una temperatura fissa configurabile, 15 °C di default.
+- attivare l'**Assenza**: il termostato passa al suo preset *Fuori casa* (`away`). Se non ha quel preset, usa una temperatura fissa configurabile, 15 °C di default. L'Assenza è sincronizzata col termostato: se scegli *Fuori casa* dalla card di Home Assistant si attiva anche qui, e se la lasci (per esempio con *Comfort*) si disattiva. La tua scelta resta valida fino alla fascia successiva.
 
 ## Come comanda il termostato
 

@@ -9,6 +9,7 @@ from enum import StrEnum
 import logging
 from typing import Any
 
+from homeassistant.components.climate import ATTR_PRESET_MODE
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.core import (
@@ -149,12 +150,21 @@ class ScheduleEngine:
             return DEFAULT_AWAY_TEMPERATURE.get(self.store.unit, DEFAULT_AWAY_TEMPERATURE["°C"])
         return float(value)
 
-    async def async_set_away(self, away: bool) -> None:
-        """Turn Away on or off."""
+    async def async_set_away(self, away: bool, source: str | None = None) -> None:
+        """Turn Away on or off.
+
+        ``source`` is a thermostat whose away preset was changed on the device
+        or its card: it already is where the user put it, so nothing is sent
+        to it, and leaving away there counts as a manual change.
+        """
         if away == self.store.away:
             return
         self.store.away = away
         self.store.async_schedule_runtime_save()
+        if source is not None and (segment := self.segments.get(source)) is not None:
+            key, _ = self._target(segment)
+            mode = "away" if away else "schedule"
+            self._remember(source, {"key": key, "mode": mode, "temperature": segment.temperature})
         await asyncio.gather(
             *(self.async_evaluate(entity_id, Reason.AWAY) for entity_id in list(self.store.rooms))
         )
@@ -292,6 +302,21 @@ class ScheduleEngine:
     def _climate_changed(self, event: Event[EventStateChangedData]) -> None:
         entity_id = event.data["entity_id"]
         new_state = event.data["new_state"]
+        old_state = event.data["old_state"]
+        room = self.store.rooms.get(entity_id)
+        if room is not None and room.enabled and old_state is not None and new_state is not None:
+            before = old_state.attributes.get(ATTR_PRESET_MODE)
+            after = new_state.attributes.get(ATTR_PRESET_MODE)
+            # The away preset was picked (or left) on the thermostat or its
+            # card: follow it with Away. Our own commands never trigger this,
+            # because they always match the current Away state.
+            if (
+                before != after
+                and AWAY_PRESET in (before, after)
+                and (after == AWAY_PRESET) != self.away
+            ):
+                self.hass.async_create_task(self.async_set_away(after == AWAY_PRESET, entity_id))
+                return
         if (
             entity_id in self.pending
             and new_state is not None
