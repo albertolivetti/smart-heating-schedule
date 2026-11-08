@@ -1,8 +1,5 @@
 export const DOMAIN = "smart_heating_schedule";
 
-export type Profile = "home" | "away";
-export type PresenceMode = "auto" | Profile;
-
 /** A block starts at `start` ("HH:MM") and lasts until the next block (or 24:00). */
 export interface Block {
   start: string;
@@ -10,13 +7,27 @@ export interface Block {
   temperature: number | null;
 }
 
-export interface WeekSchedule {
-  /** Blocks per day, keyed "mon" to "sun". */
-  days: Record<string, Block[]>;
+/** The day schedule of one or more weekdays ("mon" … "sun") within a season. */
+export interface Program {
+  id: string;
+  name: string;
+  days: string[];
+  blocks: Block[];
+}
+
+/** A date range that repeats every year; `start` and `end` are "MM-DD". */
+export interface Season {
+  id: string;
+  name: string;
+  start: string;
+  end: string;
+  color: string | null;
 }
 
 export interface RoomStatus {
-  profile: Profile;
+  season: string | null;
+  program: string | null;
+  away: boolean;
   temperature: number | null;
   start: string | null;
   end: string | null;
@@ -30,19 +41,18 @@ export interface RoomStatus {
 export interface Room {
   entity_id: string;
   enabled: boolean;
-  home: WeekSchedule;
-  away: WeekSchedule;
+  /** Programs keyed by season id. */
+  programs: Record<string, Program[]>;
   status: RoomStatus;
 }
 
 export interface PanelState {
   unit: string;
-  presence: {
-    mode: PresenceMode;
-    profile: Profile;
-    entity_id: string;
-    detected_home: boolean | null;
-  };
+  away: boolean;
+  away_temperature: number;
+  /** Id of today's season, or null outside every season. */
+  season: string | null;
+  seasons: Season[];
   rooms: Room[];
 }
 

@@ -6,10 +6,11 @@ import {
   orderedDays,
   toSegments,
   updateBlock,
+  moveBoundary,
+  splitBlock,
   validateDay,
-  withDay,
 } from "../src/schedule";
-import type { Block, WeekSchedule } from "../src/types";
+import type { Block } from "../src/types";
 
 const day = (...blocks: [string, number | null][]): Block[] =>
   blocks.map(([start, temperature]) => ({ start, temperature }));
@@ -92,20 +93,36 @@ describe("deleteBlock", () => {
   });
 });
 
-describe("week helpers", () => {
-  const week: WeekSchedule = {
-    days: { mon: tado, tue: tado, wed: tado, thu: tado, fri: tado, sat: tado, sun: tado },
-  };
+describe("orderedDays", () => {
+  it("starts on the first weekday", () => {
+    expect(orderedDays(6)).toEqual(["sun", "mon", "tue", "wed", "thu", "fri", "sat"]);
+    expect(orderedDays(0)[0]).toBe("mon");
+  });
+});
 
-  it("replaces one day", () => {
-    const updated = withDay(week, "wed", day(["00:00", 15]));
-    expect(updated.days.wed).toEqual(day(["00:00", 15]));
-    expect(updated.days.tue).toBe(tado);
-    expect(week.days.wed).toBe(tado);
+describe("moveBoundary", () => {
+  it("snaps to the slot grid", () => {
+    expect(moveBoundary(tado, 1, 5 * 60 + 7)).toEqual(day(["00:00", 19], ["05:00", 20], ["08:00", 19]));
   });
 
-  it("orders days from the first weekday", () => {
-    expect(orderedDays(0)).toEqual(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]);
-    expect(orderedDays(6)).toEqual(["sun", "mon", "tue", "wed", "thu", "fri", "sat"]);
+  it("keeps every block at least one slot long", () => {
+    expect(moveBoundary(tado, 1, 0)[1].start).toBe("00:15");
+    expect(moveBoundary(tado, 1, 9 * 60)[1].start).toBe("07:45");
+    expect(moveBoundary(tado, 2, 24 * 60)[2].start).toBe("23:45");
+  });
+
+  it("never moves the first block", () => {
+    expect(moveBoundary(tado, 0, 60)).toBe(tado);
+  });
+});
+
+describe("splitBlock", () => {
+  it("splits in the middle", () => {
+    expect(splitBlock(tado, 1)).toEqual(day(["00:00", 19], ["04:00", 20], ["06:00", 20], ["08:00", 19]));
+    expect(validateDay(splitBlock(tado, 2)!)).toBe(true);
+  });
+
+  it("refuses blocks shorter than two slots", () => {
+    expect(splitBlock(day(["00:00", 19], ["23:45", 20]), 1)).toBeNull();
   });
 });

@@ -1,4 +1,4 @@
-import { DOMAIN, type HomeAssistant, type PanelState, type PresenceMode, type WeekSchedule } from "./types";
+import { DOMAIN, type HomeAssistant, type PanelState, type Program, type Season } from "./types";
 
 export const subscribeState = (
   hass: HomeAssistant,
@@ -14,15 +14,18 @@ export const removeRoom = (hass: HomeAssistant, entityId: string) =>
 export const saveRoom = (
   hass: HomeAssistant,
   entityId: string,
-  data: { enabled?: boolean; home?: WeekSchedule; away?: WeekSchedule },
+  data: { enabled?: boolean; programs?: Record<string, Program[]> },
 ) => hass.callWS({ type: `${DOMAIN}/room/save`, entity_id: entityId, ...data });
-
-export const copyRoom = (hass: HomeAssistant, entityId: string, targets: string[]) =>
-  hass.callWS({ type: `${DOMAIN}/room/copy`, entity_id: entityId, targets });
 
 /** Undo manual changes: set the thermostat back to the current block. */
 export const resumeRoom = (hass: HomeAssistant, entityId: string) =>
   hass.callWS({ type: `${DOMAIN}/room/resume`, entity_id: entityId });
 
-export const setPresenceMode = (hass: HomeAssistant, mode: PresenceMode) =>
-  hass.callWS({ type: `${DOMAIN}/presence/set`, mode });
+export const saveSeasons = (hass: HomeAssistant, seasons: Season[]) =>
+  hass.callWS({ type: `${DOMAIN}/seasons/save`, seasons });
+
+/** Back to Home Assistant's meteorological seasons. */
+export const resetSeasons = (hass: HomeAssistant) => hass.callWS({ type: `${DOMAIN}/seasons/reset` });
+
+export const setAway = (hass: HomeAssistant, away: boolean) =>
+  hass.callWS({ type: `${DOMAIN}/away/set`, away });

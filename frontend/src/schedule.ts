@@ -2,7 +2,7 @@
  * Pure schedule logic, mirroring the Python model: a day is a list of
  * back-to-back blocks from 00:00 to 24:00 on a 15 minute grid.
  */
-import type { Block, WeekSchedule } from "./types";
+import type { Block } from "./types";
 
 export const SLOT = 15;
 export const DAY = 24 * 60;
@@ -115,15 +115,35 @@ export const validateDay = (blocks: Block[]): boolean => {
   );
 };
 
-export const blocksForWeekday = (week: WeekSchedule, weekday: number): Block[] => week.days[WEEKDAYS[weekday]];
-
-export const withDay = (week: WeekSchedule, day: string, blocks: Block[]): WeekSchedule => ({
-  ...week,
-  days: { ...week.days, [day]: blocks },
-});
-
 /** The days of the week in display order, starting on the locale's first weekday (Monday = 0). */
 export const orderedDays = (firstWeekday: number): string[] => [
   ...WEEKDAYS.slice(firstWeekday),
   ...WEEKDAYS.slice(0, firstWeekday),
 ];
+
+/**
+ * Move the start of block `index` (the divider before it), keeping every
+ * block at least one slot long.
+ */
+export const moveBoundary = (blocks: Block[], index: number, minutes: number): Block[] => {
+  if (index <= 0 || index >= blocks.length) return blocks;
+  const segments = toSegments(blocks);
+  const low = segments[index - 1].start + SLOT;
+  const high = segments[index].end - SLOT;
+  const snapped = Math.round(minutes / SLOT) * SLOT;
+  const value = Math.min(high, Math.max(low, snapped));
+  return blocks.map((block, i) => (i === index ? { ...block, start: toTime(value) } : block));
+};
+
+/** Split a block in two halves on the slot grid; null when it is too short. */
+export const splitBlock = (blocks: Block[], index: number): Block[] | null => {
+  const segment = toSegments(blocks)[index];
+  if (!segment || segment.end - segment.start < 2 * SLOT) return null;
+  const middle = Math.round((segment.start + segment.end) / 2 / SLOT) * SLOT;
+  const copy = [...blocks];
+  copy.splice(index + 1, 0, { start: toTime(middle), temperature: segment.temperature });
+  return copy;
+};
+
+export const setBlockTemperature = (blocks: Block[], index: number, temperature: number | null): Block[] =>
+  blocks.map((block, i) => (i === index ? { ...block, temperature } : block));

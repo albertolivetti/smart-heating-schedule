@@ -1,5 +1,5 @@
 {
-  "name": "Smart Heating Schedule",
+  "name": "Cronotermostato stagionale",
   "homeassistant": "2026.3.0",
   "render_readme": true
 }

@@ -1,29 +1,8 @@
-import { de } from "./translations/de";
 import { en, type Strings } from "./translations/en";
-import { es } from "./translations/es";
-import { fr } from "./translations/fr";
 import { it } from "./translations/it";
-import { nl } from "./translations/nl";
-import { pl } from "./translations/pl";
-import { pt } from "./translations/pt";
-import { ru } from "./translations/ru";
-import { tr } from "./translations/tr";
-import { zhHans } from "./translations/zh-Hans";
 
-/** Keyed by Home Assistant language code; "pt" also covers "pt-BR". */
-export const translations: Record<string, Strings> = {
-  en,
-  de,
-  nl,
-  fr,
-  es,
-  it,
-  pl,
-  pt,
-  ru,
-  tr,
-  "zh-Hans": zhHans,
-};
+/** Keyed by Home Assistant language code. */
+export const translations: Record<string, Strings> = { en, it };
 
 const lookup = (strings: Strings | undefined, key: string): string | undefined => {
   let value: any = strings;
@@ -39,7 +18,7 @@ export const localizer = (language: string): Localize => {
   return (key, values) => {
     let text = lookup(strings, key) ?? lookup(en, key) ?? key;
     for (const [name, value] of Object.entries(values ?? {})) {
-      text = text.replace(`{${name}}`, value);
+      text = text.replaceAll(`{${name}}`, value);
     }
     return text;
   };

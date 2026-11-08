@@ -73,13 +73,12 @@ describe("time", () => {
 
 describe("localize", () => {
   it("translates with fallback to English", () => {
-    expect(localizer("nl")("room.add_block")).toBe("Tijdsblok toevoegen");
-    expect(localizer("de")("room.add_block")).toBe("Zeitblock hinzufügen");
-    expect(localizer("ja")("room.add_block")).toBe("Add time block");
-    expect(localizer("nl-BE")("presence.away")).toBe("Afwezig");
-    expect(localizer("pt-BR")("presence.away")).toBe("Fora");
-    expect(localizer("zh-Hans")("presence.away")).toBe("离家");
-    expect(localizer("tr")("presence.away")).toBe("Dışarıda");
+    expect(localizer("it")("away.label")).toBe("Assenza");
+    expect(localizer("it-IT")("block.split")).toBe("Dividi");
+    expect(localizer("ja")("block.split")).toBe("Split");
+    expect(localizer("it")("programs.day_other", { day: "Lunedì", program: "Feriali" })).toBe(
+      "Lunedì: in Feriali, tocca per spostarlo qui",
+    );
     expect(localizer("en")("status.until", { temperature: "20°", time: "22:00" })).toBe("20° until 22:00");
   });
 

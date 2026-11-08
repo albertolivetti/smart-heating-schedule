@@ -6,10 +6,9 @@ import { ensureHaElements, safeCustomElement } from "./ha";
 import { localizer, type Localize } from "./localize";
 import { sharedStyles } from "./styles";
 import type { HomeAssistant, PanelState, Route } from "./types";
-import "./views/overview-view";
-import "./views/room-view";
+import "./views/main-view";
 
-/** The Smart Heating Schedule sidebar panel. */
+/** The seasonal heating schedule sidebar panel. */
 @safeCustomElement("smart-heating-schedule-panel")
 export class SmartHeatingSchedulePanel extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
@@ -65,27 +64,12 @@ export class SmartHeatingSchedulePanel extends LitElement {
     if (!this._state || !this._ready) {
       return html`<div class="message secondary">${localize("loading")}</div>`;
     }
-    const prefix = this.route?.prefix ?? "/smart-heating-schedule";
-    const match = /^\/room\/([^/]+)/.exec(this.route?.path ?? "");
-    const room = match ? this._state.rooms.find((r) => r.entity_id === decodeURIComponent(match[1])) : undefined;
-
-    if (room) {
-      return html`<shs-room-view
-        .hass=${this.hass}
-        .state=${this._state}
-        .room=${room}
-        .prefix=${prefix}
-        .narrow=${this.narrow}
-        .localize=${localize}
-      ></shs-room-view>`;
-    }
-    return html`<shs-overview-view
+    return html`<shs-main-view
       .hass=${this.hass}
       .state=${this._state}
-      .prefix=${prefix}
       .narrow=${this.narrow}
       .localize=${localize}
-    ></shs-overview-view>`;
+    ></shs-main-view>`;
   }
 
   static styles = [
