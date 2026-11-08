@@ -5,6 +5,7 @@
 import type { Block } from "./types";
 
 export const SLOT = 15;
+export const MAX_BLOCK_NAME = 30;
 export const DAY = 24 * 60;
 export const WEEKDAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 
@@ -12,6 +13,7 @@ export interface Segment {
   start: number;
   end: number;
   temperature: number | null;
+  name?: string | null;
 }
 
 export const toMinutes = (time: string): number => {
@@ -28,16 +30,27 @@ export const toSegments = (blocks: Block[]): Segment[] =>
     start: toMinutes(block.start),
     end: index + 1 < blocks.length ? toMinutes(blocks[index + 1].start) : DAY,
     temperature: block.temperature,
+    ...(block.name ? { name: block.name } : {}),
   }));
 
 const fromSegments = (segments: Segment[]): Block[] =>
   segments
     .filter((segment) => segment.end > segment.start)
     .sort((a, b) => a.start - b.start)
-    .map((segment) => ({ start: toTime(segment.start), temperature: segment.temperature }));
+    .map((segment) => {
+      const block: Block = { start: toTime(segment.start), temperature: segment.temperature };
+      if (segment.name) block.name = segment.name;
+      return block;
+    });
 
 /** Overwrite [start, end) with a temperature; overlapped blocks are trimmed or removed. */
-const paint = (segments: Segment[], start: number, end: number, temperature: number | null): Segment[] => {
+const paint = (
+  segments: Segment[],
+  start: number,
+  end: number,
+  temperature: number | null,
+  name: string | null = null,
+): Segment[] => {
   const result: Segment[] = [];
   for (const segment of segments) {
     if (segment.end <= start || segment.start >= end) {
@@ -47,7 +60,7 @@ const paint = (segments: Segment[], start: number, end: number, temperature: num
     if (segment.start < start) result.push({ ...segment, end: start });
     if (segment.end > end) result.push({ ...segment, start: end });
   }
-  result.push({ start, end, temperature });
+  result.push(name ? { start, end, temperature, name } : { start, end, temperature });
   return result;
 };
 
@@ -91,7 +104,7 @@ export const updateBlock = (
     segments[index + 1] = { ...segments[index + 1], start: Math.max(end, old.start) };
   }
   const rest = segments.filter((_, i) => i !== index);
-  return fromSegments(paint(rest, start, end, temperature));
+  return fromSegments(paint(rest, start, end, temperature, old.name));
 };
 
 /** Remove a block; the block before it (or after it, for the first) takes its time. */
@@ -147,3 +160,12 @@ export const splitBlock = (blocks: Block[], index: number): Block[] | null => {
 
 export const setBlockTemperature = (blocks: Block[], index: number, temperature: number | null): Block[] =>
   blocks.map((block, i) => (i === index ? { ...block, temperature } : block));
+
+/** Name a block; an empty name removes it. */
+export const setBlockName = (blocks: Block[], index: number, name: string): Block[] =>
+  blocks.map((block, i) => {
+    if (i !== index) return block;
+    const trimmed = name.trim().slice(0, MAX_BLOCK_NAME);
+    const { name: _old, ...rest } = block;
+    return trimmed ? { ...rest, name: trimmed } : rest;
+  });

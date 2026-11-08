@@ -24,8 +24,8 @@ type BlocksForDate = Callable[[date], list[Block]]
 class Segment:
     """A stretch of time with one target temperature.
 
-    Back-to-back blocks with the same temperature are merged, also across
-    midnight, so a segment only ends when the temperature really changes.
+    Back-to-back blocks with the same temperature and name are merged, also
+    across midnight, so a segment only ends when the block really changes.
     ``start`` and ``end`` are ``None`` when the temperature does not change
     within the window.
     """
@@ -34,6 +34,8 @@ class Segment:
     end: datetime | None
     temperature: float | None
     next_temperature: float | None
+    name: str | None = None
+    next_name: str | None = None
 
     @property
     def key(self) -> str:
@@ -50,24 +52,29 @@ def _local_datetime(day: date, minutes: int) -> datetime:
     )
 
 
+type Value = tuple[float | None, str | None]
+
+
+def _value(block: Block) -> Value:
+    return block.temperature, block.name
+
+
 def _boundaries(
     blocks_for_date: BlocksForDate, first: date, days: int
-) -> list[tuple[datetime, float | None]]:
-    """Return (start, temperature) of every block in a range, merged on equal temperature."""
-    merged: list[tuple[datetime, float | None]] = []
+) -> list[tuple[datetime, Value]]:
+    """Return (start, (temperature, name)) of every block in a range, merging equal ones."""
+    merged: list[tuple[datetime, Value]] = []
     for offset in range(days):
         day = first + timedelta(days=offset)
         for block in blocks_for_date(day):
-            if merged and merged[-1][1] == block.temperature:
+            if merged and merged[-1][1] == _value(block):
                 continue
-            merged.append((_local_datetime(day, block.start), block.temperature))
+            merged.append((_local_datetime(day, block.start), _value(block)))
     return merged
 
 
-def _start_before(
-    blocks_for_date: BlocksForDate, first: date, temperature: float | None
-) -> datetime | None:
-    """Return when the stretch of ``temperature`` running at midnight on ``first`` began.
+def _start_before(blocks_for_date: BlocksForDate, first: date, value: Value) -> datetime | None:
+    """Return when the stretch of ``value`` running at midnight on ``first`` began.
 
     Using the real start (instead of the window's first day) keeps the segment
     key the same from one day to the next, so long stretches are not re-sent.
@@ -76,7 +83,7 @@ def _start_before(
         day = first - timedelta(days=back)
         blocks = blocks_for_date(day)
         for index in range(len(blocks) - 1, -1, -1):
-            if blocks[index].temperature != temperature:
+            if _value(blocks[index]) != value:
                 if index + 1 < len(blocks):
                     return _local_datetime(day, blocks[index + 1].start)
                 return _local_datetime(day + timedelta(days=1), 0)
@@ -93,19 +100,29 @@ def segment_at(blocks_for_date: BlocksForDate, when: datetime) -> Segment:
     boundaries = _boundaries(blocks_for_date, first, 2 * _WINDOW_DAYS + 1)
 
     if len(boundaries) == 1:
-        temperature = boundaries[0][1]
-        return Segment(_start_before(blocks_for_date, first, temperature), None, temperature, None)
+        value = boundaries[0][1]
+        return Segment(_start_before(blocks_for_date, first, value), None, *_now(value))
 
     for index in range(len(boundaries) - 1, -1, -1):
-        start, temperature = boundaries[index]
+        start, value = boundaries[index]
         if start.timestamp() <= timestamp:
             # The first boundary is just the start of the window, not a change.
-            real_start = start if index > 0 else _start_before(blocks_for_date, first, temperature)
+            real_start = start if index > 0 else _start_before(blocks_for_date, first, value)
             if index + 1 == len(boundaries):
                 # No change until the end of the window.
-                return Segment(real_start, None, temperature, None)
-            end, next_temperature = boundaries[index + 1]
-            return Segment(real_start, end, temperature, next_temperature)
+                return Segment(real_start, None, *_now(value))
+            end, next_value = boundaries[index + 1]
+            return Segment(real_start, end, *_now_and_next(value, next_value))
 
-    # Before the first boundary: the window starts with this temperature.
-    return Segment(None, boundaries[0][0], boundaries[0][1], boundaries[1][1])
+    # Before the first boundary: the window starts with this block.
+    return Segment(None, boundaries[0][0], *_now_and_next(boundaries[0][1], boundaries[1][1]))
+
+
+def _now(value: Value) -> tuple[float | None, None, str | None, None]:
+    return value[0], None, value[1], None
+
+
+def _now_and_next(
+    value: Value, next_value: Value
+) -> tuple[float | None, float | None, str | None, str | None]:
+    return value[0], next_value[0], value[1], next_value[1]

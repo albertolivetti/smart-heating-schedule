@@ -19,6 +19,8 @@ import {
   deleteBlock,
   moveBoundary,
   SLOT,
+  MAX_BLOCK_NAME,
+  setBlockName,
   setBlockTemperature,
   splitBlock,
   toMinutes,
@@ -172,6 +174,11 @@ export class TimelineEditor extends LitElement {
     this._emit(setBlockTemperature(this.blocks, index, temperature));
   }
 
+  private _rename(index: number, name: string) {
+    if ((this.blocks[index].name ?? "") === name.trim()) return;
+    this._emit(setBlockName(this.blocks, index, name));
+  }
+
   private _split(index: number) {
     const blocks = splitBlock(this.blocks, index);
     if (!blocks) return;
@@ -227,15 +234,19 @@ export class TimelineEditor extends LitElement {
           ${segments.map((segment, index) => {
             const label = this._label(segment.temperature);
             const range = `${this._time(segment.start)} – ${this._time(segment.end)}`;
+            const name = segment.name ? `${segment.name}, ` : "";
             return html`<button
               class="block ${index === selected ? "selected" : ""} ${segment.temperature === null ? "off" : ""}"
               style="left:${(segment.start / DAY) * 100}%;width:${((segment.end - segment.start) / DAY) *
               100}%;--block-color:${temperatureColor(segment.temperature, this.unit)}"
               aria-pressed=${index === selected}
-              aria-label="${range}, ${label}"
+              aria-label="${name}${range}, ${label}"
+              title=${segment.name ?? nothing}
               @click=${(ev: MouseEvent) => this._tap(ev, index)}
             >
-              <span>${label}</span>
+              <span class="text"
+                >${segment.name ? html`<span class="name">${segment.name}</span>` : nothing}<span>${label}</span></span
+              >
             </button>`;
           })}
         </div>
@@ -340,6 +351,19 @@ export class TimelineEditor extends LitElement {
           <ha-svg-icon .path=${mdiClose}></ha-svg-icon>
         </button>
       </div>
+      <label class="name-field">
+        <span class="time-label secondary">${this.localize("block.name")}</span>
+        <input
+          type="text"
+          maxlength=${MAX_BLOCK_NAME}
+          .value=${segment.name ?? ""}
+          placeholder=${this.localize("block.name_placeholder")}
+          @change=${(ev: Event) => this._rename(index, (ev.target as HTMLInputElement).value)}
+          @keydown=${(ev: KeyboardEvent) => {
+            if (ev.key === "Enter") (ev.target as HTMLInputElement).blur();
+          }}
+        />
+      </label>
       <div class="controls">
         <div class="group temp">
           <button
@@ -481,10 +505,53 @@ export class TimelineEditor extends LitElement {
         outline: 2px solid var(--primary-color);
         outline-offset: -2px;
       }
+      .block .text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+        max-width: 100%;
+      }
+      .block .name {
+        font-size: 11px;
+        font-weight: 500;
+        overflow: hidden;
+        padding: 0 4px;
+        text-overflow: ellipsis;
+      }
+      @container (max-width: 64px) {
+        .block .name {
+          display: none;
+        }
+      }
       @container (max-width: 34px) {
         .block span {
           visibility: hidden;
         }
+      }
+      .name-field {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+      }
+      .name-field input {
+        background: var(--card-background-color, #fff);
+        border: 1px solid var(--divider-color);
+        border-radius: 8px;
+        box-sizing: border-box;
+        color: var(--primary-text-color);
+        flex: 1;
+        font: inherit;
+        font-size: 16px;
+        height: 36px;
+        max-width: 320px;
+        min-width: 0;
+        padding: 0 10px;
+        user-select: text;
+        -webkit-user-select: text;
+      }
+      .name-field input:focus {
+        border-color: var(--primary-color);
+        outline: none;
       }
       .divider {
         align-items: center;

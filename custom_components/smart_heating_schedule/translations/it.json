@@ -15,11 +15,11 @@
       "init": {
         "title": "Opzioni del cronotermostato",
         "data": {
-          "away_temperature": "Temperatura in assenza",
+          "away_temperature": "Temperatura fuori casa",
           "admin_only": "Mostra il pannello solo agli amministratori"
         },
         "data_description": {
-          "away_temperature": "Usata quando Assenza è attiva, per i termostati senza il preset Fuori casa. I termostati con quel preset usano il preset.",
+          "away_temperature": "Usata quando Fuori casa è attivo, per i termostati senza il preset Fuori casa. I termostati con quel preset usano il preset.",
           "admin_only": "Gli utenti non amministratori possono vedere i programmi ma non modificarli."
         }
       }
@@ -39,7 +39,7 @@
         "name": "Programmazione"
       },
       "away": {
-        "name": "Assenza"
+        "name": "Fuori casa"
       }
     }
   },

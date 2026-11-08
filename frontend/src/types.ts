@@ -5,6 +5,8 @@ export interface Block {
   start: string;
   /** Target temperature, or null for heating off. */
   temperature: number | null;
+  /** Optional label, e.g. "Risveglio", shown on the timeline and in the sensor. */
+  name?: string;
 }
 
 /** The day schedule of one or more weekdays ("mon" … "sun") within a season. */
@@ -32,6 +34,9 @@ export interface RoomStatus {
   start: string | null;
   end: string | null;
   next_temperature: number | null;
+  /** Name of the current block, if it has one. */
+  name: string | null;
+  next_name: string | null;
   pending: boolean;
   /** The thermostat was changed by hand and no longer follows the current block. */
   overridden: boolean;

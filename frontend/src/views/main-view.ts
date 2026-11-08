@@ -475,16 +475,21 @@ export class MainView extends LitElement {
     const h12 = uses12h(this.hass);
     const timeZone = this.hass.config.time_zone;
     const at = (iso: string | null) => (iso ? formatIsoTime(iso, h12, timeZone) : null);
-    const block =
-      status.start || status.end ? `${at(status.start) ?? "…"} – ${at(status.end) ?? "…"}` : this.localize("now.none");
+    const named = (name: string | null | undefined, text: string) =>
+      name ? this.localize("status.named", { name, status: text }) : text;
+    const block = named(
+      status.name,
+      status.start || status.end ? `${at(status.start) ?? "…"} – ${at(status.end) ?? "…"}` : this.localize("now.none"),
+    );
     const next =
       status.end === null
         ? this.localize("now.none")
-        : `${at(status.end)} → ${
+        : `${at(status.end)} → ${named(
+            status.next_name,
             status.next_temperature === null
               ? this.localize("now.off")
-              : formatTemperature(status.next_temperature, unit, 0.5, false, language)
-          }`;
+              : formatTemperature(status.next_temperature, unit, 0.5, false, language),
+          )}`;
     const temperature =
       status.temperature === null
         ? this.localize("now.off")

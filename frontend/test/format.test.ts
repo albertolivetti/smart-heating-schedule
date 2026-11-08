@@ -74,7 +74,7 @@ describe("time", () => {
 
 describe("localize", () => {
   it("translates with fallback to English", () => {
-    expect(localizer("it")("away.label")).toBe("Assenza");
+    expect(localizer("it")("away.label")).toBe("Fuori casa");
     expect(localizer("it-IT")("block.split")).toBe("Dividi");
     expect(localizer("ja")("block.split")).toBe("Split");
     expect(localizer("it")("programs.day_other", { day: "Lunedì", program: "Feriali" })).toBe(

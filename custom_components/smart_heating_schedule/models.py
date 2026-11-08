@@ -60,6 +60,7 @@ _DAY_NAMES = {
 _REFERENCE_YEAR = 2024
 _COLOR = re.compile(r"^#[0-9a-fA-F]{6}$")
 MAX_NAME_LENGTH = 50
+MAX_BLOCK_NAME_LENGTH = 30
 
 
 def _language(language: str) -> str:
@@ -77,10 +78,17 @@ class Block:
 
     start: int
     temperature: float | None
+    name: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
-        """Return the JSON representation."""
-        return {"start": format_minutes(self.start), "temperature": self.temperature}
+        """Return the JSON representation; ``name`` only when the block has one."""
+        data: dict[str, Any] = {
+            "start": format_minutes(self.start),
+            "temperature": self.temperature,
+        }
+        if self.name:
+            data["name"] = self.name
+        return data
 
 
 OFF_DAY: list[Block] = [Block(0, None)]
@@ -276,6 +284,15 @@ def _validate_name(value: Any) -> str:
     return name
 
 
+def _validate_block_name(value: Any) -> str | None:
+    if value is None:
+        return None
+    name = vol.Coerce(str)(value).strip()
+    if len(name) > MAX_BLOCK_NAME_LENGTH:
+        raise vol.Invalid(f"a block name can have up to {MAX_BLOCK_NAME_LENGTH} characters")
+    return name or None
+
+
 def _validate_id(value: Any) -> str:
     if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,40}", value):
         raise vol.Invalid(f"invalid id: {value}")
@@ -300,6 +317,7 @@ BLOCK_SCHEMA = vol.Schema(
     {
         vol.Required("start"): _validate_time,
         vol.Required("temperature"): _validate_temperature,
+        vol.Optional("name"): _validate_block_name,
     }
 )
 DAY_SCHEMA = vol.All([BLOCK_SCHEMA], _validate_day)
@@ -376,7 +394,10 @@ def _season(data: dict[str, Any]) -> Season:
 
 def day_from_dict(blocks: list[dict[str, Any]]) -> list[Block]:
     """Build blocks from validated JSON."""
-    return [Block(parse_time(block["start"]), block["temperature"]) for block in blocks]
+    return [
+        Block(parse_time(block["start"]), block["temperature"], block.get("name"))
+        for block in blocks
+    ]
 
 
 def seasons_from_list(data: Any) -> list[Season]:
@@ -500,7 +521,8 @@ def convert_room(room: RoomSchedule, from_unit: str, to_unit: str) -> RoomSchedu
                     name=program.name,
                     days=list(program.days),
                     blocks=[
-                        Block(block.start, convert(block.temperature)) for block in program.blocks
+                        Block(block.start, convert(block.temperature), block.name)
+                        for block in program.blocks
                     ],
                 )
                 for program in programs

@@ -38,6 +38,7 @@ from .const import (
     CONF_AWAY_TEMPERATURE,
     DEFAULT_AWAY_TEMPERATURE,
     DOMAIN,
+    EVENT_BLOCK_STARTED,
     SIGNAL_ROOM_ADDED,
     SIGNAL_ROOM_REMOVED,
     SIGNAL_UPDATED,
@@ -189,11 +190,38 @@ class ScheduleEngine:
             room = self.store.rooms.get(entity_id)
             if room is None:
                 return
+            previous = self.segments.get(entity_id)
             segment = self._update_segment(entity_id, dt_util.now())
             if segment is not None and self._started:
                 await self._async_apply(room, segment, reason)
+                if (
+                    reason is Reason.TRANSITION
+                    and previous is not None
+                    and previous.key != segment.key
+                ):
+                    self._fire_block_started(entity_id)
             self._update_overridden(entity_id)
             self._notify()
+
+    @callback
+    def _fire_block_started(self, entity_id: str) -> None:
+        status = self.room_status(entity_id)
+        self.hass.bus.async_fire(
+            EVENT_BLOCK_STARTED,
+            {
+                "entity_id": entity_id,
+                "season": status["season"],
+                "program": status["program"],
+                "block_name": status["name"],
+                "temperature": status["temperature"],
+                "heating_off": status["temperature"] is None,
+                "away": status["away"],
+                "block_start": status["start"],
+                "block_end": status["end"],
+                "next_temperature": status["next_temperature"],
+                "next_block_name": status["next_name"],
+            },
+        )
 
     def plan(self, room: RoomSchedule, day: date) -> DayPlan:
         """Return what a room does on a date."""
@@ -545,6 +573,8 @@ class ScheduleEngine:
             "start": segment.start.isoformat() if segment and segment.start else None,
             "end": segment.end.isoformat() if segment and segment.end else None,
             "next_temperature": segment.next_temperature if segment and segment.end else None,
+            "name": segment.name if segment else None,
+            "next_name": segment.next_name if segment and segment.end else None,
             "pending": entity_id in self.pending,
             "overridden": entity_id in self.overridden,
             "last_error": self.errors.get(entity_id),

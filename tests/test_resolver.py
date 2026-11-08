@@ -152,3 +152,23 @@ def test_key_is_stable_through_a_long_stretch() -> None:
     assert len(keys) == 1
     segment = segment_at(seasonal, at(2026, 6, 20, 12, 0))
     assert segment.start == at(2026, 6, 1, 0, 0)
+
+
+def test_names_split_equal_temperatures() -> None:
+    week = every_day(
+        [Block(0, 18), Block(6 * 60, 20, "Risveglio"), Block(8 * 60, 20), Block(22 * 60, 18)]
+    )
+    segment = segment_at(week, at(2026, 10, 26, 7, 0))
+    assert segment.start == at(2026, 10, 26, 6, 0)
+    assert segment.end == at(2026, 10, 26, 8, 0)
+    assert segment.name == "Risveglio"
+    assert segment.next_temperature == 20
+    assert segment.next_name is None
+
+
+def test_same_name_and_temperature_merge() -> None:
+    week = every_day([Block(0, 18, "Notte"), Block(7 * 60, 20), Block(22 * 60, 18, "Notte")])
+    segment = segment_at(week, at(2026, 10, 27, 3, 0))
+    assert segment.start == at(2026, 10, 26, 22, 0)
+    assert segment.end == at(2026, 10, 27, 7, 0)
+    assert segment.name == "Notte"

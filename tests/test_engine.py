@@ -15,11 +15,13 @@ from homeassistant.util.unit_system import US_CUSTOMARY_SYSTEM
 import pytest
 from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
+    async_capture_events,
     async_fire_time_changed,
     async_mock_service,
 )
+import voluptuous as vol
 
-from custom_components.smart_heating_schedule.const import DOMAIN
+from custom_components.smart_heating_schedule.const import DOMAIN, EVENT_BLOCK_STARTED
 from custom_components.smart_heating_schedule.models import (
     Season,
     programs_by_season,
@@ -66,12 +68,19 @@ async def move_to(hass: HomeAssistant, freezer: FrozenDateTimeFactory, when: dat
     await hass.async_block_till_done()
 
 
-def program(name: str, days: list[str], *blocks: tuple[str, float | None]) -> dict[str, Any]:
+def program(name: str, days: list[str], *blocks: tuple) -> dict[str, Any]:
     return {
         "id": name.lower().replace(" ", "_"),
         "name": name,
         "days": days,
-        "blocks": [{"start": start, "temperature": temp} for start, temp in blocks],
+        "blocks": [
+            {
+                "start": block[0],
+                "temperature": block[1],
+                **({"name": block[2]} if block[2:] else {}),
+            }
+            for block in blocks
+        ],
     }
 
 
@@ -616,3 +625,71 @@ async def test_away_follows_the_thermostat_card(
     climate(hass, {**boiler_state, "preset_mode": "away"})
     await hass.async_block_till_done()
     assert engine.away
+
+
+async def test_block_names_and_started_event(
+    hass: HomeAssistant, config_entry: MockConfigEntry, freezer, calls, heat_state
+) -> None:
+    climate(hass, heat_state)
+    await setup_integration(hass, config_entry)
+    await add_room(hass)
+    engine = config_entry.runtime_data
+    set_temperature, _, _ = calls
+    events = async_capture_events(hass, EVENT_BLOCK_STARTED)
+
+    every_day = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+    programs = programs_by_season(
+        {
+            "autumn": [
+                program(
+                    "Week",
+                    every_day,
+                    ("00:00", 17, "Notte"),
+                    ("12:00", 20, "Pranzo"),
+                    ("14:00", 20),
+                    ("22:00", 17, "Notte"),
+                )
+            ]
+        }
+    )
+    await engine.async_update_room(CLIMATE, programs=programs)
+    await hass.async_block_till_done()
+    attributes = hass.states.get(SENSOR).attributes
+    assert attributes["block_name"] == "Pranzo"
+    assert attributes["next_block_name"] is None
+    assert attributes["next_temperature"] == 20
+    assert not events  # edits are not block starts
+    stored = engine.store.rooms[CLIMATE].as_dict()["programs"]["autumn"][0]["blocks"]
+    assert stored[1] == {"start": "12:00", "temperature": 20.0, "name": "Pranzo"}
+    assert "name" not in stored[2]
+
+    sent = len(set_temperature)
+    await move_to(hass, freezer, datetime(2026, 10, 26, 14, 0, 1, tzinfo=TZ))
+    assert len(events) == 1
+    assert events[0].data["entity_id"] == CLIMATE
+    assert events[0].data["block_name"] is None
+    assert events[0].data["temperature"] == 20
+    assert events[0].data["next_block_name"] == "Notte"
+    assert len(set_temperature) == sent + 1  # a new block, sent again
+
+    await move_to(hass, freezer, datetime(2026, 10, 26, 22, 0, 1, tzinfo=TZ))
+    assert len(events) == 2
+    assert events[1].data["block_name"] == "Notte"
+    assert events[1].data["program"] == "week"
+    # Midnight is inside the Notte block: no new event.
+    await move_to(hass, freezer, datetime(2026, 10, 27, 0, 0, 1, tzinfo=TZ))
+    assert len(events) == 2
+
+
+async def test_block_name_is_validated(
+    hass: HomeAssistant, config_entry: MockConfigEntry, calls, heat_state
+) -> None:
+    climate(hass, heat_state)
+    await setup_integration(hass, config_entry)
+    await add_room(hass)
+    engine = config_entry.runtime_data
+    with pytest.raises(vol.Invalid):
+        programs_by_season({"autumn": [program("Week", ["mon"], ("00:00", 17, "x" * 31))]})
+    programs = programs_by_season({"autumn": [program("Week", ["mon"], ("00:00", 17, "  "))]})
+    await engine.async_update_room(CLIMATE, programs=programs)
+    assert engine.store.rooms[CLIMATE].programs["autumn"][0].blocks[0].name is None

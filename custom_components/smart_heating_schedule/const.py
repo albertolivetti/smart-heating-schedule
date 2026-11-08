@@ -30,6 +30,9 @@ WEEKDAYS: Final = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 SLOT_MINUTES: Final = 15
 MINUTES_PER_DAY: Final = 24 * 60
 
+# Fired when a block starts, so automations can follow the schedule.
+EVENT_BLOCK_STARTED: Final = f"{DOMAIN}_block_started"
+
 SIGNAL_UPDATED: Final = f"{DOMAIN}_updated"
 SIGNAL_ROOM_ADDED: Final = f"{DOMAIN}_room_added"
 SIGNAL_ROOM_REMOVED: Final = f"{DOMAIN}_room_removed_{{}}"
@@ -37,6 +40,8 @@ SIGNAL_ROOM_REMOVED: Final = f"{DOMAIN}_room_removed_{{}}"
 ATTR_SEASON: Final = "season"
 ATTR_PROGRAM: Final = "program"
 ATTR_AWAY: Final = "away"
+ATTR_BLOCK_NAME: Final = "block_name"
+ATTR_NEXT_BLOCK_NAME: Final = "next_block_name"
 ATTR_BLOCK_START: Final = "block_start"
 ATTR_BLOCK_END: Final = "block_end"
 ATTR_NEXT_TEMPERATURE: Final = "next_temperature"

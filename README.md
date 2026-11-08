@@ -10,9 +10,9 @@ Il pannello nella barra laterale permette di:
 
 - **dividere l'anno in stagioni** con data di inizio e fine scelte da calendario. Le date si ripetono ogni anno e possono attraversare il capodanno (es. 15 ottobre → 15 aprile). Di partenza ci sono le stagioni meteorologiche di Home Assistant: inverno, primavera, estate e autunno.
 - dare a ogni stagione dei **programmi**. Un programma vale per **uno o più giorni** della settimana, scelti con i pulsanti L M M G V S D, e ogni giorno appartiene a un solo programma.
-- modificare le **fasce orarie** direttamente sulla barra delle 24 ore: tocchi una fascia per selezionarla, trascini i separatori per cambiare gli orari (a passi di 15 minuti), cambi la temperatura con − e +, oppure **Dividi** ed **Elimina** la fascia.
+- modificare le **fasce orarie** direttamente sulla barra delle 24 ore: tocchi una fascia per selezionarla, trascini i separatori per cambiare gli orari (a passi di 15 minuti), cambi la temperatura con − e +, oppure **Dividi** ed **Elimina** la fascia. A ogni fascia puoi dare un **nome** facoltativo (es. *Risveglio*, *Notte*), che compare sulla barra e nel sensore.
 - tenere la caldaia **spenta fuori stagione** e nei giorni senza programma. Di default l'estate non ha programmi.
-- attivare l'**Assenza**: il termostato passa al suo preset *Fuori casa* (`away`). Se non ha quel preset, usa una temperatura fissa configurabile, 15 °C di default. L'Assenza è sincronizzata col termostato: se scegli *Fuori casa* dalla card di Home Assistant si attiva anche qui, e se la lasci (per esempio con *Comfort*) si disattiva. La tua scelta resta valida fino alla fascia successiva.
+- attivare **Fuori casa**: il termostato passa al suo preset *Fuori casa* (`away`). Se non ha quel preset, usa una temperatura fissa configurabile, 15 °C di default. Fuori casa è sincronizzato col termostato: se scegli *Fuori casa* dalla card di Home Assistant si attiva anche qui, e se lo lasci (per esempio con *Comfort*) si disattiva. La tua scelta resta valida fino alla fascia successiva.
 
 ## Come comanda il termostato
 
@@ -20,11 +20,11 @@ Il pannello nella barra laterale permette di:
 | --- | --- |
 | Fascia a 20 °C | `hvac_mode: heat`, `preset_mode: none`, `temperature: 20` |
 | Fascia *Spento*, fuori stagione, giorno senza programma | `hvac_mode: off` |
-| Assenza attiva | `hvac_mode: heat`, `preset_mode: away` (o la temperatura di assenza) |
+| Fuori casa attivo | `hvac_mode: heat`, `preset_mode: away` (o la temperatura fuori casa) |
 
 Prima di impostare una temperatura, un preset attivo (comfort, sonno…) viene riportato a `none`, così `generic_thermostat` segue davvero il programma.
 
-I comandi vengono inviati **solo quando cambia qualcosa**: un cambio di fascia, una nuova stagione, l'Assenza o una modifica. Se cambi la temperatura a mano, vale fino alla fascia successiva. Nel pannello compare **Torna al programma** per annullare subito la modifica manuale.
+I comandi vengono inviati **solo quando cambia qualcosa**: un cambio di fascia, una nuova stagione, Fuori casa o una modifica. Se cambi la temperatura a mano, vale fino alla fascia successiva. Nel pannello compare **Torna al programma** per annullare subito la modifica manuale.
 
 ## Installazione
 
@@ -62,10 +62,10 @@ I temi possono cambiarli con le variabili CSS `--shs-color-cold`, `--shs-color-c
 
 | Entità | Descrizione |
 | --- | --- |
-| `switch.cronotermostato_away` | Assenza |
+| `switch.cronotermostato_away` | Fuori casa |
 | `sensor.cronotermostato_active_season` | Stagione di oggi (sconosciuta fuori stagione) |
 | `switch.<termostato>_schedule` | Attiva o disattiva la programmazione |
-| `sensor.<termostato>_scheduled_temperature` | Temperatura richiesta ora. Attributi: `season`, `program`, `away`, `block_start`, `block_end`, `next_temperature`, `heating_off`, `overridden`, `pending`, `last_error` |
+| `sensor.<termostato>_scheduled_temperature` | Temperatura richiesta ora. Attributi: `season`, `program`, `away`, `block_name`, `block_start`, `block_end`, `next_temperature`, `next_block_name`, `heating_off`, `overridden`, `pending`, `last_error` |
 
 ## Azioni
 
@@ -92,8 +92,8 @@ data:
         days: [mon, tue, wed, thu, fri]
         blocks:
           - { start: "00:00", temperature: 17 }
-          - { start: "06:30", temperature: 20 }
-          - { start: "22:30", temperature: 17 }
+          - { start: "06:30", temperature: 20, name: Risveglio }
+          - { start: "22:30", temperature: 17, name: Notte }
       - id: weekend
         name: Weekend
         days: [sat, sun]
@@ -102,13 +102,33 @@ data:
           - { start: "08:00", temperature: 21 }
 ```
 
-Ogni giorno di programma inizia con una fascia alle `00:00`. Gli orari sono su una griglia di 15 minuti e `temperature: null` significa spento.
+Ogni giorno di programma inizia con una fascia alle `00:00`. Gli orari sono su una griglia di 15 minuti, `temperature: null` significa spento e `name` (facoltativo, fino a 30 caratteri) dà un nome alla fascia.
+
+## Automazioni sulle fasce
+
+All'inizio di ogni fascia viene lanciato l'evento `smart_heating_schedule_block_started`, con `entity_id`, `season`, `program`, `block_name`, `temperature`, `heating_off`, `away`, `block_start`, `block_end`, `next_temperature` e `next_block_name`. Fasce vicine con la stessa temperatura e lo stesso nome contano come una sola.
+
+```yaml
+# Accende il deumidificatore quando inizia la fascia "Risveglio"
+triggers:
+  - trigger: event
+    event_type: smart_heating_schedule_block_started
+    event_data:
+      entity_id: climate.riscaldamento
+      block_name: Risveglio
+actions:
+  - action: switch.turn_on
+    target:
+      entity_id: switch.deumidificatore
+```
+
+L'evento parte solo ai cambi di fascia, non quando modifichi il programma o riavvii Home Assistant. Per sapere in ogni momento la fascia in corso usa l'attributo `block_name` del sensore.
 
 ## Opzioni
 
 In **Impostazioni → Dispositivi e servizi → Cronotermostato stagionale → Configura**:
 
-- **Temperatura in assenza**, per i termostati senza preset `away`;
+- **Temperatura fuori casa**, per i termostati senza preset `away`;
 - **Mostra il pannello solo agli amministratori**.
 
 ## Dati

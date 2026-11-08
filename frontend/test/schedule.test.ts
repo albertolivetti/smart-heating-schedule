@@ -7,6 +7,7 @@ import {
   toSegments,
   updateBlock,
   moveBoundary,
+  setBlockName,
   splitBlock,
   validateDay,
 } from "../src/schedule";
@@ -124,5 +125,30 @@ describe("splitBlock", () => {
 
   it("refuses blocks shorter than two slots", () => {
     expect(splitBlock(day(["00:00", 19], ["23:45", 20]), 1)).toBeNull();
+  });
+});
+
+describe("block names", () => {
+  const named: Block[] = [
+    { start: "00:00", temperature: 17 },
+    { start: "06:30", temperature: 20, name: "Risveglio" },
+    { start: "08:00", temperature: 17 },
+  ];
+
+  it("sets, trims and removes a name", () => {
+    expect(setBlockName(named, 0, "  Notte ")[0]).toEqual({ start: "00:00", temperature: 17, name: "Notte" });
+    expect(setBlockName(named, 1, " ")[1]).toEqual({ start: "06:30", temperature: 20 });
+    expect(setBlockName(named, 0, "x".repeat(40))[0].name).toHaveLength(30);
+  });
+
+  it("keeps the name when a block is changed or a neighbour is deleted", () => {
+    expect(updateBlock(named, 1, 7 * 60, 9 * 60, 21)[1]).toEqual({ start: "07:00", temperature: 21, name: "Risveglio" });
+    expect(deleteBlock(named, 2)[1]).toEqual({ start: "06:30", temperature: 20, name: "Risveglio" });
+  });
+
+  it("does not copy the name into the second half of a split", () => {
+    const split = splitBlock(named, 1)!;
+    expect(split[1].name).toBe("Risveglio");
+    expect(split[2].name).toBeUndefined();
   });
 });
