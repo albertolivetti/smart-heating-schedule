@@ -33,11 +33,12 @@ describe("colours", () => {
     expect(temperatureColor(null, "°C")).toContain("--shs-color-off");
   });
 
-  it("gets warmer with the temperature", () => {
-    const red = (hex: string) => parseInt(hex.slice(1, 3), 16);
-    const green = (hex: string) => parseInt(hex.slice(3, 5), 16);
-    expect(green(celsiusColor(25))).toBeLessThan(green(celsiusColor(19)));
-    expect(red(celsiusColor(19))).toBeGreaterThan(200);
+  it("uses the legend's bands", () => {
+    expect(celsiusColor(16)).toBe("#a9cbee");
+    expect(celsiusColor(17.5)).toBe("#f5cf9a");
+    expect(celsiusColor(20)).toBe("#ef9f5c");
+    expect(celsiusColor(21)).toBe("#e5794a");
+    expect(celsiusColor(null)).toBe("#d5d9df");
   });
 });
 

@@ -4,6 +4,7 @@ import { property, state } from "lit/decorators.js";
 import { keyed } from "lit/directives/keyed.js";
 import { repeat } from "lit/directives/repeat.js";
 
+import { BANDS, OFF_COLOR } from "../colors";
 import { addRoom, removeRoom, resetSeasons, saveRoom, saveSeasons, setAway } from "../api";
 import "../components/dialog";
 import "../components/program-card";
@@ -563,6 +564,11 @@ export class MainView extends LitElement {
               <ha-svg-icon .path=${mdiPlus}></ha-svg-icon>${this.localize("programs.new")}
             </button>`}
       </div>
+      <div class="legend" aria-label=${this.localize("programs.legend")}>
+        ${this._legend(unit, language).map(
+          ({ color, label }) => html`<span><span class="swatch" style="background:${color}"></span>${label}</span>`,
+        )}
+      </div>
       ${!programs.length
         ? html`<div class="warning" role="status">
             <ha-svg-icon .path=${mdiAlertCircleOutline}></ha-svg-icon>${this.localize("programs.empty")}
@@ -601,6 +607,23 @@ export class MainView extends LitElement {
         ),
       )}
     `;
+  }
+
+  /** Legend entries for the colour bands, e.g. "≤16°", "17–18°", "≥21°", "Off". */
+  private _legend(unit: string, language: string): { color: string; label: string }[] {
+    const fahrenheit = unit === FAHRENHEIT;
+    const show = (celsius: number) =>
+      formatTemperature(fahrenheit ? Math.round((celsius * 9) / 5 + 32) : celsius, unit, 1, true, language);
+    const entries = BANDS.map((band, i) => {
+      const previous = BANDS[i - 1];
+      const label = !previous
+        ? `≤${show(band.upTo)}`
+        : band.upTo === Infinity
+          ? `≥${show(previous.upTo + 1)}`
+          : `${show(previous.upTo + 1).replace("°", "")}–${show(band.upTo)}`;
+      return { color: `var(--shs-color-${band.name}, ${band.color})`, label };
+    });
+    return [...entries, { color: `var(--shs-color-off, ${OFF_COLOR})`, label: this.localize("block.off") }];
   }
 
   private _renderDialogs(room: Room | undefined) {
@@ -984,6 +1007,24 @@ export class MainView extends LitElement {
         flex-direction: column;
         gap: 10px;
         min-width: 0;
+      }
+      .legend {
+        color: var(--secondary-text-color);
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 11px;
+        gap: 4px 12px;
+      }
+      .legend > span {
+        align-items: center;
+        display: inline-flex;
+        gap: 4px;
+      }
+      .swatch {
+        border-radius: 3px;
+        display: inline-block;
+        height: 10px;
+        width: 10px;
       }
       .warning {
         align-items: center;

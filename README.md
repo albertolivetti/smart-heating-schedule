@@ -42,6 +42,22 @@ Copia `custom_components/smart_heating_schedule` in `config/custom_components`, 
 
 Richiede Home Assistant 2026.3 o successivo.
 
+### Aggiornamenti
+
+Le nuove versioni escono come **release** su GitHub (`v0.2.0`, `v0.2.1`, …) con le note in italiano. HACS le propone come aggiornamento in **Impostazioni** e in HACS; dopo l'aggiornamento serve un **riavvio** di Home Assistant.
+
+## Colori delle fasce
+
+| Colore | Temperatura |
+| --- | --- |
+| Azzurro | fino a 16° |
+| Arancio chiaro | 17–18° |
+| Arancio | 19–20° |
+| Arancio scuro | 21° e oltre |
+| Grigio | Spento |
+
+I temi possono cambiarli con le variabili CSS `--shs-color-cold`, `--shs-color-cool`, `--shs-color-warm`, `--shs-color-hot` e `--shs-color-off`.
+
 ## Entità
 
 | Entità | Descrizione |
@@ -114,6 +130,12 @@ npm run lint && npm test && npm run build
 ```
 
 Il bundle compilato `custom_components/smart_heating_schedule/frontend/smart-heating-schedule-panel.js` è incluso nel repository, quindi chi installa da HACS non ha bisogno di Node.
+
+### Pubblicare una versione
+
+1. Lavora su un branch; quando i test passano, unisci in `main`.
+2. Aumenta `version` in `custom_components/smart_heating_schedule/manifest.json` (e in `pyproject.toml`) e ricompila il frontend.
+3. Crea una release GitHub con tag `vX.Y.Z` e le note delle modifiche: HACS la propone come aggiornamento.
 
 ## Licenza
 

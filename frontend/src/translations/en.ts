@@ -66,6 +66,7 @@ export const en = {
   },
   programs: {
     title: "Programs · {season}",
+    legend: "Temperature colours",
     hint: "Tap a day to move it here. Tap a block to change its temperature, drag the dividers to change the times.",
     new: "Program",
     new_name: "New program",

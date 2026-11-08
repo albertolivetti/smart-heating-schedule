@@ -67,6 +67,7 @@ export const it: Strings = {
   },
   programs: {
     title: "Programmi · {season}",
+    legend: "Colori delle temperature",
     hint: "Tocca un giorno per spostarlo qui. Tocca una fascia per la temperatura, trascina i separatori per gli orari.",
     new: "Programma",
     new_name: "Nuovo programma",

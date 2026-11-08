@@ -1,8 +1,8 @@
 import { mdiArrowSplitVertical, mdiClose, mdiDeleteOutline, mdiMinus, mdiPlus } from "@mdi/js";
-import { css, html, LitElement, nothing, type PropertyValues } from "lit";
+import { css, html, LitElement, nothing, type PropertyValues, unsafeCSS } from "lit";
 import { property, state } from "lit/decorators.js";
 
-import { temperatureColor } from "../colors";
+import { BLOCK_TEXT, temperatureColor } from "../colors";
 import { formatMinutes } from "../format";
 import { fireEvent, safeCustomElement } from "../ha";
 import type { Localize } from "../localize";
@@ -221,7 +221,9 @@ export class TimelineEditor extends LitElement {
           : html`<div class="now" style="left:${(this.now / DAY) * 100}%" aria-hidden="true"></div>`}
       </div>
       <div class="ticks" aria-hidden="true">
-        ${[0, 360, 720, 1080, DAY].map((minutes) => html`<span>${formatMinutes(minutes, this.h12, true)}</span>`)}
+        ${[0, 6, 12, 18, 24].map(
+          (hour) => html`<span>${this.h12 ? formatMinutes(hour * 60, true, true) : String(hour).padStart(2, "0")}</span>`,
+        )}
       </div>
       ${selected === null || this.readOnly
         ? this.readOnly
@@ -375,16 +377,12 @@ export class TimelineEditor extends LitElement {
       }
       .block {
         align-items: center;
-        background: color-mix(
-          in srgb,
-          var(--block-color) var(--shs-block-mix, 45%),
-          var(--ha-card-background, var(--card-background-color, #fff))
-        );
+        background: var(--block-color);
         border: none;
         border-inline-end: 2px solid var(--ha-card-background, var(--card-background-color, #fff));
         bottom: 0;
         box-sizing: border-box;
-        color: color-mix(in srgb, var(--block-color) var(--shs-text-mix, 100%), black);
+        color: var(--shs-block-text, ${unsafeCSS(BLOCK_TEXT)});
         container-type: inline-size;
         cursor: pointer;
         display: flex;
