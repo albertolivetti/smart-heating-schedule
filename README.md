@@ -36,7 +36,7 @@ I comandi vengono inviati **solo quando cambia qualcosa**: un cambio di fascia, 
 
 Richiede Home Assistant 2026.3 o successivo.
 
-1. In **Marketplace** apri il menu (⋮) → **Repository personalizzati**.
+1. In **Marketplace** → **Aggiungi da collegamento**.
 2. Aggiungi `https://github.com/albertolivetti/smart-heating-schedule` di tipo **Integrazione**.
 3. Installa **Cronotermostato stagionale** e riavvia Home Assistant.
 4. Vai in **Impostazioni → Dispositivi e servizi → Aggiungi integrazione** e scegli **Cronotermostato stagionale**.
