@@ -31,6 +31,8 @@ from homeassistant.const import (
 )
 from homeassistant.core import Context, HomeAssistant, State
 
+from .const import AWAY_PRESET
+
 _LOGGER = logging.getLogger(__name__)
 
 # Modes in which a device heats towards its setpoint, in order of preference.
@@ -92,6 +94,23 @@ def _has_preset(state: State, preset: str) -> bool:
     )
 
 
+def _reset_preset(state: State) -> str | None:
+    """Return the preset to switch to before a scheduled temperature, if any.
+
+    With a "none" preset every other preset is left. Without one, only "away"
+    is left (for the first other preset), e.g. Tado's home/away.
+    """
+    current = state.attributes.get(ATTR_PRESET_MODE)
+    if current in (None, PRESET_NONE) or ClimateEntityFeature.PRESET_MODE not in _features(state):
+        return None
+    presets = state.attributes.get(ATTR_PRESET_MODES) or []
+    if PRESET_NONE in presets:
+        return PRESET_NONE
+    if current == AWAY_PRESET:
+        return next((preset for preset in presets if preset != AWAY_PRESET), None)
+    return None
+
+
 def _preset_calls(state: State, preset: str) -> list[tuple[str, dict[str, object]]]:
     """Switch to heating with a preset."""
     calls: list[tuple[str, dict[str, object]]] = []
@@ -143,9 +162,9 @@ def _service_calls(state: State, target: Target, unit: str) -> list[tuple[str, d
     # generic_thermostat and friends: leave comfort/sleep/away first, otherwise
     # the preset keeps (or later restores) its own temperature.
     clear_preset: list[tuple[str, dict[str, object]]] = []
-    if _has_preset(state, PRESET_NONE) and attrs.get(ATTR_PRESET_MODE) not in (None, PRESET_NONE):
+    if (reset := _reset_preset(state)) is not None:
         clear_preset = [
-            (SERVICE_SET_PRESET_MODE, {ATTR_ENTITY_ID: entity_id, ATTR_PRESET_MODE: PRESET_NONE})
+            (SERVICE_SET_PRESET_MODE, {ATTR_ENTITY_ID: entity_id, ATTR_PRESET_MODE: reset})
         ]
 
     if ClimateEntityFeature.TARGET_TEMPERATURE in features:

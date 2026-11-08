@@ -140,3 +140,15 @@ def test_no_change_in_the_window() -> None:
     segment = segment_at(lambda day: [Block(0, None)], at(2026, 7, 1, 12, 0))
     assert segment.start is None
     assert segment.end is None
+
+
+def test_key_is_stable_through_a_long_stretch() -> None:
+    from datetime import date
+
+    def seasonal(day: date) -> list[Block]:
+        return [Block(0, None)] if date(2026, 6, 1) <= day <= date(2026, 8, 31) else HOME
+
+    keys = {segment_at(seasonal, at(2026, 6, day, 12, 0)).key for day in range(2, 30)}
+    assert len(keys) == 1
+    segment = segment_at(seasonal, at(2026, 6, 20, 12, 0))
+    assert segment.start == at(2026, 6, 1, 0, 0)

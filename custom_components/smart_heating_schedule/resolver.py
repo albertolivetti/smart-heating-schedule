@@ -14,6 +14,8 @@ from .models import Block
 # week back and ahead. When nothing changes in it, the segment has no start
 # or end and the engine checks again the next day.
 _WINDOW_DAYS = 8
+# How far back to look for the real start of a stretch that began before the window.
+_LOOKBACK_DAYS = 400
 
 type BlocksForDate = Callable[[date], list[Block]]
 
@@ -62,6 +64,25 @@ def _boundaries(
     return merged
 
 
+def _start_before(
+    blocks_for_date: BlocksForDate, first: date, temperature: float | None
+) -> datetime | None:
+    """Return when the stretch of ``temperature`` running at midnight on ``first`` began.
+
+    Using the real start (instead of the window's first day) keeps the segment
+    key the same from one day to the next, so long stretches are not re-sent.
+    """
+    for back in range(1, _LOOKBACK_DAYS):
+        day = first - timedelta(days=back)
+        blocks = blocks_for_date(day)
+        for index in range(len(blocks) - 1, -1, -1):
+            if blocks[index].temperature != temperature:
+                if index + 1 < len(blocks):
+                    return _local_datetime(day, blocks[index + 1].start)
+                return _local_datetime(day + timedelta(days=1), 0)
+    return None
+
+
 def segment_at(blocks_for_date: BlocksForDate, when: datetime) -> Segment:
     """Return the segment active at ``when``."""
     local = dt_util.as_local(when)
@@ -72,14 +93,14 @@ def segment_at(blocks_for_date: BlocksForDate, when: datetime) -> Segment:
     boundaries = _boundaries(blocks_for_date, first, 2 * _WINDOW_DAYS + 1)
 
     if len(boundaries) == 1:
-        return Segment(None, None, boundaries[0][1], None)
+        temperature = boundaries[0][1]
+        return Segment(_start_before(blocks_for_date, first, temperature), None, temperature, None)
 
     for index in range(len(boundaries) - 1, -1, -1):
         start, temperature = boundaries[index]
         if start.timestamp() <= timestamp:
-            # The first boundary is just the start of the window, not a change:
-            # report it as unknown so the segment key stays stable from day to day.
-            real_start = start if index > 0 else None
+            # The first boundary is just the start of the window, not a change.
+            real_start = start if index > 0 else _start_before(blocks_for_date, first, temperature)
             if index + 1 == len(boundaries):
                 # No change until the end of the window.
                 return Segment(real_start, None, temperature, None)

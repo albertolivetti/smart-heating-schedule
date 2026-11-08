@@ -118,7 +118,8 @@ class ScheduleStore:
             self.rooms[room.entity_id] = room
 
         runtime = await self._runtime_store.async_load() or {}
-        self.away = bool(runtime.get("away", False))
+        # Version 1 had a presence mode; a forced "away" becomes Away.
+        self.away = bool(runtime.get("away", runtime.get("presence_mode") == "away"))
         if not converted:
             self.last_applied = dict(runtime.get("last_applied", {}))
         else:

@@ -6,7 +6,16 @@ import { temperatureColor } from "../colors";
 import { formatMinutes } from "../format";
 import { fireEvent, safeCustomElement } from "../ha";
 import type { Localize } from "../localize";
-import { DAY, deleteBlock, moveBoundary, SLOT, setBlockTemperature, splitBlock, toSegments } from "../schedule";
+import {
+  DAY,
+  deleteBlock,
+  moveBoundary,
+  SLOT,
+  setBlockTemperature,
+  splitBlock,
+  toMinutes,
+  toSegments,
+} from "../schedule";
 import { sharedStyles } from "../styles";
 import { clamp, defaultTemperature, FAHRENHEIT, formatTemperature, type Limits } from "../temperature";
 import type { Block } from "../types";
@@ -96,9 +105,13 @@ export class TimelineEditor extends LitElement {
       handle.removeEventListener("pointermove", move);
       handle.removeEventListener("pointerup", end);
       handle.removeEventListener("pointercancel", end);
-      const blocks = this._drag?.blocks ?? original;
+      const dragged = this._drag?.blocks ?? original;
       this._drag = null;
-      if (blocks[index].start !== original[index].start) this._emit(blocks);
+      if (dragged[index].start === original[index].start) return;
+      // Apply the new time to the current blocks: they may have been updated
+      // (a save finishing, another device) while dragging.
+      if (this.blocks.length !== original.length) return;
+      this._emit(moveBoundary(this.blocks, index, toMinutes(dragged[index].start)));
     };
     handle.addEventListener("pointermove", move);
     handle.addEventListener("pointerup", end);

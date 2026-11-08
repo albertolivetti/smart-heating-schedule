@@ -526,3 +526,51 @@ async def test_entities_on_thermostat_device(
     entry = er.async_get(hass).async_get("switch.slaapkamer_schedule")
     assert entry is not None
     assert entry.device_id == device.id
+
+
+async def test_long_off_stretch_keeps_manual_change(
+    hass: HomeAssistant, config_entry: MockConfigEntry, freezer, calls, heat_state
+) -> None:
+    freezer.move_to(datetime(2026, 6, 2, 12, 0, tzinfo=TZ))
+    climate(hass, heat_state)
+    await setup_integration(hass, config_entry)
+    await add_room(hass)
+    _, set_hvac_mode, _ = calls
+    assert len(set_hvac_mode) == 1
+    # Someone turns the heating on by hand in summer: never undone by the schedule.
+    climate(hass, heat_state, HVACMode.HEAT)
+    for day in range(3, 30):
+        await move_to(hass, freezer, datetime(2026, 6, day, 12, 0, tzinfo=TZ))
+    assert len(set_hvac_mode) == 1
+
+
+async def test_away_keeps_heating_off_outside_seasons(
+    hass: HomeAssistant, config_entry: MockConfigEntry, freezer, calls, boiler_state
+) -> None:
+    freezer.move_to(datetime(2026, 8, 30, 12, 0, tzinfo=TZ))
+    climate(hass, {**boiler_state, "preset_mode": "none"}, HVACMode.OFF)
+    await setup_integration(hass, config_entry)
+    await add_room(hass)
+    set_temperature, _, set_preset = calls
+
+    await config_entry.runtime_data.async_set_away(True)
+    await hass.async_block_till_done()
+    assert not set_preset
+    assert not set_temperature
+    # Autumn starts during Away: the away preset is used from then on.
+    await move_to(hass, freezer, datetime(2026, 9, 1, 0, 0, 1, tzinfo=TZ))
+    assert set_preset[-1].data["preset_mode"] == "away"
+
+
+async def test_migrates_forced_away(
+    hass: HomeAssistant, config_entry: MockConfigEntry, hass_storage: dict, calls, heat_state
+) -> None:
+    hass_storage[f"{DOMAIN}.runtime"] = {
+        "version": 1,
+        "minor_version": 1,
+        "key": f"{DOMAIN}.runtime",
+        "data": {"presence_mode": "away", "last_applied": {}},
+    }
+    climate(hass, heat_state)
+    await setup_integration(hass, config_entry)
+    assert config_entry.runtime_data.away

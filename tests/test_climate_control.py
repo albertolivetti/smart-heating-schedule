@@ -178,3 +178,19 @@ async def test_presets_without_none_are_left_alone(hass: HomeAssistant, heat_sta
     )
     assert not await async_apply_target(hass, state, 17, "°C")
     assert not temps
+
+
+async def test_leaves_away_without_none_preset(hass: HomeAssistant, heat_state: dict) -> None:
+    presets = async_mock_service(hass, "climate", "set_preset_mode")
+    temps = async_mock_service(hass, "climate", "set_temperature")
+    attrs = {
+        **heat_state,
+        "preset_modes": ["home", "away"],
+        "preset_mode": "away",
+        "supported_features": PRESET_FEATURES,
+    }
+    state = set_state(hass, HVACMode.HEAT, **attrs)
+    assert not follows_target(state, 17, "°C")
+    assert await async_apply_target(hass, state, 17, "°C")
+    assert presets[0].data == {"entity_id": ENTITY, "preset_mode": "home"}
+    assert temps[0].data["temperature"] == 17

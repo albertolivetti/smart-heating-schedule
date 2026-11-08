@@ -1,6 +1,8 @@
 import { mdiAlertCircleOutline, mdiDeleteOutline, mdiDownload, mdiMenu, mdiPencilOutline, mdiPlus, mdiThermostat } from "@mdi/js";
 import { css, html, LitElement, nothing, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
+import { keyed } from "lit/directives/keyed.js";
+import { repeat } from "lit/directives/repeat.js";
 
 import { addRoom, removeRoom, resetSeasons, saveRoom, saveSeasons, setAway } from "../api";
 import "../components/dialog";
@@ -80,7 +82,8 @@ export class MainView extends LitElement {
   @state() private _rename: { program: Program; name: string } | null = null;
 
   private _timers = new Map<string, number>();
-  private _inflight = new Set<string>();
+  /** Saves in flight per key; a draft is kept until all of them are done. */
+  private _inflight = new Map<string, number>();
 
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -151,14 +154,16 @@ export class MainView extends LitElement {
     const programs = this._drafts[key];
     if (!programs) return;
     const [entityId, seasonId] = key.split("|");
-    this._inflight.add(key);
+    this._inflight.set(key, (this._inflight.get(key) ?? 0) + 1);
     try {
       await saveRoom(this.hass, entityId, { programs: { [seasonId]: programs } });
     } catch (err) {
       this._error(err);
     } finally {
-      this._inflight.delete(key);
-      if (!this._timers.has(key)) {
+      const count = (this._inflight.get(key) ?? 1) - 1;
+      if (count > 0) this._inflight.set(key, count);
+      else this._inflight.delete(key);
+      if (!this._timers.has(key) && !this._inflight.has(key)) {
         const { [key]: _done, ...rest } = this._drafts;
         this._drafts = rest;
       }
@@ -223,8 +228,23 @@ export class MainView extends LitElement {
     this._seasonId = season.id;
   }
 
+  /** Forget unsaved edits whose entity or season is about to be deleted. */
+  private _discard(matches: (entityId: string, seasonId: string) => boolean) {
+    const drafts = { ...this._drafts };
+    for (const key of new Set([...Object.keys(drafts), ...this._timers.keys()])) {
+      const [entityId, seasonId] = key.split("|");
+      if (!matches(entityId, seasonId)) continue;
+      const timer = this._timers.get(key);
+      if (timer !== undefined) clearTimeout(timer);
+      this._timers.delete(key);
+      delete drafts[key];
+    }
+    this._drafts = drafts;
+  }
+
   private async _removeSeason(season: Season) {
     this._deleteSeason = null;
+    this._discard((_, seasonId) => seasonId === season.id);
     await this._call(saveSeasons(this.hass, this.state.seasons.filter((s) => s.id !== season.id)));
     if (this._seasonId === season.id) this._seasonId = undefined;
   }
@@ -243,6 +263,7 @@ export class MainView extends LitElement {
     this._removeOpen = false;
     const entityId = this._entityId!;
     this._entityId = undefined;
+    this._discard((id) => id === entityId);
     await this._call(removeRoom(this.hass, entityId));
   }
 
@@ -553,8 +574,12 @@ export class MainView extends LitElement {
               })}
             </div>`
           : nothing}
-      ${programs.map(
-        (program) => html`<shs-program-card
+      ${keyed(
+        `${room.entity_id}|${season.id}`,
+        repeat(
+          programs,
+          (program) => program.id,
+          (program) => html`<shs-program-card
           .program=${program}
           .others=${programs.filter((p) => p.id !== program.id)}
           .days=${days}
@@ -573,6 +598,7 @@ export class MainView extends LitElement {
           @duplicate=${() => this._duplicate(season.id, programs, program)}
           @delete=${() => (this._deleteProgram = program)}
         ></shs-program-card>`,
+        ),
       )}
     `;
   }

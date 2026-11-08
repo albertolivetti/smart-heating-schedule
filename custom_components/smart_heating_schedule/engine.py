@@ -163,7 +163,10 @@ class ScheduleEngine:
     def _target(self, segment: Segment) -> tuple[str, Target]:
         """Return the target key and what to send for a segment."""
         if self.away:
-            return "away", PresetTarget(AWAY_PRESET, self.away_temperature)
+            # Away never turns heating on where the schedule has it off.
+            if segment.temperature is None:
+                return "away|off", None
+            return f"away|{self.away_temperature}", PresetTarget(AWAY_PRESET, self.away_temperature)
         return f"schedule|{segment.key}", segment.temperature
 
     # ------------------------------------------------------------------
