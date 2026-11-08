@@ -4,6 +4,12 @@ Programmazione del riscaldamento per **stagioni** in Home Assistant, pensata per
 
 Fork di [talhaucar/smart-heating-schedule](https://github.com/talhaucar/smart-heating-schedule) (MIT), da cui riprende il motore che invia i comandi, la gestione delle modifiche manuali e dei riavvii.
 
+![Il pannello Cronotermostato in Home Assistant](docs/images/panoramica.png)
+
+| Programmi di una stagione | Modifica di una fascia | Modifica di una stagione |
+| --- | --- | --- |
+| ![Programmi della primavera, uno per i feriali e uno per il sabato](docs/images/programmi.png) | ![Fascia "Mattina" selezionata con nome, temperatura e orari](docs/images/modifica-fascia.png) | ![Finestra per cambiare nome, colore e date di una stagione](docs/images/modifica-stagione.png) |
+
 ## Cosa fa
 
 Il pannello nella barra laterale permette di:
