@@ -34,23 +34,17 @@ I comandi vengono inviati **solo quando cambia qualcosa**: un cambio di fascia, 
 
 ## Installazione
 
-### HACS (repository personalizzato)
+Richiede Home Assistant 2026.3 o successivo.
 
-1. In HACS apri il menu (⋮) → **Repository personalizzati**.
+1. In **Marketplace** apri il menu (⋮) → **Repository personalizzati**.
 2. Aggiungi `https://github.com/albertolivetti/smart-heating-schedule` di tipo **Integrazione**.
 3. Installa **Cronotermostato stagionale** e riavvia Home Assistant.
 4. Vai in **Impostazioni → Dispositivi e servizi → Aggiungi integrazione** e scegli **Cronotermostato stagionale**.
 5. Apri **Cronotermostato** nella barra laterale e scegli l'entità `climate` della caldaia.
 
-### Manuale
-
-Copia `custom_components/smart_heating_schedule` in `config/custom_components`, riavvia e aggiungi l'integrazione come sopra.
-
-Richiede Home Assistant 2026.3 o successivo.
-
 ### Aggiornamenti
 
-Le nuove versioni escono come **release** su GitHub (`v0.2.0`, `v0.2.1`, …) con le note in italiano. HACS le propone come aggiornamento in **Impostazioni** e in HACS; dopo l'aggiornamento serve un **riavvio** di Home Assistant.
+Le nuove versioni escono come **release** su GitHub (`v0.2.0`, `v0.2.1`, …) con le note in italiano. Il Marketplace le propone come aggiornamento in **Impostazioni** e nel Marketplace; dopo l'aggiornamento serve un **riavvio** di Home Assistant.
 
 ## Colori delle fasce
 
@@ -140,28 +134,6 @@ In **Impostazioni → Dispositivi e servizi → Cronotermostato stagionale → C
 ## Dati
 
 Stagioni e programmi sono salvati in `.storage/smart_heating_schedule` e finiscono nei backup di Home Assistant. Le programmazioni settimanali Casa/Fuori casa dell'integrazione originale vengono convertite automaticamente in programmi per ogni stagione, estate esclusa.
-
-## Sviluppo
-
-```bash
-# Backend
-python3.13 -m venv .venv && .venv/bin/pip install -r requirements_test.txt
-.venv/bin/pip install home-assistant-frontend   # versione allineata a homeassistant
-.venv/bin/pytest
-.venv/bin/ruff check custom_components tests
-
-# Frontend (TypeScript + Lit, compilato in custom_components/.../frontend)
-cd frontend && npm ci
-npm run lint && npm test && npm run build
-```
-
-Il bundle compilato `custom_components/smart_heating_schedule/frontend/smart-heating-schedule-panel.js` è incluso nel repository, quindi chi installa da HACS non ha bisogno di Node.
-
-### Pubblicare una versione
-
-1. Lavora su un branch; quando i test passano, unisci in `main`.
-2. Aumenta `version` in `custom_components/smart_heating_schedule/manifest.json` (e in `pyproject.toml`) e ricompila il frontend.
-3. Crea una release GitHub con tag `vX.Y.Z` e le note delle modifiche: HACS la propone come aggiornamento.
 
 ## Licenza
 
