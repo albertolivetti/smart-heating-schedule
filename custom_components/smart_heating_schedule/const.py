@@ -13,7 +13,7 @@ RUNTIME_STORAGE_KEY: Final = f"{DOMAIN}.runtime"
 RUNTIME_STORAGE_VERSION: Final = 1
 SAVE_DELAY: Final = 1
 
-PANEL_URL_PATH: Final = "smart-heating-schedule"
+PANEL_URL_PATH: Final = "cronotermostato"
 PANEL_COMPONENT: Final = "smart-heating-schedule-panel"
 PANEL_ICON: Final = "mdi:radiator"
 PANEL_FILENAME: Final = "smart-heating-schedule-panel.js"

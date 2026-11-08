@@ -241,7 +241,7 @@ async def test_config_and_options_flow(hass: HomeAssistant) -> None:
     await hass.async_block_till_done()
     engine = entry.runtime_data
     assert engine.away_temperature == 14.5
-    assert hass.data["frontend_panels"]["smart-heating-schedule"].require_admin
+    assert hass.data["frontend_panels"]["cronotermostato"].require_admin
 
 
 async def test_repair_flow(

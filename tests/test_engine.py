@@ -501,9 +501,9 @@ async def test_unloaded_panel(
 ) -> None:
     climate(hass, heat_state)
     await setup_integration(hass, config_entry)
-    assert "smart-heating-schedule" in hass.data["frontend_panels"]
+    assert "cronotermostato" in hass.data["frontend_panels"]
     assert await hass.config_entries.async_unload(config_entry.entry_id)
-    assert "smart-heating-schedule" not in hass.data["frontend_panels"]
+    assert "cronotermostato" not in hass.data["frontend_panels"]
 
 
 async def test_entities_on_thermostat_device(
