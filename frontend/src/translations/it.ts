@@ -68,7 +68,7 @@ export const it: Strings = {
   programs: {
     title: "Programmi · {season}",
     legend: "Colori delle temperature",
-    hint: "Tocca un giorno per spostarlo qui. Tocca una fascia per la temperatura, trascina i separatori per gli orari.",
+    hint: "Tocca un giorno per spostarlo qui. Tocca una fascia per cambiarne temperatura e orari.",
     new: "Programma",
     new_name: "Nuovo programma",
     every_day: "Tutti i giorni",
@@ -87,6 +87,7 @@ export const it: Strings = {
   },
   block: {
     hint: "Tocca una fascia nella barra per modificarla; con ‹ › raggiungi anche quelle più strette.",
+    hint_touch: "Tocca una fascia per modificarla: con − e + cambi gli orari, con ‹ › passi alle fasce vicine.",
     previous: "Fascia precedente",
     next: "Fascia successiva",
     split: "Dividi",

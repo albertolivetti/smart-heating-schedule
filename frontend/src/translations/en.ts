@@ -67,7 +67,7 @@ export const en = {
   programs: {
     title: "Programs · {season}",
     legend: "Temperature colours",
-    hint: "Tap a day to move it here. Tap a block to change its temperature, drag the dividers to change the times.",
+    hint: "Tap a day to move it here. Tap a block to change its temperature and times.",
     new: "Program",
     new_name: "New program",
     every_day: "Every day",
@@ -86,6 +86,7 @@ export const en = {
   },
   block: {
     hint: "Tap a block on the bar to edit it; use ‹ › to reach short blocks.",
+    hint_touch: "Tap a block to edit it; − and + change its times. Use ‹ › to reach short blocks.",
     previous: "Previous block",
     next: "Next block",
     split: "Split",

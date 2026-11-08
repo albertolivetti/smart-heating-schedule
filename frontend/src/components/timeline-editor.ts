@@ -89,6 +89,34 @@ export class TimelineEditor extends LitElement {
     this._selected = this._selected === index ? null : index;
   }
 
+  /** Touch screens edit times with − / + only: dragging thin dividers with a finger is unreliable. */
+  private get _touch(): boolean {
+    return window.matchMedia?.("(pointer: coarse)").matches ?? false;
+  }
+
+  /**
+   * Select the block under a tap. Blocks narrower than a finger are hard to
+   * hit, so the narrowest block within about 14px of the tap wins.
+   */
+  private _tap(ev: MouseEvent, index: number) {
+    if (ev.detail === 0) {
+      this._select(index); // keyboard
+      return;
+    }
+    const track = this.renderRoot.querySelector(".track") as HTMLElement;
+    const rect = track.getBoundingClientRect();
+    const reach = (14 / rect.width) * DAY;
+    const minutes = ((ev.clientX - rect.left) / rect.width) * DAY;
+    const segments = toSegments(this.blocks);
+    let best = index;
+    for (const [i, segment] of segments.entries()) {
+      const near = segment.start <= minutes + reach && segment.end >= minutes - reach;
+      const width = segment.end - segment.start;
+      if (near && width < segments[best].end - segments[best].start) best = i;
+    }
+    this._select(best);
+  }
+
   private _minutesAt(clientX: number): number {
     const track = this.renderRoot.querySelector(".track") as HTMLElement;
     const rect = track.getBoundingClientRect();
@@ -205,13 +233,13 @@ export class TimelineEditor extends LitElement {
               100}%;--block-color:${temperatureColor(segment.temperature, this.unit)}"
               aria-pressed=${index === selected}
               aria-label="${range}, ${label}"
-              @click=${() => this._select(index)}
+              @click=${(ev: MouseEvent) => this._tap(ev, index)}
             >
               <span>${label}</span>
             </button>`;
           })}
         </div>
-        ${this.readOnly
+        ${this.readOnly || this._touch
           ? nothing
           : dividers.map(
               ({ index, minutes }) => html`<button
@@ -224,6 +252,14 @@ export class TimelineEditor extends LitElement {
                 <span></span>
               </button>`,
             )}
+        ${selected === null || !segments[selected]
+          ? nothing
+          : html`<div
+              class="selection"
+              aria-hidden="true"
+              style="--center:${((segments[selected].start + segments[selected].end) / 2 / DAY) *
+              100}%;--width:${((segments[selected].end - segments[selected].start) / DAY) * 100}%"
+            ></div>`}
         ${this.now === null
           ? nothing
           : html`<div class="now" style="left:${(this.now / DAY) * 100}%" aria-hidden="true"></div>`}
@@ -236,7 +272,7 @@ export class TimelineEditor extends LitElement {
       ${selected === null || this.readOnly
         ? this.readOnly
           ? nothing
-          : html`<p class="hint secondary">${this.localize("block.hint")}</p>`
+          : html`<p class="hint secondary">${this.localize(this._touch ? "block.hint_touch" : "block.hint")}</p>`
         : this._renderEditor(segments, selected)}
     `;
   }
@@ -305,7 +341,7 @@ export class TimelineEditor extends LitElement {
         </button>
       </div>
       <div class="controls">
-        <div class="group">
+        <div class="group temp">
           <button
             class="round"
             ?disabled=${off || (value !== null && value <= this.limits.min)}
@@ -429,8 +465,17 @@ export class TimelineEditor extends LitElement {
       .block.off {
         font-weight: 500;
       }
-      .block.selected {
-        box-shadow: inset 0 0 0 3px var(--primary-text-color);
+      /* Drawn over the bar with a minimum width, so even a 15 minute block shows as selected. */
+      .selection {
+        border: 3px solid var(--primary-text-color);
+        border-radius: 6px;
+        bottom: -3px;
+        box-sizing: border-box;
+        left: calc(var(--center) - max(var(--width), 14px) / 2);
+        pointer-events: none;
+        position: absolute;
+        top: -3px;
+        width: max(var(--width), 14px);
       }
       .block:focus-visible {
         outline: 2px solid var(--primary-color);
@@ -569,6 +614,36 @@ export class TimelineEditor extends LitElement {
         height: 18px;
         margin: 0;
         width: 18px;
+      }
+      /* Phones: one full-width row for the temperature, one each for start and end. */
+      @container (max-width: 520px) {
+        .controls {
+          align-items: stretch;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .group {
+          width: 100%;
+        }
+        .group.temp .temperature {
+          flex: 1;
+        }
+        .group.temp button.round {
+          height: 48px;
+          width: 48px;
+        }
+        .group.time button.small {
+          height: 44px;
+          width: 56px;
+        }
+        .group.time .time-value {
+          flex: 1;
+          font-size: 16px;
+        }
+        .group.time .time-label {
+          font-size: 13px;
+          min-width: 3.6em;
+        }
       }
       .time-label {
         font-size: 12px;
