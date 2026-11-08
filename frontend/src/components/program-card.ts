@@ -127,8 +127,8 @@ export class ProgramCard extends LitElement {
       ha-card {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        padding: 8px 12px 12px;
+        gap: 12px;
+        padding: 12px 16px 14px;
       }
       .header {
         align-items: center;
@@ -142,7 +142,7 @@ export class ProgramCard extends LitElement {
         min-width: 0;
       }
       h3 {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
         margin: 0;
         overflow: hidden;
@@ -150,7 +150,7 @@ export class ProgramCard extends LitElement {
         white-space: nowrap;
       }
       .title .secondary {
-        font-size: 12px;
+        font-size: 13px;
       }
       ha-icon-button {
         --mdc-icon-button-size: 40px;
@@ -168,9 +168,9 @@ export class ProgramCard extends LitElement {
         cursor: pointer;
         flex: 1 1 0;
         font: inherit;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
-        height: 38px;
+        height: 40px;
         min-width: 0;
         padding: 0;
       }

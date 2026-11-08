@@ -1,4 +1,4 @@
-function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,i);else for(var n=t.length-1;n>=0;n--)(a=t[n])&&(r=(o<3?a(r):o>3?a(e,s,r):a(e,s))||r);return o>3&&r&&Object.defineProperty(e,s,r),r}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,s=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),a=new WeakMap;let o=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(s&&void 0===t){const s=void 0!==e&&1===e.length;s&&(t=a.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&a.set(e,t))}return t}toString(){return this.cssText}};const r=t=>new o("string"==typeof t?t:t+"",void 0,i),n=(t,...e)=>{const s=1===t.length?t[0]:e.reduce((e,s,i)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[i+1],t[0]);return new o(s,t,i)},l=s?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r(e)})(t):t,{is:d,defineProperty:c,getOwnPropertyDescriptor:h,getOwnPropertyNames:p,getOwnPropertySymbols:u,getPrototypeOf:m}=Object,g=globalThis,f=g.trustedTypes,y=f?f.emptyScript:"",b=g.reactiveElementPolyfillSupport,_=(t,e)=>t,v={toAttribute(t,e){switch(e){case Boolean:t=t?y:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let s=t;switch(e){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t)}catch(t){s=null}}return s}},$=(t,e)=>!d(t,e),x={attribute:!0,type:String,converter:v,reflect:!1,useDefault:!1,hasChanged:$};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=x){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const s=Symbol(),i=this.getPropertyDescriptor(t,s,e);void 0!==i&&c(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){const{get:i,set:a}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:i,set(e){const o=i?.call(this);a?.call(this,e),this.requestUpdate(t,o,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??x}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const t=m(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const t=this.properties,e=[...p(t),...u(t)];for(const s of e)this.createProperty(s,t[s])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,s]of e)this.elementProperties.set(t,s)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const s=this._$Eu(t,e);void 0!==s&&this._$Eh.set(s,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const s=new Set(t.flat(1/0).reverse());for(const t of s)e.unshift(l(t))}else void 0!==t&&e.push(l(t));return e}static _$Eu(t,e){const s=e.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,i)=>{if(s)t.adoptedStyleSheets=i.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const s of i){const i=document.createElement("style"),a=e.litNonce;void 0!==a&&i.setAttribute("nonce",a),i.textContent=s.cssText,t.appendChild(i)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){const s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(void 0!==i&&!0===s.reflect){const a=(void 0!==s.converter?.toAttribute?s.converter:v).toAttribute(e,s.type);this._$Em=t,null==a?this.removeAttribute(i):this.setAttribute(i,a),this._$Em=null}}_$AK(t,e){const s=this.constructor,i=s._$Eh.get(t);if(void 0!==i&&this._$Em!==i){const t=s.getPropertyOptions(i),a="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:v;this._$Em=i;const o=a.fromAttribute(e,t.type);this[i]=o??this._$Ej?.get(i)??o,this._$Em=null}}requestUpdate(t,e,s,i=!1,a){if(void 0!==t){const o=this.constructor;if(!1===i&&(a=this[t]),s??=o.getPropertyOptions(t),!((s.hasChanged??$)(a,e)||s.useDefault&&s.reflect&&a===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,s))))return;this.C(t,e,s)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:a},o){s&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==a||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),!0===i&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,s]of t){const{wrapped:t}=s,i=this[e];!0!==t||this._$AL.has(e)||void 0===i||this.C(e,void 0,s,i)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[_("elementProperties")]=new Map,w[_("finalized")]=new Map,b?.({ReactiveElement:w}),(g.reactiveElementVersions??=[]).push("2.1.2");const k=globalThis,z=t=>t,A=k.trustedTypes,S=A?A.createPolicy("lit-html",{createHTML:t=>t}):void 0,E="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,O="?"+C,H=`<${O}>`,M=document,P=()=>M.createComment(""),T=t=>null===t||"object"!=typeof t&&"function"!=typeof t,L=Array.isArray,D="[ \t\n\f\r]",I=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,N=/-->/g,V=/>/g,U=RegExp(`>|${D}(?:([^\\s"'>=/]+)(${D}*=${D}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),R=/'/g,j=/"/g,B=/^(?:script|style|textarea|title)$/i,F=(t=>(e,...s)=>({_$litType$:t,strings:e,values:s}))(1),W=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),Z=new WeakMap,X=M.createTreeWalker(M,129);function K(t,e){if(!L(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==S?S.createHTML(e):e}class J{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let a=0,o=0;const r=t.length-1,n=this.parts,[l,d]=((t,e)=>{const s=t.length-1,i=[];let a,o=2===e?"<svg>":3===e?"<math>":"",r=I;for(let e=0;e<s;e++){const s=t[e];let n,l,d=-1,c=0;for(;c<s.length&&(r.lastIndex=c,l=r.exec(s),null!==l);)c=r.lastIndex,r===I?"!--"===l[1]?r=N:void 0!==l[1]?r=V:void 0!==l[2]?(B.test(l[2])&&(a=RegExp("</"+l[2],"g")),r=U):void 0!==l[3]&&(r=U):r===U?">"===l[0]?(r=a??I,d=-1):void 0===l[1]?d=-2:(d=r.lastIndex-l[2].length,n=l[1],r=void 0===l[3]?U:'"'===l[3]?j:R):r===j||r===R?r=U:r===N||r===V?r=I:(r=U,a=void 0);const h=r===U&&t[e+1].startsWith("/>")?" ":"";o+=r===I?s+H:d>=0?(i.push(n),s.slice(0,d)+E+s.slice(d)+C+h):s+C+(-2===d?e:h)}return[K(t,o+(t[s]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),i]})(t,e);if(this.el=J.createElement(l,s),X.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(i=X.nextNode())&&n.length<r;){if(1===i.nodeType){if(i.hasAttributes())for(const t of i.getAttributeNames())if(t.endsWith(E)){const e=d[o++],s=i.getAttribute(t).split(C),r=/([.?@])?(.*)/.exec(e);n.push({type:1,index:a,name:r[2],strings:s,ctor:"."===r[1]?et:"?"===r[1]?st:"@"===r[1]?it:tt}),i.removeAttribute(t)}else t.startsWith(C)&&(n.push({type:6,index:a}),i.removeAttribute(t));if(B.test(i.tagName)){const t=i.textContent.split(C),e=t.length-1;if(e>0){i.textContent=A?A.emptyScript:"";for(let s=0;s<e;s++)i.append(t[s],P()),X.nextNode(),n.push({type:2,index:++a});i.append(t[e],P())}}}else if(8===i.nodeType)if(i.data===O)n.push({type:2,index:a});else{let t=-1;for(;-1!==(t=i.data.indexOf(C,t+1));)n.push({type:7,index:a}),t+=C.length-1}a++}}static createElement(t,e){const s=M.createElement("template");return s.innerHTML=t,s}}function Q(t,e,s=t,i){if(e===W)return e;let a=void 0!==i?s._$Co?.[i]:s._$Cl;const o=T(e)?void 0:e._$litDirective$;return a?.constructor!==o&&(a?._$AO?.(!1),void 0===o?a=void 0:(a=new o(t),a._$AT(t,s,i)),void 0!==i?(s._$Co??=[])[i]=a:s._$Cl=a),void 0!==a&&(e=Q(t,a._$AS(t,e.values),a,i)),e}class G{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??M).importNode(e,!0);X.currentNode=i;let a=X.nextNode(),o=0,r=0,n=s[0];for(;void 0!==n;){if(o===n.index){let e;2===n.type?e=new Y(a,a.nextSibling,this,t):1===n.type?e=new n.ctor(a,n.name,n.strings,this,t):6===n.type&&(e=new at(a,this,t)),this._$AV.push(e),n=s[++r]}o!==n?.index&&(a=X.nextNode(),o++)}return X.currentNode=M,i}p(t){let e=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}}class Y{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Q(this,t,e),T(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==W&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>L(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&T(this._$AH)?this._$AA.nextSibling.data=t:this.T(M.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:s}=t,i="number"==typeof s?this._$AC(t):(void 0===s.el&&(s.el=J.createElement(K(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{const t=new G(i,this),s=t.u(this.options);t.p(e),this.T(s),this._$AH=t}}_$AC(t){let e=Z.get(t.strings);return void 0===e&&Z.set(t.strings,e=new J(t)),e}k(t){L(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let s,i=0;for(const a of t)i===e.length?e.push(s=new Y(this.O(P()),this.O(P()),this,this.options)):s=e[i],s._$AI(a),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=z(t).nextSibling;z(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class tt{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,a){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=a,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=q}_$AI(t,e=this,s,i){const a=this.strings;let o=!1;if(void 0===a)t=Q(this,t,e,0),o=!T(t)||t!==this._$AH&&t!==W,o&&(this._$AH=t);else{const i=t;let r,n;for(t=a[0],r=0;r<a.length-1;r++)n=Q(this,i[s+r],e,r),n===W&&(n=this._$AH[r]),o||=!T(n)||n!==this._$AH[r],n===q?t=q:t!==q&&(t+=(n??"")+a[r+1]),this._$AH[r]=n}o&&!i&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class et extends tt{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class st extends tt{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class it extends tt{constructor(t,e,s,i,a){super(t,e,s,i,a),this.type=5}_$AI(t,e=this){if((t=Q(this,t,e,0)??q)===W)return;const s=this._$AH,i=t===q&&s!==q||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,a=t!==q&&(s===q||i);i&&this.element.removeEventListener(this.name,this,s),a&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class at{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){Q(this,t)}}const ot={I:Y},rt=k.litHtmlPolyfillSupport;rt?.(J,Y),(k.litHtmlVersions??=[]).push("3.3.3");const nt=globalThis;let lt=class extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,s)=>{const i=s?.renderBefore??e;let a=i._$litPart$;if(void 0===a){const t=s?.renderBefore??null;i._$litPart$=a=new Y(e.insertBefore(P(),t),t,void 0,s??{})}return a._$AI(t),a})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return W}};lt._$litElement$=!0,lt.finalized=!0,nt.litElementHydrateSupport?.({LitElement:lt});const dt=nt.litElementPolyfillSupport;dt?.({LitElement:lt}),(nt.litElementVersions??=[]).push("4.2.2");const ct={attribute:!0,type:String,converter:v,reflect:!1,hasChanged:$},ht=(t=ct,e,s)=>{const{kind:i,metadata:a}=s;let o=globalThis.litPropertyMetadata.get(a);if(void 0===o&&globalThis.litPropertyMetadata.set(a,o=new Map),"setter"===i&&((t=Object.create(t)).wrapped=!0),o.set(s.name,t),"accessor"===i){const{name:i}=s;return{set(s){const a=e.get.call(this);e.set.call(this,s),this.requestUpdate(i,a,t,!0,s)},init(e){return void 0!==e&&this.C(i,void 0,t,e),e}}}if("setter"===i){const{name:i}=s;return function(s){const a=this[i];e.call(this,s),this.requestUpdate(i,a,t,!0,s)}}throw Error("Unsupported decorator location: "+i)};function pt(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,e,s)=>{const i=e.hasOwnProperty(s);return e.constructor.createProperty(s,t),i?Object.getOwnPropertyDescriptor(e,s):void 0})(t,e,s)}function ut(t){return pt({...t,state:!0,attribute:!1})}const mt="smart_heating_schedule",gt=(t,e,s)=>t.callWS({type:`${mt}/room/save`,entity_id:e,...s}),ft=(t,e)=>t.callWS({type:`${mt}/seasons/save`,seasons:e}),yt=(t,e,s)=>{t.dispatchEvent(new CustomEvent(e,{bubbles:!0,composed:!0,detail:s}))},bt=(t,e)=>{yt(t,"hass-notification",{message:e})};let _t;const vt=(t,e)=>{const s=t.states[e]?.attributes.friendly_name;if(s)return s;const i=t.entities?.[e]?.device_id,a=i?t.devices?.[i]:void 0;return a?.name_by_user||a?.name||e},$t=t=>e=>{customElements.get(t)||customElements.define(t,e)},xt={title:"Heating schedule",loading:"Loading…",not_loaded:"The seasonal heating schedule is not set up. Add the integration under Settings → Devices & services.",read_only:"Only administrators can change schedules.",away:{label:"Away",active:"Away is on",preset:"The thermostat uses its away preset. The schedule resumes when you turn Away off.",temperature:"The thermostat keeps {temperature}. The schedule resumes when you turn Away off."},entity:{label:"Entity controlled by the schedule",add:"Add thermostat",choose:"Choose the thermostat to schedule",none_title:"Choose what to schedule",none_text:"Pick the climate entity of your boiler or thermostat. The schedule sets its temperature and turns it off outside the seasons.",no_thermostats:"All climate entities already have a schedule.",enabled:"Schedule active",remove:"Remove schedule",remove_text:"Stop scheduling {name} and delete its programs?",measured:"Measured {temperature}"},seasons:{title:"Seasons",subtitle:"Dates repeat every year and apply to all thermostats.",reset:"From Home Assistant",reset_title:"Use Home Assistant's seasons",reset_text:"Replace your seasons with winter, spring, summer and autumn as Home Assistant defines them. Programs of seasons that no longer exist are deleted.",new:"New",edit:"Edit {name}",select:"Show {name}",today:"today",outside:"Outside the seasons ({ranges}) heating is off",always:"The seasons cover the whole year",programs_one:"1 program",programs:"{count} programs",programs_none:"no programs: off"},season_dialog:{new:"New season",edit:"Edit season",name:"Name",color:"Color",start:"Start",end:"End",year:"The year is ignored: the season repeats every year.",wraps:"Runs across new year.",overlap:"Overlaps with {name}.",delete:"Delete season",delete_text:"Delete {name} and the programs in it?"},now:{title:"Now",scheduled:"requested",off:"Off",season:"Season",program:"Program",block:"Current block",next:"Next change",next_season:"Next season",none:"None",manual_hint:"If you change the temperature by hand, it holds until the next block."},programs:{title:"Programs · {season}",legend:"Temperature colours",hint:"Tap a day to move it here. Tap a block to change its temperature, drag the dividers to change the times.",new:"Program",new_name:"New program",every_day:"Every day",no_days:"No day selected",empty:"No programs in this season: heating is off.",uncovered:"No program on {days}: heating is off on those days.",duplicate:"Duplicate {name}",delete:"Delete {name}",delete_text:"Delete the program {name}?",rename:"Rename {name}",name:"Name",copy:"{name} (copy)",day_mine:"{day}: in this program",day_other:"{day}: in {program}, tap to move it here",day_free:"{day}: no program"},block:{hint:"Tap a block on the bar to edit it.",split:"Split",delete:"Delete block",close:"Close",lower:"Lower by {step}",raise:"Raise by {step}",off:"Off",start:"Start",end:"End",earlier:"{what} 15 minutes earlier",later:"{what} 15 minutes later",divider:"Change at {time}: drag, or use the left and right arrow keys"},status:{until:"{temperature} until {time}",off_until:"Off until {time}",constant:"{temperature}",constant_off:"Off",disabled:"Schedule is off",pending:"Waiting for the thermostat",error:"Could not update the thermostat: {error}"},room:{overridden:"Changed by hand",resume:"Back to the schedule"},common:{cancel:"Cancel",save:"Save",add:"Add",delete:"Delete",close:"Close",replace:"Replace"},error:{save:"Could not save: {error}",resume:"Could not restore the schedule: {error}"}},wt={en:xt,it:{title:"Cronotermostato",loading:"Caricamento…",not_loaded:"Il cronotermostato stagionale non è configurato. Aggiungi l'integrazione in Impostazioni → Dispositivi e servizi.",read_only:"Solo gli amministratori possono modificare la programmazione.",away:{label:"Assenza",active:"Assenza attiva",preset:"Il termostato usa il suo preset Fuori casa. Il programma riprende quando disattivi l'Assenza.",temperature:"Il termostato tiene {temperature}. Il programma riprende quando disattivi l'Assenza."},entity:{label:"Entità comandata dalla programmazione",add:"Aggiungi termostato",choose:"Scegli il termostato da programmare",none_title:"Scegli cosa programmare",none_text:"Seleziona l'entità climate della caldaia o del termostato. Il programma ne imposta la temperatura e la spegne fuori stagione.",no_thermostats:"Tutte le entità climate hanno già una programmazione.",enabled:"Programmazione attiva",remove:"Rimuovi programmazione",remove_text:"Smettere di programmare {name} ed eliminare i suoi programmi?",measured:"Misurata {temperature}"},seasons:{title:"Stagioni",subtitle:"Le date si ripetono ogni anno e valgono per tutti i termostati.",reset:"Da Home Assistant",reset_title:"Usa le stagioni di Home Assistant",reset_text:"Sostituisce le tue stagioni con inverno, primavera, estate e autunno come li definisce Home Assistant. I programmi delle stagioni che non esistono più vengono eliminati.",new:"Nuova",edit:"Modifica {name}",select:"Mostra {name}",today:"oggi",outside:"Fuori stagione ({ranges}) la caldaia resta spenta",always:"Le stagioni coprono tutto l'anno",programs_one:"1 programma",programs:"{count} programmi",programs_none:"nessun programma: spento"},season_dialog:{new:"Nuova stagione",edit:"Modifica stagione",name:"Nome",color:"Colore",start:"Inizio",end:"Fine",year:"L'anno non conta: la stagione si ripete ogni anno.",wraps:"Attraversa il capodanno.",overlap:"Si sovrappone a {name}.",delete:"Elimina stagione",delete_text:"Eliminare {name} e i suoi programmi?"},now:{title:"Adesso",scheduled:"richiesti",off:"Spento",season:"Stagione",program:"Programma",block:"Fascia attuale",next:"Prossimo cambio",next_season:"Prossima stagione",none:"Nessuno",manual_hint:"Se cambi la temperatura a mano, vale fino al prossimo cambio di fascia."},programs:{title:"Programmi · {season}",legend:"Colori delle temperature",hint:"Tocca un giorno per spostarlo qui. Tocca una fascia per la temperatura, trascina i separatori per gli orari.",new:"Programma",new_name:"Nuovo programma",every_day:"Tutti i giorni",no_days:"Nessun giorno selezionato",empty:"Nessun programma in questa stagione: la caldaia resta spenta.",uncovered:"Nessun programma per {days}: in quei giorni la caldaia resta spenta.",duplicate:"Duplica {name}",delete:"Elimina {name}",delete_text:"Eliminare il programma {name}?",rename:"Rinomina {name}",name:"Nome",copy:"{name} (copia)",day_mine:"{day}: in questo programma",day_other:"{day}: in {program}, tocca per spostarlo qui",day_free:"{day}: senza programma"},block:{hint:"Tocca una fascia nella barra per modificarla.",split:"Dividi",delete:"Elimina fascia",close:"Chiudi",lower:"Diminuisci di {step}",raise:"Aumenta di {step}",off:"Spento",start:"Inizio",end:"Fine",earlier:"{what} 15 minuti prima",later:"{what} 15 minuti dopo",divider:"Cambio alle {time}: trascina, oppure usa le frecce sinistra e destra"},status:{until:"{temperature} fino alle {time}",off_until:"Spento fino alle {time}",constant:"{temperature}",constant_off:"Spento",disabled:"Programmazione disattivata",pending:"In attesa del termostato",error:"Impossibile aggiornare il termostato: {error}"},room:{overridden:"Modificato a mano",resume:"Torna al programma"},common:{cancel:"Annulla",save:"Salva",add:"Aggiungi",delete:"Elimina",close:"Chiudi",replace:"Sostituisci"},error:{save:"Impossibile salvare: {error}",resume:"Impossibile ripristinare il programma: {error}"}}},kt=(t,e)=>{let s=t;for(const t of e.split("."))s=s?.[t];return"string"==typeof s?s:void 0},zt=t=>{const e=wt[t]??wt[t.split("-")[0]];return(t,s)=>{let i=kt(e,t)??kt(xt,t)??t;for(const[t,e]of Object.entries(s??{}))i=i.replaceAll(`{${t}}`,e);return i}},At=n`
+function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,i);else for(var n=t.length-1;n>=0;n--)(a=t[n])&&(r=(o<3?a(r):o>3?a(e,s,r):a(e,s))||r);return o>3&&r&&Object.defineProperty(e,s,r),r}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,s=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),a=new WeakMap;let o=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(s&&void 0===t){const s=void 0!==e&&1===e.length;s&&(t=a.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&a.set(e,t))}return t}toString(){return this.cssText}};const r=t=>new o("string"==typeof t?t:t+"",void 0,i),n=(t,...e)=>{const s=1===t.length?t[0]:e.reduce((e,s,i)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[i+1],t[0]);return new o(s,t,i)},l=s?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r(e)})(t):t,{is:d,defineProperty:c,getOwnPropertyDescriptor:h,getOwnPropertyNames:p,getOwnPropertySymbols:u,getPrototypeOf:m}=Object,g=globalThis,f=g.trustedTypes,b=f?f.emptyScript:"",y=g.reactiveElementPolyfillSupport,_=(t,e)=>t,v={toAttribute(t,e){switch(e){case Boolean:t=t?b:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let s=t;switch(e){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t)}catch(t){s=null}}return s}},$=(t,e)=>!d(t,e),x={attribute:!0,type:String,converter:v,reflect:!1,useDefault:!1,hasChanged:$};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=x){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const s=Symbol(),i=this.getPropertyDescriptor(t,s,e);void 0!==i&&c(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){const{get:i,set:a}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:i,set(e){const o=i?.call(this);a?.call(this,e),this.requestUpdate(t,o,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??x}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const t=m(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const t=this.properties,e=[...p(t),...u(t)];for(const s of e)this.createProperty(s,t[s])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,s]of e)this.elementProperties.set(t,s)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const s=this._$Eu(t,e);void 0!==s&&this._$Eh.set(s,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const s=new Set(t.flat(1/0).reverse());for(const t of s)e.unshift(l(t))}else void 0!==t&&e.push(l(t));return e}static _$Eu(t,e){const s=e.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,i)=>{if(s)t.adoptedStyleSheets=i.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const s of i){const i=document.createElement("style"),a=e.litNonce;void 0!==a&&i.setAttribute("nonce",a),i.textContent=s.cssText,t.appendChild(i)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){const s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(void 0!==i&&!0===s.reflect){const a=(void 0!==s.converter?.toAttribute?s.converter:v).toAttribute(e,s.type);this._$Em=t,null==a?this.removeAttribute(i):this.setAttribute(i,a),this._$Em=null}}_$AK(t,e){const s=this.constructor,i=s._$Eh.get(t);if(void 0!==i&&this._$Em!==i){const t=s.getPropertyOptions(i),a="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:v;this._$Em=i;const o=a.fromAttribute(e,t.type);this[i]=o??this._$Ej?.get(i)??o,this._$Em=null}}requestUpdate(t,e,s,i=!1,a){if(void 0!==t){const o=this.constructor;if(!1===i&&(a=this[t]),s??=o.getPropertyOptions(t),!((s.hasChanged??$)(a,e)||s.useDefault&&s.reflect&&a===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,s))))return;this.C(t,e,s)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:a},o){s&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==a||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),!0===i&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,s]of t){const{wrapped:t}=s,i=this[e];!0!==t||this._$AL.has(e)||void 0===i||this.C(e,void 0,s,i)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[_("elementProperties")]=new Map,w[_("finalized")]=new Map,y?.({ReactiveElement:w}),(g.reactiveElementVersions??=[]).push("2.1.2");const k=globalThis,z=t=>t,A=k.trustedTypes,S=A?A.createPolicy("lit-html",{createHTML:t=>t}):void 0,E="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,O="?"+C,H=`<${O}>`,M=document,P=()=>M.createComment(""),T=t=>null===t||"object"!=typeof t&&"function"!=typeof t,L=Array.isArray,D="[ \t\n\f\r]",N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,I=/-->/g,V=/>/g,U=RegExp(`>|${D}(?:([^\\s"'>=/]+)(${D}*=${D}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),R=/'/g,j=/"/g,B=/^(?:script|style|textarea|title)$/i,F=(t=>(e,...s)=>({_$litType$:t,strings:e,values:s}))(1),Z=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),W=new WeakMap,X=M.createTreeWalker(M,129);function K(t,e){if(!L(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==S?S.createHTML(e):e}class J{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let a=0,o=0;const r=t.length-1,n=this.parts,[l,d]=((t,e)=>{const s=t.length-1,i=[];let a,o=2===e?"<svg>":3===e?"<math>":"",r=N;for(let e=0;e<s;e++){const s=t[e];let n,l,d=-1,c=0;for(;c<s.length&&(r.lastIndex=c,l=r.exec(s),null!==l);)c=r.lastIndex,r===N?"!--"===l[1]?r=I:void 0!==l[1]?r=V:void 0!==l[2]?(B.test(l[2])&&(a=RegExp("</"+l[2],"g")),r=U):void 0!==l[3]&&(r=U):r===U?">"===l[0]?(r=a??N,d=-1):void 0===l[1]?d=-2:(d=r.lastIndex-l[2].length,n=l[1],r=void 0===l[3]?U:'"'===l[3]?j:R):r===j||r===R?r=U:r===I||r===V?r=N:(r=U,a=void 0);const h=r===U&&t[e+1].startsWith("/>")?" ":"";o+=r===N?s+H:d>=0?(i.push(n),s.slice(0,d)+E+s.slice(d)+C+h):s+C+(-2===d?e:h)}return[K(t,o+(t[s]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),i]})(t,e);if(this.el=J.createElement(l,s),X.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(i=X.nextNode())&&n.length<r;){if(1===i.nodeType){if(i.hasAttributes())for(const t of i.getAttributeNames())if(t.endsWith(E)){const e=d[o++],s=i.getAttribute(t).split(C),r=/([.?@])?(.*)/.exec(e);n.push({type:1,index:a,name:r[2],strings:s,ctor:"."===r[1]?et:"?"===r[1]?st:"@"===r[1]?it:tt}),i.removeAttribute(t)}else t.startsWith(C)&&(n.push({type:6,index:a}),i.removeAttribute(t));if(B.test(i.tagName)){const t=i.textContent.split(C),e=t.length-1;if(e>0){i.textContent=A?A.emptyScript:"";for(let s=0;s<e;s++)i.append(t[s],P()),X.nextNode(),n.push({type:2,index:++a});i.append(t[e],P())}}}else if(8===i.nodeType)if(i.data===O)n.push({type:2,index:a});else{let t=-1;for(;-1!==(t=i.data.indexOf(C,t+1));)n.push({type:7,index:a}),t+=C.length-1}a++}}static createElement(t,e){const s=M.createElement("template");return s.innerHTML=t,s}}function Q(t,e,s=t,i){if(e===Z)return e;let a=void 0!==i?s._$Co?.[i]:s._$Cl;const o=T(e)?void 0:e._$litDirective$;return a?.constructor!==o&&(a?._$AO?.(!1),void 0===o?a=void 0:(a=new o(t),a._$AT(t,s,i)),void 0!==i?(s._$Co??=[])[i]=a:s._$Cl=a),void 0!==a&&(e=Q(t,a._$AS(t,e.values),a,i)),e}class G{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??M).importNode(e,!0);X.currentNode=i;let a=X.nextNode(),o=0,r=0,n=s[0];for(;void 0!==n;){if(o===n.index){let e;2===n.type?e=new Y(a,a.nextSibling,this,t):1===n.type?e=new n.ctor(a,n.name,n.strings,this,t):6===n.type&&(e=new at(a,this,t)),this._$AV.push(e),n=s[++r]}o!==n?.index&&(a=X.nextNode(),o++)}return X.currentNode=M,i}p(t){let e=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}}class Y{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Q(this,t,e),T(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==Z&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>L(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&T(this._$AH)?this._$AA.nextSibling.data=t:this.T(M.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:s}=t,i="number"==typeof s?this._$AC(t):(void 0===s.el&&(s.el=J.createElement(K(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{const t=new G(i,this),s=t.u(this.options);t.p(e),this.T(s),this._$AH=t}}_$AC(t){let e=W.get(t.strings);return void 0===e&&W.set(t.strings,e=new J(t)),e}k(t){L(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let s,i=0;for(const a of t)i===e.length?e.push(s=new Y(this.O(P()),this.O(P()),this,this.options)):s=e[i],s._$AI(a),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=z(t).nextSibling;z(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class tt{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,a){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=a,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=q}_$AI(t,e=this,s,i){const a=this.strings;let o=!1;if(void 0===a)t=Q(this,t,e,0),o=!T(t)||t!==this._$AH&&t!==Z,o&&(this._$AH=t);else{const i=t;let r,n;for(t=a[0],r=0;r<a.length-1;r++)n=Q(this,i[s+r],e,r),n===Z&&(n=this._$AH[r]),o||=!T(n)||n!==this._$AH[r],n===q?t=q:t!==q&&(t+=(n??"")+a[r+1]),this._$AH[r]=n}o&&!i&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class et extends tt{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class st extends tt{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class it extends tt{constructor(t,e,s,i,a){super(t,e,s,i,a),this.type=5}_$AI(t,e=this){if((t=Q(this,t,e,0)??q)===Z)return;const s=this._$AH,i=t===q&&s!==q||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,a=t!==q&&(s===q||i);i&&this.element.removeEventListener(this.name,this,s),a&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class at{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){Q(this,t)}}const ot={I:Y},rt=k.litHtmlPolyfillSupport;rt?.(J,Y),(k.litHtmlVersions??=[]).push("3.3.3");const nt=globalThis;let lt=class extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,s)=>{const i=s?.renderBefore??e;let a=i._$litPart$;if(void 0===a){const t=s?.renderBefore??null;i._$litPart$=a=new Y(e.insertBefore(P(),t),t,void 0,s??{})}return a._$AI(t),a})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return Z}};lt._$litElement$=!0,lt.finalized=!0,nt.litElementHydrateSupport?.({LitElement:lt});const dt=nt.litElementPolyfillSupport;dt?.({LitElement:lt}),(nt.litElementVersions??=[]).push("4.2.2");const ct={attribute:!0,type:String,converter:v,reflect:!1,hasChanged:$},ht=(t=ct,e,s)=>{const{kind:i,metadata:a}=s;let o=globalThis.litPropertyMetadata.get(a);if(void 0===o&&globalThis.litPropertyMetadata.set(a,o=new Map),"setter"===i&&((t=Object.create(t)).wrapped=!0),o.set(s.name,t),"accessor"===i){const{name:i}=s;return{set(s){const a=e.get.call(this);e.set.call(this,s),this.requestUpdate(i,a,t,!0,s)},init(e){return void 0!==e&&this.C(i,void 0,t,e),e}}}if("setter"===i){const{name:i}=s;return function(s){const a=this[i];e.call(this,s),this.requestUpdate(i,a,t,!0,s)}}throw Error("Unsupported decorator location: "+i)};function pt(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,e,s)=>{const i=e.hasOwnProperty(s);return e.constructor.createProperty(s,t),i?Object.getOwnPropertyDescriptor(e,s):void 0})(t,e,s)}function ut(t){return pt({...t,state:!0,attribute:!1})}const mt="smart_heating_schedule",gt=(t,e,s)=>t.callWS({type:`${mt}/room/save`,entity_id:e,...s}),ft=(t,e)=>t.callWS({type:`${mt}/seasons/save`,seasons:e}),bt=(t,e,s)=>{t.dispatchEvent(new CustomEvent(e,{bubbles:!0,composed:!0,detail:s}))},yt=(t,e)=>{bt(t,"hass-notification",{message:e})};let _t;const vt=(t,e)=>{const s=t.states[e]?.attributes.friendly_name;if(s)return s;const i=t.entities?.[e]?.device_id,a=i?t.devices?.[i]:void 0;return a?.name_by_user||a?.name||e},$t=t=>e=>{customElements.get(t)||customElements.define(t,e)},xt={title:"Heating schedule",loading:"Loading…",not_loaded:"The seasonal heating schedule is not set up. Add the integration under Settings → Devices & services.",read_only:"Only administrators can change schedules.",away:{label:"Away",active:"Away is on",preset:"The thermostat uses its away preset. The schedule resumes when you turn Away off.",temperature:"The thermostat keeps {temperature}. The schedule resumes when you turn Away off."},entity:{label:"Entity controlled by the schedule",add:"Add thermostat",choose:"Choose the thermostat to schedule",none_title:"Choose what to schedule",none_text:"Pick the climate entity of your boiler or thermostat. The schedule sets its temperature and turns it off outside the seasons.",no_thermostats:"All climate entities already have a schedule.",enabled:"Schedule active",remove:"Remove schedule",remove_text:"Stop scheduling {name} and delete its programs?",measured:"Measured {temperature}"},seasons:{title:"Seasons",subtitle:"Dates repeat every year and apply to all thermostats.",reset:"From Home Assistant",reset_title:"Use Home Assistant's seasons",reset_text:"Replace your seasons with winter, spring, summer and autumn as Home Assistant defines them. Programs of seasons that no longer exist are deleted.",new:"New",edit:"Edit {name}",select:"Show {name}",today:"today",outside:"Outside the seasons ({ranges}) heating is off",always:"The seasons cover the whole year",programs_one:"1 program",programs:"{count} programs",programs_none:"no programs: off"},season_dialog:{new:"New season",edit:"Edit season",name:"Name",color:"Color",start:"Start",end:"End",year:"The year is ignored: the season repeats every year.",wraps:"Runs across new year.",overlap:"Overlaps with {name}.",delete:"Delete season",delete_text:"Delete {name} and the programs in it?"},now:{title:"Now",scheduled:"requested",off:"Off",season:"Season",program:"Program",block:"Current block",next:"Next change",next_season:"Next season",none:"None",manual_hint:"If you change the temperature by hand, it holds until the next block."},programs:{title:"Programs · {season}",legend:"Temperature colours",hint:"Tap a day to move it here. Tap a block to change its temperature, drag the dividers to change the times.",new:"Program",new_name:"New program",every_day:"Every day",no_days:"No day selected",empty:"No programs in this season: heating is off.",uncovered:"No program on {days}: heating is off on those days.",duplicate:"Duplicate {name}",delete:"Delete {name}",delete_text:"Delete the program {name}?",rename:"Rename {name}",name:"Name",copy:"{name} (copy)",day_mine:"{day}: in this program",day_other:"{day}: in {program}, tap to move it here",day_free:"{day}: no program"},block:{hint:"Tap a block on the bar to edit it; use ‹ › to reach short blocks.",previous:"Previous block",next:"Next block",split:"Split",delete:"Delete block",close:"Close",lower:"Lower by {step}",raise:"Raise by {step}",off:"Off",start:"Start",end:"End",earlier:"{what} 15 minutes earlier",later:"{what} 15 minutes later",divider:"Change at {time}: drag, or use the left and right arrow keys"},status:{until:"{temperature} until {time}",off_until:"Off until {time}",constant:"{temperature}",constant_off:"Off",disabled:"Schedule is off",pending:"Waiting for the thermostat",error:"Could not update the thermostat: {error}"},room:{overridden:"Changed by hand",resume:"Back to the schedule"},common:{cancel:"Cancel",save:"Save",add:"Add",delete:"Delete",close:"Close",replace:"Replace"},error:{save:"Could not save: {error}",resume:"Could not restore the schedule: {error}"}},wt={en:xt,it:{title:"Cronotermostato",loading:"Caricamento…",not_loaded:"Il cronotermostato stagionale non è configurato. Aggiungi l'integrazione in Impostazioni → Dispositivi e servizi.",read_only:"Solo gli amministratori possono modificare la programmazione.",away:{label:"Assenza",active:"Assenza attiva",preset:"Il termostato usa il suo preset Fuori casa. Il programma riprende quando disattivi l'Assenza.",temperature:"Il termostato tiene {temperature}. Il programma riprende quando disattivi l'Assenza."},entity:{label:"Entità comandata dalla programmazione",add:"Aggiungi termostato",choose:"Scegli il termostato da programmare",none_title:"Scegli cosa programmare",none_text:"Seleziona l'entità climate della caldaia o del termostato. Il programma ne imposta la temperatura e la spegne fuori stagione.",no_thermostats:"Tutte le entità climate hanno già una programmazione.",enabled:"Programmazione attiva",remove:"Rimuovi programmazione",remove_text:"Smettere di programmare {name} ed eliminare i suoi programmi?",measured:"Misurata {temperature}"},seasons:{title:"Stagioni",subtitle:"Le date si ripetono ogni anno e valgono per tutti i termostati.",reset:"Da Home Assistant",reset_title:"Usa le stagioni di Home Assistant",reset_text:"Sostituisce le tue stagioni con inverno, primavera, estate e autunno come li definisce Home Assistant. I programmi delle stagioni che non esistono più vengono eliminati.",new:"Nuova",edit:"Modifica {name}",select:"Mostra {name}",today:"oggi",outside:"Fuori stagione ({ranges}) la caldaia resta spenta",always:"Le stagioni coprono tutto l'anno",programs_one:"1 programma",programs:"{count} programmi",programs_none:"nessun programma: spento"},season_dialog:{new:"Nuova stagione",edit:"Modifica stagione",name:"Nome",color:"Colore",start:"Inizio",end:"Fine",year:"L'anno non conta: la stagione si ripete ogni anno.",wraps:"Attraversa il capodanno.",overlap:"Si sovrappone a {name}.",delete:"Elimina stagione",delete_text:"Eliminare {name} e i suoi programmi?"},now:{title:"Adesso",scheduled:"richiesti",off:"Spento",season:"Stagione",program:"Programma",block:"Fascia attuale",next:"Prossimo cambio",next_season:"Prossima stagione",none:"Nessuno",manual_hint:"Se cambi la temperatura a mano, vale fino al prossimo cambio di fascia."},programs:{title:"Programmi · {season}",legend:"Colori delle temperature",hint:"Tocca un giorno per spostarlo qui. Tocca una fascia per la temperatura, trascina i separatori per gli orari.",new:"Programma",new_name:"Nuovo programma",every_day:"Tutti i giorni",no_days:"Nessun giorno selezionato",empty:"Nessun programma in questa stagione: la caldaia resta spenta.",uncovered:"Nessun programma per {days}: in quei giorni la caldaia resta spenta.",duplicate:"Duplica {name}",delete:"Elimina {name}",delete_text:"Eliminare il programma {name}?",rename:"Rinomina {name}",name:"Nome",copy:"{name} (copia)",day_mine:"{day}: in questo programma",day_other:"{day}: in {program}, tocca per spostarlo qui",day_free:"{day}: senza programma"},block:{hint:"Tocca una fascia nella barra per modificarla; con ‹ › raggiungi anche quelle più strette.",previous:"Fascia precedente",next:"Fascia successiva",split:"Dividi",delete:"Elimina fascia",close:"Chiudi",lower:"Diminuisci di {step}",raise:"Aumenta di {step}",off:"Spento",start:"Inizio",end:"Fine",earlier:"{what} 15 minuti prima",later:"{what} 15 minuti dopo",divider:"Cambio alle {time}: trascina, oppure usa le frecce sinistra e destra"},status:{until:"{temperature} fino alle {time}",off_until:"Spento fino alle {time}",constant:"{temperature}",constant_off:"Spento",disabled:"Programmazione disattivata",pending:"In attesa del termostato",error:"Impossibile aggiornare il termostato: {error}"},room:{overridden:"Modificato a mano",resume:"Torna al programma"},common:{cancel:"Annulla",save:"Salva",add:"Aggiungi",delete:"Elimina",close:"Chiudi",replace:"Sostituisci"},error:{save:"Impossibile salvare: {error}",resume:"Impossibile ripristinare il programma: {error}"}}},kt=(t,e)=>{let s=t;for(const t of e.split("."))s=s?.[t];return"string"==typeof s?s:void 0},zt=t=>{const e=wt[t]??wt[t.split("-")[0]];return(t,s)=>{let i=kt(e,t)??kt(xt,t)??t;for(const[t,e]of Object.entries(s??{}))i=i.replaceAll(`{${t}}`,e);return i}},At=n`
   :host {
     color: var(--primary-text-color);
   }
@@ -112,7 +112,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
   .toolbar ha-icon-button {
     color: inherit;
   }
-`;var Ct="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z",Ot="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z",Ht="M19,13H5V11H19V13Z",Mt="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z",Pt="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z",Tt="M16.95,16.95L14.83,14.83C15.55,14.1 16,13.1 16,12C16,11.26 15.79,10.57 15.43,10L17.6,7.81C18.5,9 19,10.43 19,12C19,13.93 18.22,15.68 16.95,16.95M12,5C13.57,5 15,5.5 16.19,6.4L14,8.56C13.43,8.21 12.74,8 12,8A4,4 0 0,0 8,12C8,13.1 8.45,14.1 9.17,14.83L7.05,16.95C5.78,15.68 5,13.93 5,12A7,7 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z";const Lt=2,Dt=t=>(...e)=>({_$litDirective$:t,values:e});let It=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,s){this._$Ct=t,this._$AM=e,this._$Ci=s}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};const{I:Nt}=ot,Vt=t=>t,Ut=()=>document.createComment(""),Rt=(t,e,s)=>{const i=t._$AA.parentNode,a=void 0===e?t._$AB:e._$AA;if(void 0===s){const e=i.insertBefore(Ut(),a),o=i.insertBefore(Ut(),a);s=new Nt(e,o,t,t.options)}else{const e=s._$AB.nextSibling,o=s._$AM,r=o!==t;if(r){let e;s._$AQ?.(t),s._$AM=t,void 0!==s._$AP&&(e=t._$AU)!==o._$AU&&s._$AP(e)}if(e!==a||r){let t=s._$AA;for(;t!==e;){const e=Vt(t).nextSibling;Vt(i).insertBefore(t,a),t=e}}}return s},jt=(t,e,s=t)=>(t._$AI(e,s),t),Bt={},Ft=(t,e=Bt)=>t._$AH=e,Wt=t=>{t._$AR(),t._$AA.remove()},qt=Dt(class extends It{constructor(){super(...arguments),this.key=q}render(t,e){return this.key=t,e}update(t,[e,s]){return e!==this.key&&(Ft(t),this.key=e),s}}),Zt=(t,e,s)=>{const i=new Map;for(let a=e;a<=s;a++)i.set(t[a],a);return i},Xt=Dt(class extends It{constructor(t){if(super(t),t.type!==Lt)throw Error("repeat() can only be used in text expressions")}dt(t,e,s){let i;void 0===s?s=e:void 0!==e&&(i=e);const a=[],o=[];let r=0;for(const e of t)a[r]=i?i(e,r):r,o[r]=s(e,r),r++;return{values:o,keys:a}}render(t,e,s){return this.dt(t,e,s).values}update(t,[e,s,i]){const a=(t=>t._$AH)(t),{values:o,keys:r}=this.dt(e,s,i);if(!Array.isArray(a))return this.ut=r,o;const n=this.ut??=[],l=[];let d,c,h=0,p=a.length-1,u=0,m=o.length-1;for(;h<=p&&u<=m;)if(null===a[h])h++;else if(null===a[p])p--;else if(n[h]===r[u])l[u]=jt(a[h],o[u]),h++,u++;else if(n[p]===r[m])l[m]=jt(a[p],o[m]),p--,m--;else if(n[h]===r[m])l[m]=jt(a[h],o[m]),Rt(t,l[m+1],a[h]),h++,m--;else if(n[p]===r[u])l[u]=jt(a[p],o[u]),Rt(t,a[h],a[p]),p--,u++;else if(void 0===d&&(d=Zt(r,u,m),c=Zt(n,h,p)),d.has(n[h]))if(d.has(n[p])){const e=c.get(r[u]),s=void 0!==e?a[e]:null;if(null===s){const e=Rt(t,a[h]);jt(e,o[u]),l[u]=e}else l[u]=jt(s,o[u]),Rt(t,a[h],s),a[e]=null;u++}else Wt(a[p]),p--;else Wt(a[h]),h++;for(;u<=m;){const e=Rt(t,l[m+1]);jt(e,o[u]),l[u++]=e}for(;h<=p;){const t=a[h++];null!==t&&Wt(t)}return this.ut=r,Ft(t,l),W}}),Kt="°F",Jt={"°C":{min:5,max:30,step:.5},"°F":{min:41,max:86,step:1}},Qt=t=>Jt[t]??Jt["°C"],Gt=(t,e)=>{const s=Qt(e),i=t?.attributes??{};return{min:Number(i.min_temp??s.min),max:Number(i.max_temp??s.max),step:Number(i.target_temp_step||s.step)}},Yt=t=>t===Kt?68:20,te=(t,e)=>{const s=Math.round(t/e.step)*e.step;return Math.min(e.max,Math.max(e.min,Number(s.toFixed(2))))},ee=(t,e,s=Qt(e).step,i=!1,a)=>{const o=((t,e)=>e<1?e<.1?2:1:t===Kt?0:1)(e,s);return`${new Intl.NumberFormat(a,{minimumFractionDigits:i?0:o,maximumFractionDigits:o}).format(t)}°`},se=[{name:"cold",upTo:16,color:"#a9cbee"},{name:"cool",upTo:18,color:"#f5cf9a"},{name:"warm",upTo:20,color:"#ef9f5c"},{name:"hot",upTo:1/0,color:"#e5794a"}],ie="#d5d9df",ae=(t,e)=>{if(null===t)return`var(--shs-color-off, ${ie})`;const s=(i=((t,e)=>e===Kt?5*(t-32)/9:t)(t,e),se.find(t=>i<=t.upTo));var i;return`var(--shs-color-${s.name}, ${s.color})`};let oe=class extends lt{constructor(){super(...arguments),this.heading="",this.open=!1,this._previousFocus=null,this._keydown=t=>{"Escape"===t.key&&this.open&&(t.stopPropagation(),this._close())}}_close(){yt(this,"closed")}connectedCallback(){super.connectedCallback(),window.addEventListener("keydown",this._keydown)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("keydown",this._keydown)}updated(t){t.has("open")&&(this.open?(this._previousFocus=document.activeElement,this.renderRoot.querySelector(".surface")?.focus()):this._previousFocus instanceof HTMLElement&&this._previousFocus.focus())}render(){return this.open?F`
+`;var Ct="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z",Ot="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z",Ht="M19,13H5V11H19V13Z",Mt="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z",Pt="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z",Tt="M16.95,16.95L14.83,14.83C15.55,14.1 16,13.1 16,12C16,11.26 15.79,10.57 15.43,10L17.6,7.81C18.5,9 19,10.43 19,12C19,13.93 18.22,15.68 16.95,16.95M12,5C13.57,5 15,5.5 16.19,6.4L14,8.56C13.43,8.21 12.74,8 12,8A4,4 0 0,0 8,12C8,13.1 8.45,14.1 9.17,14.83L7.05,16.95C5.78,15.68 5,13.93 5,12A7,7 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z";const Lt=2,Dt=t=>(...e)=>({_$litDirective$:t,values:e});let Nt=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,s){this._$Ct=t,this._$AM=e,this._$Ci=s}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};const{I:It}=ot,Vt=t=>t,Ut=()=>document.createComment(""),Rt=(t,e,s)=>{const i=t._$AA.parentNode,a=void 0===e?t._$AB:e._$AA;if(void 0===s){const e=i.insertBefore(Ut(),a),o=i.insertBefore(Ut(),a);s=new It(e,o,t,t.options)}else{const e=s._$AB.nextSibling,o=s._$AM,r=o!==t;if(r){let e;s._$AQ?.(t),s._$AM=t,void 0!==s._$AP&&(e=t._$AU)!==o._$AU&&s._$AP(e)}if(e!==a||r){let t=s._$AA;for(;t!==e;){const e=Vt(t).nextSibling;Vt(i).insertBefore(t,a),t=e}}}return s},jt=(t,e,s=t)=>(t._$AI(e,s),t),Bt={},Ft=(t,e=Bt)=>t._$AH=e,Zt=t=>{t._$AR(),t._$AA.remove()},qt=Dt(class extends Nt{constructor(){super(...arguments),this.key=q}render(t,e){return this.key=t,e}update(t,[e,s]){return e!==this.key&&(Ft(t),this.key=e),s}}),Wt=(t,e,s)=>{const i=new Map;for(let a=e;a<=s;a++)i.set(t[a],a);return i},Xt=Dt(class extends Nt{constructor(t){if(super(t),t.type!==Lt)throw Error("repeat() can only be used in text expressions")}dt(t,e,s){let i;void 0===s?s=e:void 0!==e&&(i=e);const a=[],o=[];let r=0;for(const e of t)a[r]=i?i(e,r):r,o[r]=s(e,r),r++;return{values:o,keys:a}}render(t,e,s){return this.dt(t,e,s).values}update(t,[e,s,i]){const a=(t=>t._$AH)(t),{values:o,keys:r}=this.dt(e,s,i);if(!Array.isArray(a))return this.ut=r,o;const n=this.ut??=[],l=[];let d,c,h=0,p=a.length-1,u=0,m=o.length-1;for(;h<=p&&u<=m;)if(null===a[h])h++;else if(null===a[p])p--;else if(n[h]===r[u])l[u]=jt(a[h],o[u]),h++,u++;else if(n[p]===r[m])l[m]=jt(a[p],o[m]),p--,m--;else if(n[h]===r[m])l[m]=jt(a[h],o[m]),Rt(t,l[m+1],a[h]),h++,m--;else if(n[p]===r[u])l[u]=jt(a[p],o[u]),Rt(t,a[h],a[p]),p--,u++;else if(void 0===d&&(d=Wt(r,u,m),c=Wt(n,h,p)),d.has(n[h]))if(d.has(n[p])){const e=c.get(r[u]),s=void 0!==e?a[e]:null;if(null===s){const e=Rt(t,a[h]);jt(e,o[u]),l[u]=e}else l[u]=jt(s,o[u]),Rt(t,a[h],s),a[e]=null;u++}else Zt(a[p]),p--;else Zt(a[h]),h++;for(;u<=m;){const e=Rt(t,l[m+1]);jt(e,o[u]),l[u++]=e}for(;h<=p;){const t=a[h++];null!==t&&Zt(t)}return this.ut=r,Ft(t,l),Z}}),Kt="°F",Jt={"°C":{min:5,max:30,step:.5},"°F":{min:41,max:86,step:1}},Qt=t=>Jt[t]??Jt["°C"],Gt=(t,e)=>{const s=Qt(e),i=t?.attributes??{};return{min:Number(i.min_temp??s.min),max:Number(i.max_temp??s.max),step:Number(i.target_temp_step||s.step)}},Yt=t=>t===Kt?68:20,te=(t,e)=>{const s=Math.round(t/e.step)*e.step;return Math.min(e.max,Math.max(e.min,Number(s.toFixed(2))))},ee=(t,e,s=Qt(e).step,i=!1,a)=>{const o=((t,e)=>e<1?e<.1?2:1:t===Kt?0:1)(e,s);return`${new Intl.NumberFormat(a,{minimumFractionDigits:i?0:o,maximumFractionDigits:o}).format(t)}°`},se=[{name:"cold",upTo:16,color:"#a9cbee"},{name:"cool",upTo:18,color:"#f5cf9a"},{name:"warm",upTo:20,color:"#ef9f5c"},{name:"hot",upTo:1/0,color:"#e5794a"}],ie="#d5d9df",ae=(t,e)=>{if(null===t)return`var(--shs-color-off, ${ie})`;const s=(i=((t,e)=>e===Kt?5*(t-32)/9:t)(t,e),se.find(t=>i<=t.upTo));var i;return`var(--shs-color-${s.name}, ${s.color})`};let oe=class extends lt{constructor(){super(...arguments),this.heading="",this.open=!1,this._previousFocus=null,this._keydown=t=>{"Escape"===t.key&&this.open&&(t.stopPropagation(),this._close())}}_close(){bt(this,"closed")}connectedCallback(){super.connectedCallback(),window.addEventListener("keydown",this._keydown)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("keydown",this._keydown)}updated(t){t.has("open")&&(this.open?(this._previousFocus=document.activeElement,this.renderRoot.querySelector(".surface")?.focus()):this._previousFocus instanceof HTMLElement&&this._previousFocus.focus())}render(){return this.open?F`
       <div class="scrim" @click=${this._close}></div>
       <div class="surface" role="dialog" aria-modal="true" aria-labelledby="heading" tabindex="-1">
         <h2 id="heading">${this.heading}</h2>
@@ -175,7 +175,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
     .spacer {
       flex: 1;
     }
-  `}};t([pt()],oe.prototype,"heading",void 0),t([pt({type:Boolean,reflect:!0})],oe.prototype,"open",void 0),oe=t([$t("shs-dialog")],oe);const re=15,ne=1440,le=["mon","tue","wed","thu","fri","sat","sun"],de=t=>{const[e,s]=t.split(":").map(Number);return 60*e+s},ce=t=>`${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}`,he=t=>t.map((e,s)=>({start:de(e.start),end:s+1<t.length?de(t[s+1].start):ne,temperature:e.temperature})),pe=(t,e)=>{if(t.length<=1)return t;const s=he(t),i=s[e];return e>0?s[e-1]={...s[e-1],end:i.end}:s[1]={...s[1],start:0},(t=>t.filter(t=>t.end>t.start).sort((t,e)=>t.start-e.start).map(t=>({start:ce(t.start),temperature:t.temperature})))(s.filter((t,s)=>s!==e))},ue=(t,e,s)=>{if(e<=0||e>=t.length)return t;const i=he(t),a=i[e-1].start+re,o=i[e].end-re,r=Math.round(s/re)*re,n=Math.min(o,Math.max(a,r));return t.map((t,s)=>s===e?{...t,start:ce(n)}:t)},me=(t,e,s)=>t.map((t,i)=>i===e?{...t,temperature:s}:t),ge=t=>{const e=t.locale.time_format;if("12"===e)return!0;if("24"===e)return!1;const s="system"===e?void 0:t.locale.language;return new Intl.DateTimeFormat(s,{hour:"numeric"}).resolvedOptions().hour12??!1},fe=(t,e,s=!1)=>{if(!e&&s&&t===ne)return"24:00";const i=t%ne,a=Math.floor(i/60),o=String(i%60).padStart(2,"0");if(e){return`${a%12||12}:${o} ${a<12?"AM":"PM"}`}return`${s?a:String(a).padStart(2,"0")}:${o}`},ye={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6},be=(t,e)=>{let s;try{s=new Intl.DateTimeFormat("en-US",{timeZone:e,weekday:"short",hour:"numeric",minute:"numeric",hourCycle:"h23"}).formatToParts(t)}catch{return be(t)}const i=t=>s.find(e=>e.type===t)?.value??"0";return{weekday:ye[i("weekday")]??0,minutes:60*Number(i("hour"))+Number(i("minute"))}},_e=new Date(2024,0,1),ve=(t,e,s="long")=>{const i=new Date(_e);i.setDate(_e.getDate()+e);const a=new Intl.DateTimeFormat(t,{weekday:s}).format(i);return a.charAt(0).toUpperCase()+a.slice(1)};let $e=class extends lt{constructor(){super(...arguments),this.blocks=[],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null,this._selected=null,this._drag=null,this._width=0,this._resize=new ResizeObserver(t=>{this._width=t[0]?.contentRect.width??0})}connectedCallback(){super.connectedCallback(),this._resize.observe(this)}disconnectedCallback(){super.disconnectedCallback(),this._resize.disconnect()}willUpdate(t){t.has("blocks")&&null!==this._selected&&this._selected>=this.blocks.length&&(this._selected=this.blocks.length-1)}get _step(){return Math.max(this.limits.step,this.unit===Kt?1:.5)}get _blocks(){return this._drag?.blocks??this.blocks}_emit(t,e=!0){yt(this,"blocks-changed",{blocks:t,final:e})}_select(t){this._selected=this._selected===t?null:t}_minutesAt(t){const e=this.renderRoot.querySelector(".track").getBoundingClientRect();return(t-e.left)/e.width*ne}_pointerDown(t,e){if(this.readOnly||t.button>0)return;t.preventDefault();const s=t.currentTarget;s.setPointerCapture?.(t.pointerId),s.focus();const i=this.blocks;this._drag={index:e,blocks:i};const a=t=>{if(!this._drag)return;const s=ue(i,e,this._minutesAt(t.clientX));s[e].start!==this._drag.blocks[e].start&&(this._drag={index:e,blocks:s})},o=()=>{s.removeEventListener("pointermove",a),s.removeEventListener("pointerup",o),s.removeEventListener("pointercancel",o);const t=this._drag?.blocks??i;this._drag=null,t[e].start!==i[e].start&&this.blocks.length===i.length&&this._emit(ue(this.blocks,e,de(t[e].start)))};s.addEventListener("pointermove",a),s.addEventListener("pointerup",o),s.addEventListener("pointercancel",o)}_dividerKey(t,e,s){const i={ArrowLeft:-15,ArrowDown:-15,ArrowRight:re,ArrowUp:re}[t.key];i&&!this.readOnly&&(t.preventDefault(),this._emit(ue(this.blocks,e,s+i)))}_changeTemperature(t,e){const s=this.blocks[t].temperature??Yt(this.unit),i={...this.limits,step:this._step};this._emit(me(this.blocks,t,te(s+e*this._step,i)))}_toggleOff(t,e){const s=e?null:te(Yt(this.unit),{...this.limits,step:this._step});this._emit(me(this.blocks,t,s))}_split(t){const e=((t,e)=>{const s=he(t)[e];if(!s||s.end-s.start<30)return null;const i=Math.round((s.start+s.end)/2/re)*re,a=[...t];return a.splice(e+1,0,{start:ce(i),temperature:s.temperature}),a})(this.blocks,t);e&&(this._selected=t+1,this._emit(e))}_delete(t){this._selected=Math.max(0,t-1),this._emit(pe(this.blocks,t))}_time(t){return t!==ne||this.h12?fe(t,this.h12):"24:00"}_label(t,e=!0){return null===t?this.localize("block.off"):ee(t,this.unit,this._step,e,this.language)}render(){const t=he(this._blocks),e=t.slice(1).map((t,e)=>({index:e+1,minutes:t.start})),s=this._selected,i=t=>this._drag?.index===t||t===s||null!==s&&t===s+1,a=this._width?40/this._width*ne:0,o=[];for(const t of e){const e=o[o.length-1];if(e&&t.minutes-e.minutes<a){if(!i(t.index)||i(e.index))continue;o.pop()}o.push(t)}return F`
+  `}};t([pt()],oe.prototype,"heading",void 0),t([pt({type:Boolean,reflect:!0})],oe.prototype,"open",void 0),oe=t([$t("shs-dialog")],oe);const re=15,ne=1440,le=["mon","tue","wed","thu","fri","sat","sun"],de=t=>{const[e,s]=t.split(":").map(Number);return 60*e+s},ce=t=>`${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}`,he=t=>t.map((e,s)=>({start:de(e.start),end:s+1<t.length?de(t[s+1].start):ne,temperature:e.temperature})),pe=(t,e)=>{if(t.length<=1)return t;const s=he(t),i=s[e];return e>0?s[e-1]={...s[e-1],end:i.end}:s[1]={...s[1],start:0},(t=>t.filter(t=>t.end>t.start).sort((t,e)=>t.start-e.start).map(t=>({start:ce(t.start),temperature:t.temperature})))(s.filter((t,s)=>s!==e))},ue=(t,e,s)=>{if(e<=0||e>=t.length)return t;const i=he(t),a=i[e-1].start+re,o=i[e].end-re,r=Math.round(s/re)*re,n=Math.min(o,Math.max(a,r));return t.map((t,s)=>s===e?{...t,start:ce(n)}:t)},me=(t,e,s)=>t.map((t,i)=>i===e?{...t,temperature:s}:t),ge=t=>{const e=t.locale.time_format;if("12"===e)return!0;if("24"===e)return!1;const s="system"===e?void 0:t.locale.language;return new Intl.DateTimeFormat(s,{hour:"numeric"}).resolvedOptions().hour12??!1},fe=(t,e,s=!1)=>{if(!e&&s&&t===ne)return"24:00";const i=t%ne,a=Math.floor(i/60),o=String(i%60).padStart(2,"0");if(e){return`${a%12||12}:${o} ${a<12?"AM":"PM"}`}return`${s?a:String(a).padStart(2,"0")}:${o}`},be={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6},ye=(t,e)=>{let s;try{s=new Intl.DateTimeFormat("en-US",{timeZone:e,weekday:"short",hour:"numeric",minute:"numeric",hourCycle:"h23"}).formatToParts(t)}catch{return ye(t)}const i=t=>s.find(e=>e.type===t)?.value??"0";return{weekday:be[i("weekday")]??0,minutes:60*Number(i("hour"))+Number(i("minute"))}},_e=(t,e,s)=>fe(ye(new Date(t),s).minutes,e),ve=new Date(2024,0,1),$e=(t,e,s="long")=>{const i=new Date(ve);i.setDate(ve.getDate()+e);const a=new Intl.DateTimeFormat(t,{weekday:s}).format(i);return a.charAt(0).toUpperCase()+a.slice(1)};let xe=class extends lt{constructor(){super(...arguments),this.blocks=[],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null,this._selected=null,this._drag=null,this._width=0,this._resize=new ResizeObserver(t=>{this._width=t[0]?.contentRect.width??0})}connectedCallback(){super.connectedCallback(),this._resize.observe(this)}disconnectedCallback(){super.disconnectedCallback(),this._resize.disconnect()}willUpdate(t){t.has("blocks")&&null!==this._selected&&this._selected>=this.blocks.length&&(this._selected=this.blocks.length-1)}get _step(){return Math.max(this.limits.step,this.unit===Kt?1:.5)}get _blocks(){return this._drag?.blocks??this.blocks}_emit(t,e=!0){bt(this,"blocks-changed",{blocks:t,final:e})}_select(t){this._selected=this._selected===t?null:t}_minutesAt(t){const e=this.renderRoot.querySelector(".track").getBoundingClientRect();return(t-e.left)/e.width*ne}_pointerDown(t,e){if(this.readOnly||t.button>0)return;t.preventDefault();const s=t.currentTarget;s.setPointerCapture?.(t.pointerId),s.focus();const i=this.blocks;this._drag={index:e,blocks:i};const a=t=>{if(!this._drag)return;const s=ue(i,e,this._minutesAt(t.clientX));s[e].start!==this._drag.blocks[e].start&&(this._drag={index:e,blocks:s})},o=()=>{s.removeEventListener("pointermove",a),s.removeEventListener("pointerup",o),s.removeEventListener("pointercancel",o);const t=this._drag?.blocks??i;this._drag=null,t[e].start!==i[e].start&&this.blocks.length===i.length&&this._emit(ue(this.blocks,e,de(t[e].start)))};s.addEventListener("pointermove",a),s.addEventListener("pointerup",o),s.addEventListener("pointercancel",o)}_dividerKey(t,e,s){const i={ArrowLeft:-15,ArrowDown:-15,ArrowRight:re,ArrowUp:re}[t.key];i&&!this.readOnly&&(t.preventDefault(),this._emit(ue(this.blocks,e,s+i)))}_changeTemperature(t,e){const s=this.blocks[t].temperature??Yt(this.unit),i={...this.limits,step:this._step};this._emit(me(this.blocks,t,te(s+e*this._step,i)))}_toggleOff(t,e){const s=e?null:te(Yt(this.unit),{...this.limits,step:this._step});this._emit(me(this.blocks,t,s))}_split(t){const e=((t,e)=>{const s=he(t)[e];if(!s||s.end-s.start<30)return null;const i=Math.round((s.start+s.end)/2/re)*re,a=[...t];return a.splice(e+1,0,{start:ce(i),temperature:s.temperature}),a})(this.blocks,t);e&&(this._selected=t+1,this._emit(e))}_delete(t){this._selected=Math.max(0,t-1),this._emit(pe(this.blocks,t))}_time(t){return t!==ne||this.h12?fe(t,this.h12):"24:00"}_label(t,e=!0){return null===t?this.localize("block.off"):ee(t,this.unit,this._step,e,this.language)}render(){const t=he(this._blocks),e=t.slice(1).map((t,e)=>({index:e+1,minutes:t.start})),s=this._selected,i=t=>this._drag?.index===t||t===s||null!==s&&t===s+1,a=this._width?40/this._width*ne:0,o=[];for(const t of e){const e=o[o.length-1];if(e&&t.minutes-e.minutes<a){if(!i(t.index)||i(e.index))continue;o.pop()}o.push(t)}return F`
       <div class="labels" aria-hidden="true">
         ${o.map(({index:t,minutes:e})=>F`<span class=${i(t)?"active":""} style="left:${e/ne*100}%"
               >${fe(e,this.h12)}</span
@@ -210,14 +210,36 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       ${null===s||this.readOnly?this.readOnly?q:F`<p class="hint secondary">${this.localize("block.hint")}</p>`:this._renderEditor(t,s)}
     `}_renderEditor(t,e){const s=t[e];if(!s)return q;const i=null===s.temperature,a=0===e,o=e===t.length-1,r=ee(this._step,this.unit,this._step,!0,this.language),n=this.localize("block.start"),l=this.localize("block.end"),d=`${this._time(s.start)} – ${this._time(s.end)}`,c=s.temperature;return F`<div class="editor" style="--block-color:${ae(s.temperature,this.unit)}">
       <div class="editor-header">
+        <button
+          class="plain icon"
+          ?disabled=${a}
+          aria-label=${this.localize("block.previous")}
+          title=${this.localize("block.previous")}
+          @click=${()=>this._selected=e-1}
+        >
+          <ha-svg-icon .path=${"M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"}></ha-svg-icon>
+        </button>
         <span class="swatch"></span>
         <span class="range">${d}</span>
         <button
-          class="outlined"
+          class="plain icon"
+          ?disabled=${o}
+          aria-label=${this.localize("block.next")}
+          title=${this.localize("block.next")}
+          @click=${()=>this._selected=e+1}
+        >
+          <ha-svg-icon .path=${"M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"}></ha-svg-icon>
+        </button>
+        <span class="spacer"></span>
+        <button
+          class="outlined split"
+          aria-label=${this.localize("block.split")}
+          title=${this.localize("block.split")}
           ?disabled=${s.end-s.start<30}
           @click=${()=>this._split(e)}
         >
-          <ha-svg-icon .path=${"M18,16V13H15V22H13V2H15V11H18V8L22,12L18,16M2,12L6,16V13H9V22H11V2H9V11H6V8L2,12Z"}></ha-svg-icon>${this.localize("block.split")}
+          <ha-svg-icon .path=${"M18,16V13H15V22H13V2H15V11H18V8L22,12L18,16M2,12L6,16V13H9V22H11V2H9V11H6V8L2,12Z"}></ha-svg-icon
+          ><span class="split-label">${this.localize("block.split")}</span>
         </button>
         <button
           class="outlined icon danger"
@@ -298,12 +320,12 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         margin: 0 10px;
       }
       .labels {
-        height: 16px;
+        height: 18px;
         position: relative;
       }
       .labels span {
         color: var(--secondary-text-color);
-        font-size: 11px;
+        font-size: 12px;
         font-variant-numeric: tabular-nums;
         position: absolute;
         transform: translateX(-50%);
@@ -314,7 +336,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         font-weight: 700;
       }
       .track {
-        height: 44px;
+        height: 48px;
         position: relative;
         touch-action: none;
       }
@@ -337,7 +359,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         cursor: pointer;
         display: flex;
         font: inherit;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
         justify-content: center;
         overflow: hidden;
@@ -367,7 +389,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         border: none;
         cursor: ew-resize;
         display: flex;
-        height: 56px;
+        height: 60px;
         justify-content: center;
         padding: 0;
         position: absolute;
@@ -381,7 +403,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         border: 2px solid var(--primary-text-color);
         border-radius: 5px;
         box-sizing: border-box;
-        height: 34px;
+        height: 38px;
         width: 8px;
       }
       .divider.active span {
@@ -404,13 +426,13 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       .ticks {
         color: var(--secondary-text-color);
         display: flex;
-        font-size: 11px;
+        font-size: 12px;
         justify-content: space-between;
-        margin-top: 4px;
+        margin-top: 6px;
       }
       .hint {
-        font-size: 12px;
-        margin: 8px 0 0;
+        font-size: 13px;
+        margin: 10px 0 0;
       }
       .editor {
         background: color-mix(in srgb, var(--primary-text-color) 4%, transparent);
@@ -418,14 +440,17 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         border-radius: 10px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin-top: 10px;
-        padding: 8px 12px 10px;
+        gap: 12px;
+        margin-top: 12px;
+        padding: 10px 14px 12px;
       }
       .editor-header {
         align-items: center;
         display: flex;
         gap: 6px;
+      }
+      .spacer {
+        flex: 1;
       }
       .swatch {
         background: var(--block-color);
@@ -434,9 +459,21 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         height: 12px;
         width: 12px;
       }
+      .editor {
+        container-type: inline-size;
+      }
+      @container (max-width: 360px) {
+        .split-label {
+          display: none;
+        }
+        button.split {
+          padding: 0;
+          width: 36px;
+        }
+      }
       .range {
-        flex: 1;
-        font-size: 13px;
+        white-space: nowrap;
+        font-size: 14px;
         font-variant-numeric: tabular-nums;
         font-weight: 700;
         min-width: 0;
@@ -453,7 +490,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         gap: 6px;
       }
       .temperature {
-        font-size: 19px;
+        font-size: 22px;
         font-variant-numeric: tabular-nums;
         font-weight: 700;
         min-width: 4.2em;
@@ -542,7 +579,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       ha-svg-icon {
         --mdc-icon-size: 18px;
       }
-    `]}};t([pt({attribute:!1})],$e.prototype,"blocks",void 0),t([pt()],$e.prototype,"unit",void 0),t([pt({attribute:!1})],$e.prototype,"limits",void 0),t([pt({type:Boolean})],$e.prototype,"canTurnOff",void 0),t([pt()],$e.prototype,"language",void 0),t([pt({type:Boolean})],$e.prototype,"h12",void 0),t([pt({type:Boolean})],$e.prototype,"readOnly",void 0),t([pt({attribute:!1})],$e.prototype,"now",void 0),t([pt({attribute:!1})],$e.prototype,"localize",void 0),t([ut()],$e.prototype,"_selected",void 0),t([ut()],$e.prototype,"_drag",void 0),t([ut()],$e.prototype,"_width",void 0),$e=t([$t("shs-timeline-editor")],$e);let xe=class extends lt{constructor(){super(...arguments),this.others=[],this.days=[...le],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null}_dayName(t,e="long"){const s=le.indexOf(t);return"narrow"===e?new Intl.DateTimeFormat(this.language,{weekday:"narrow"}).format(new Date(2024,0,1+s)):ve(this.language,s,e)}_daysLabel(){const{days:t}=this.program;return 7===t.length?this.localize("programs.every_day"):t.length?this.days.filter(e=>t.includes(e)).map(t=>this._dayName(t,"short")).join(" · "):this.localize("programs.no_days")}render(){const t=this.program.name;return F`
+    `]}};t([pt({attribute:!1})],xe.prototype,"blocks",void 0),t([pt()],xe.prototype,"unit",void 0),t([pt({attribute:!1})],xe.prototype,"limits",void 0),t([pt({type:Boolean})],xe.prototype,"canTurnOff",void 0),t([pt()],xe.prototype,"language",void 0),t([pt({type:Boolean})],xe.prototype,"h12",void 0),t([pt({type:Boolean})],xe.prototype,"readOnly",void 0),t([pt({attribute:!1})],xe.prototype,"now",void 0),t([pt({attribute:!1})],xe.prototype,"localize",void 0),t([ut()],xe.prototype,"_selected",void 0),t([ut()],xe.prototype,"_drag",void 0),t([ut()],xe.prototype,"_width",void 0),xe=t([$t("shs-timeline-editor")],xe);let we=class extends lt{constructor(){super(...arguments),this.others=[],this.days=[...le],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null}_dayName(t,e="long"){const s=le.indexOf(t);return"narrow"===e?new Intl.DateTimeFormat(this.language,{weekday:"narrow"}).format(new Date(2024,0,1+s)):$e(this.language,s,e)}_daysLabel(){const{days:t}=this.program;return 7===t.length?this.localize("programs.every_day"):t.length?this.days.filter(e=>t.includes(e)).map(t=>this._dayName(t,"short")).join(" · "):this.localize("programs.no_days")}render(){const t=this.program.name;return F`
       <ha-card>
         <div class="header">
           <div class="title">
@@ -552,17 +589,17 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           ${this.readOnly?q:F`<ha-icon-button
                   .path=${Mt}
                   .label=${this.localize("programs.rename",{name:t})}
-                  @click=${()=>yt(this,"rename")}
+                  @click=${()=>bt(this,"rename")}
                 ></ha-icon-button>
                 <ha-icon-button
                   .path=${"M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"}
                   .label=${this.localize("programs.duplicate",{name:t})}
-                  @click=${()=>yt(this,"duplicate")}
+                  @click=${()=>bt(this,"duplicate")}
                 ></ha-icon-button>
                 <ha-icon-button
                   .path=${Ot}
                   .label=${this.localize("programs.delete",{name:t})}
-                  @click=${()=>yt(this,"delete")}
+                  @click=${()=>bt(this,"delete")}
                 ></ha-icon-button>`}
         </div>
 
@@ -573,7 +610,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
               aria-label=${a}
               title=${a}
               ?disabled=${this.readOnly}
-              @click=${()=>yt(this,"day-toggled",{day:t})}
+              @click=${()=>bt(this,"day-toggled",{day:t})}
             >
               ${this._dayName(t,"narrow")}
             </button>`})}
@@ -598,8 +635,8 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       ha-card {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        padding: 8px 12px 12px;
+        gap: 12px;
+        padding: 12px 16px 14px;
       }
       .header {
         align-items: center;
@@ -613,7 +650,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         min-width: 0;
       }
       h3 {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
         margin: 0;
         overflow: hidden;
@@ -621,7 +658,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         white-space: nowrap;
       }
       .title .secondary {
-        font-size: 12px;
+        font-size: 13px;
       }
       ha-icon-button {
         --mdc-icon-button-size: 40px;
@@ -639,9 +676,9 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         cursor: pointer;
         flex: 1 1 0;
         font: inherit;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
-        height: 38px;
+        height: 40px;
         min-width: 0;
         padding: 0;
       }
@@ -667,7 +704,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       .day[disabled] {
         cursor: default;
       }
-    `]}};t([pt({attribute:!1})],xe.prototype,"program",void 0),t([pt({attribute:!1})],xe.prototype,"others",void 0),t([pt({attribute:!1})],xe.prototype,"days",void 0),t([pt()],xe.prototype,"unit",void 0),t([pt({attribute:!1})],xe.prototype,"limits",void 0),t([pt({type:Boolean})],xe.prototype,"canTurnOff",void 0),t([pt()],xe.prototype,"language",void 0),t([pt({type:Boolean})],xe.prototype,"h12",void 0),t([pt({type:Boolean})],xe.prototype,"readOnly",void 0),t([pt({attribute:!1})],xe.prototype,"now",void 0),t([pt({attribute:!1})],xe.prototype,"localize",void 0),xe=t([$t("shs-program-card")],xe);let we=class extends lt{constructor(){super(...arguments),this.entityId="",this._busy=!1}async _resume(){this._busy=!0;try{await(t=this.hass,e=this.entityId,t.callWS({type:`${mt}/room/resume`,entity_id:e}))}catch(t){bt(this,this.localize("error.resume",{error:t?.message??String(t)}))}finally{this._busy=!1}var t,e}render(){return F`
+    `]}};t([pt({attribute:!1})],we.prototype,"program",void 0),t([pt({attribute:!1})],we.prototype,"others",void 0),t([pt({attribute:!1})],we.prototype,"days",void 0),t([pt()],we.prototype,"unit",void 0),t([pt({attribute:!1})],we.prototype,"limits",void 0),t([pt({type:Boolean})],we.prototype,"canTurnOff",void 0),t([pt()],we.prototype,"language",void 0),t([pt({type:Boolean})],we.prototype,"h12",void 0),t([pt({type:Boolean})],we.prototype,"readOnly",void 0),t([pt({attribute:!1})],we.prototype,"now",void 0),t([pt({attribute:!1})],we.prototype,"localize",void 0),we=t([$t("shs-program-card")],we);let ke=class extends lt{constructor(){super(...arguments),this.entityId="",this._busy=!1}async _resume(){this._busy=!0;try{await(t=this.hass,e=this.entityId,t.callWS({type:`${mt}/room/resume`,entity_id:e}))}catch(t){yt(this,this.localize("error.resume",{error:t?.message??String(t)}))}finally{this._busy=!1}var t,e}render(){return F`
       <span class="secondary">${this.localize("room.overridden")}</span>
       <button class="text-button" ?disabled=${this._busy} @click=${this._resume}>
         <ha-svg-icon .path=${"M18,11V12.5C21.19,12.5 23.09,16.05 21.33,18.71L20.24,17.62C21.06,15.96 19.85,14 18,14V15.5L15.75,13.25L18,11M18,22V20.5C14.81,20.5 12.91,16.95 14.67,14.29L15.76,15.38C14.94,17.04 16.15,19 18,19V17.5L20.25,19.75L18,22M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H14C13.36,20.45 12.86,19.77 12.5,19H5V8H19V10.59C19.71,10.7 20.39,10.94 21,11.31V5A2,2 0 0,0 19,3Z"}></ha-svg-icon>${this.localize("room.resume")}
@@ -692,21 +729,21 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       ha-svg-icon {
         --mdc-icon-size: 18px;
       }
-    `]}};t([pt({attribute:!1})],we.prototype,"hass",void 0),t([pt()],we.prototype,"entityId",void 0),t([pt({attribute:!1})],we.prototype,"localize",void 0),t([ut()],we.prototype,"_busy",void 0),we=t([$t("shs-resume-row")],we);const ke=[31,29,31,30,31,30,31,31,30,31,30,31],ze=366,Ae=t=>{const[e,s]=t.split("-").map(Number);return[e,s]},Se=([t,e])=>`${String(t).padStart(2,"0")}-${String(e).padStart(2,"0")}`,Ee=([t,e])=>ke.slice(0,t-1).reduce((t,e)=>t+e,0)+e,Ce=t=>{let e=t,s=0;for(;e>ke[s];)e-=ke[s],s++;return[s+1,e]},Oe=(t,e)=>t[0]-e[0]||t[1]-e[1],He=t=>{const e=Ee(Ae(t.start)),s=Ee(Ae(t.end));return e<=s?[[e,s]]:[[e,ze],[1,s]]},Me=(t,e,s="long")=>{const[i,a]=Ae(t);return new Intl.DateTimeFormat(e,{day:"numeric",month:s}).format(new Date(2024,i-1,a))},Pe=()=>Math.random().toString(36).slice(2,10),Te=["#2f6fca","#23794a","#b7791f","#a85b14","#7a4cc2","#b23a48"];let Le=class extends lt{constructor(){super(...arguments),this.seasons=[],this.selected=null,this.today=null,this.language="en"}render(){const t=(e=this.language,Array.from({length:12},(t,s)=>new Intl.DateTimeFormat(e,{month:"narrow"}).format(new Date(2024,s,1))));var e;const s=ke.map(t=>t/ze);return F`
+    `]}};t([pt({attribute:!1})],ke.prototype,"hass",void 0),t([pt()],ke.prototype,"entityId",void 0),t([pt({attribute:!1})],ke.prototype,"localize",void 0),t([ut()],ke.prototype,"_busy",void 0),ke=t([$t("shs-resume-row")],ke);const ze=[31,29,31,30,31,30,31,31,30,31,30,31],Ae=366,Se=t=>{const[e,s]=t.split("-").map(Number);return[e,s]},Ee=([t,e])=>`${String(t).padStart(2,"0")}-${String(e).padStart(2,"0")}`,Ce=([t,e])=>ze.slice(0,t-1).reduce((t,e)=>t+e,0)+e,Oe=t=>{let e=t,s=0;for(;e>ze[s];)e-=ze[s],s++;return[s+1,e]},He=(t,e)=>t[0]-e[0]||t[1]-e[1],Me=t=>{const e=Ce(Se(t.start)),s=Ce(Se(t.end));return e<=s?[[e,s]]:[[e,Ae],[1,s]]},Pe=(t,e,s="long")=>{const[i,a]=Se(t);return new Intl.DateTimeFormat(e,{day:"numeric",month:s}).format(new Date(2024,i-1,a))},Te=()=>Math.random().toString(36).slice(2,10),Le=["#2f6fca","#23794a","#b7791f","#a85b14","#7a4cc2","#b23a48"];let De=class extends lt{constructor(){super(...arguments),this.seasons=[],this.selected=null,this.today=null,this.language="en"}render(){const t=(e=this.language,Array.from({length:12},(t,s)=>new Intl.DateTimeFormat(e,{month:"narrow"}).format(new Date(2024,s,1))));var e;const s=ze.map(t=>t/Ae);return F`
       <div class="months" aria-hidden="true">
         ${t.map((t,e)=>F`<span style="width:${100*s[e]}%">${t}</span>`)}
       </div>
       <div class="bar">
-        ${this.seasons.flatMap(t=>He(t).map(([e,s])=>{const i=(s-e+1)/ze;return F`<button
+        ${this.seasons.flatMap(t=>Me(t).map(([e,s])=>{const i=(s-e+1)/Ae;return F`<button
               class=${t.id===this.selected?"selected":""}
-              style="left:${(e-1)/ze*100}%;width:${100*i}%;background:${t.color??"#607d8b"}"
+              style="left:${(e-1)/Ae*100}%;width:${100*i}%;background:${t.color??"#607d8b"}"
               aria-label=${this.localize("seasons.select",{name:t.name})}
               aria-pressed=${t.id===this.selected}
-              @click=${()=>yt(this,"select",{id:t.id})}
+              @click=${()=>bt(this,"select",{id:t.id})}
             >
               <span>${t.name}</span>
             </button>`}))}
-        ${null===this.today?q:F`<div class="today" style="left:${(this.today-.5)/ze*100}%"></div>`}
+        ${null===this.today?q:F`<div class="today" style="left:${(this.today-.5)/Ae*100}%"></div>`}
       </div>
     `}static{this.styles=n`
     :host {
@@ -769,7 +806,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       width: 2px;
       z-index: 2;
     }
-  `}};t([pt({attribute:!1})],Le.prototype,"seasons",void 0),t([pt()],Le.prototype,"selected",void 0),t([pt({attribute:!1})],Le.prototype,"today",void 0),t([pt()],Le.prototype,"language",void 0),t([pt({attribute:!1})],Le.prototype,"localize",void 0),Le=t([$t("shs-season-bar")],Le);let De=class extends lt{constructor(){super(...arguments),this.open=!1,this.heading="",this.description="",this.emptyText="",this.confirmLabel="",this.multiple=!1,this.entityIds=[],this._selected=new Set}willUpdate(t){t.has("open")&&this.open&&(this._selected=new Set)}_toggle(t,e){const s=new Set(this._selected);e?s.add(t):s.delete(t),this._selected=s}_pick(t){yt(this,"picked",{entityIds:t})}render(){const t=[...this.entityIds].sort((t,e)=>vt(this.hass,t).localeCompare(vt(this.hass,e)));return F`<shs-dialog .open=${this.open} .heading=${this.heading} @closed=${()=>yt(this,"closed")}>
+  `}};t([pt({attribute:!1})],De.prototype,"seasons",void 0),t([pt()],De.prototype,"selected",void 0),t([pt({attribute:!1})],De.prototype,"today",void 0),t([pt()],De.prototype,"language",void 0),t([pt({attribute:!1})],De.prototype,"localize",void 0),De=t([$t("shs-season-bar")],De);let Ne=class extends lt{constructor(){super(...arguments),this.open=!1,this.heading="",this.description="",this.emptyText="",this.confirmLabel="",this.multiple=!1,this.entityIds=[],this._selected=new Set}willUpdate(t){t.has("open")&&this.open&&(this._selected=new Set)}_toggle(t,e){const s=new Set(this._selected);e?s.add(t):s.delete(t),this._selected=s}_pick(t){bt(this,"picked",{entityIds:t})}render(){const t=[...this.entityIds].sort((t,e)=>vt(this.hass,t).localeCompare(vt(this.hass,e)));return F`<shs-dialog .open=${this.open} .heading=${this.heading} @closed=${()=>bt(this,"closed")}>
       ${this.description?F`<p class="secondary">${this.description}</p>`:q}
       ${t.length?F`<ul>
             ${t.map(t=>{const e=((t,e)=>{const s=t.entities?.[e],i=s?.area_id??(s?.device_id?t.devices?.[s.device_id]?.area_id:void 0);return i?t.areas?.[i]?.name:void 0})(this.hass,t),s=F`<span class="name">${vt(this.hass,t)}</span>
@@ -787,7 +824,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
                     </button>`}
               </li>`})}
           </ul>`:F`<p class="secondary">${this.emptyText}</p>`}
-      <button slot="actions" class="text-button" @click=${()=>yt(this,"closed")}>
+      <button slot="actions" class="text-button" @click=${()=>bt(this,"closed")}>
         ${this.localize("common.cancel")}
       </button>
       ${this.multiple?F`<button
@@ -846,10 +883,10 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         overflow: hidden;
         text-overflow: ellipsis;
       }
-    `]}};t([pt({attribute:!1})],De.prototype,"hass",void 0),t([pt({type:Boolean})],De.prototype,"open",void 0),t([pt()],De.prototype,"heading",void 0),t([pt()],De.prototype,"description",void 0),t([pt()],De.prototype,"emptyText",void 0),t([pt()],De.prototype,"confirmLabel",void 0),t([pt({type:Boolean})],De.prototype,"multiple",void 0),t([pt({attribute:!1})],De.prototype,"entityIds",void 0),t([pt({attribute:!1})],De.prototype,"localize",void 0),t([ut()],De.prototype,"_selected",void 0),De=t([$t("shs-entity-picker-dialog")],De);const Ie=2024,Ne=t=>`2024-${t}`,Ve=t=>t.slice(5);let Ue=class extends lt{constructor(){super(...arguments),this.open=!1,this.season=null,this.seasons=[],this._draft={id:"",name:"",start:"10-15",end:"04-15",color:Te[0]}}willUpdate(t){t.has("open")&&this.open&&(this._draft=this.season?{...this.season}:{id:Pe(),name:"",start:"10-15",end:"04-15",color:Te[this.seasons.length%Te.length]})}_set(t){this._draft={...this._draft,...t}}render(){const t=this._draft,e=((t,e)=>{const s=new Set;for(const[e,i]of He(t))for(let t=e;t<=i;t++)s.add(t);return e.find(e=>e.id!==t.id&&He(e).some(([t,e])=>{for(let i=t;i<=e;i++)if(s.has(i))return!0;return!1}))})(t,this.seasons),s=t.name.trim().length>0&&!e;return F`<shs-dialog
+    `]}};t([pt({attribute:!1})],Ne.prototype,"hass",void 0),t([pt({type:Boolean})],Ne.prototype,"open",void 0),t([pt()],Ne.prototype,"heading",void 0),t([pt()],Ne.prototype,"description",void 0),t([pt()],Ne.prototype,"emptyText",void 0),t([pt()],Ne.prototype,"confirmLabel",void 0),t([pt({type:Boolean})],Ne.prototype,"multiple",void 0),t([pt({attribute:!1})],Ne.prototype,"entityIds",void 0),t([pt({attribute:!1})],Ne.prototype,"localize",void 0),t([ut()],Ne.prototype,"_selected",void 0),Ne=t([$t("shs-entity-picker-dialog")],Ne);const Ie=2024,Ve=t=>`2024-${t}`,Ue=t=>t.slice(5);let Re=class extends lt{constructor(){super(...arguments),this.open=!1,this.season=null,this.seasons=[],this._draft={id:"",name:"",start:"10-15",end:"04-15",color:Le[0]}}willUpdate(t){t.has("open")&&this.open&&(this._draft=this.season?{...this.season}:{id:Te(),name:"",start:"10-15",end:"04-15",color:Le[this.seasons.length%Le.length]})}_set(t){this._draft={...this._draft,...t}}render(){const t=this._draft,e=((t,e)=>{const s=new Set;for(const[e,i]of Me(t))for(let t=e;t<=i;t++)s.add(t);return e.find(e=>e.id!==t.id&&Me(e).some(([t,e])=>{for(let i=t;i<=e;i++)if(s.has(i))return!0;return!1}))})(t,this.seasons),s=t.name.trim().length>0&&!e;return F`<shs-dialog
       .open=${this.open}
       .heading=${this.localize(this.season?"season_dialog.edit":"season_dialog.new")}
-      @closed=${()=>yt(this,"closed")}
+      @closed=${()=>bt(this,"closed")}
     >
       <div class="form">
         <label class="field">
@@ -864,7 +901,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         <div class="field">
           <span id="color-label">${this.localize("season_dialog.color")}</span>
           <div class="colors" role="radiogroup" aria-labelledby="color-label">
-            ${Te.map(e=>F`<button
+            ${Le.map(e=>F`<button
                 role="radio"
                 aria-checked=${t.color===e}
                 aria-label=${e}
@@ -881,8 +918,8 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
               type="date"
               min="${Ie}-01-01"
               max="${Ie}-12-31"
-              .value=${Ne(t.start)}
-              @change=${t=>{const e=t.target.value;e&&this._set({start:Ve(e)})}}
+              .value=${Ve(t.start)}
+              @change=${t=>{const e=t.target.value;e&&this._set({start:Ue(e)})}}
             />
           </label>
           <label class="field">
@@ -891,14 +928,14 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
               type="date"
               min="${Ie}-01-01"
               max="${Ie}-12-31"
-              .value=${Ne(t.end)}
-              @change=${t=>{const e=t.target.value;e&&this._set({end:Ve(e)})}}
+              .value=${Ve(t.end)}
+              @change=${t=>{const e=t.target.value;e&&this._set({end:Ue(e)})}}
             />
           </label>
         </div>
         <p class="secondary note">
           ${this.localize("season_dialog.year")}
-          ${i=t,Oe(Ae(i.start),Ae(i.end))>0?this.localize("season_dialog.wraps"):q}
+          ${i=t,He(Se(i.start),Se(i.end))>0?this.localize("season_dialog.wraps"):q}
         </p>
         ${e?F`<p class="error note" role="alert">
               ${this.localize("season_dialog.overlap",{name:e.name})}
@@ -907,18 +944,18 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       ${this.season?F`<button
             slot="secondary"
             class="text-button danger"
-            @click=${()=>yt(this,"delete",{season:this.season})}
+            @click=${()=>bt(this,"delete",{season:this.season})}
           >
             ${this.localize("season_dialog.delete")}
           </button>`:q}
-      <button slot="actions" class="text-button" @click=${()=>yt(this,"closed")}>
+      <button slot="actions" class="text-button" @click=${()=>bt(this,"closed")}>
         ${this.localize("common.cancel")}
       </button>
       <button
         slot="actions"
         class="filled-button"
         ?disabled=${!s}
-        @click=${()=>yt(this,"save",{season:{...t,name:t.name.trim()}})}
+        @click=${()=>bt(this,"save",{season:{...t,name:t.name.trim()}})}
       >
         ${this.localize("common.save")}
       </button>
@@ -973,12 +1010,12 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         font-size: 13px;
         margin: 0;
       }
-    `]}};t([pt({type:Boolean})],Ue.prototype,"open",void 0),t([pt({attribute:!1})],Ue.prototype,"season",void 0),t([pt({attribute:!1})],Ue.prototype,"seasons",void 0),t([pt({attribute:!1})],Ue.prototype,"localize",void 0),t([ut()],Ue.prototype,"_draft",void 0),Ue=t([$t("shs-season-dialog")],Ue);const Re=(t,e,s)=>{const{status:i}=t;if(!t.enabled)return{text:e("status.disabled"),error:!1};if(i.last_error)return{text:e("status.error",{error:i.last_error}),error:!0};if(i.pending)return{text:e("status.pending"),error:!1};const a=null===i.temperature?null:ee(i.temperature,s.unit,s.step,!1,s.language);if(!i.end)return null===a?{text:e("status.constant_off"),error:!1}:{text:e("status.constant",{temperature:a}),error:!1};const o=(r=i.end,n=s.h12,l=s.timeZone,fe(be(new Date(r),l).minutes,n));var r,n,l;return null===a?{text:e("status.off_until",{time:o}),error:!1}:{text:e("status.until",{temperature:a,time:o}),error:!1}},je=t=>{try{const e=new Intl.DateTimeFormat("en-US",{timeZone:t,month:"numeric",day:"numeric"}).formatToParts(new Date),s=t=>Number(e.find(e=>e.type===t)?.value);return[s("month"),s("day")]}catch{const t=new Date;return[t.getMonth()+1,t.getDate()]}};let Be=class extends lt{constructor(){super(...arguments),this.narrow=!1,this._drafts={},this._addOpen=!1,this._removeOpen=!1,this._resetOpen=!1,this._seasonDialog=null,this._deleteSeason=null,this._deleteProgram=null,this._rename=null,this._timers=new Map,this._inflight=new Map}disconnectedCallback(){super.disconnectedCallback();for(const t of[...this._timers.keys()])this._flush(t)}willUpdate(t){if(!t.has("state"))return;const e=Object.fromEntries(Object.entries(this._drafts).filter(([t])=>this._timers.has(t)||this._inflight.has(t)));Object.keys(e).length!==Object.keys(this._drafts).length&&(this._drafts=e),!this._room&&this.state.rooms.length&&(this._entityId=this.state.rooms[0].entity_id),this._season||(this._seasonId=this.state.season??this.state.seasons[0]?.id)}get _readOnly(){return!this.hass.user?.is_admin}get _room(){return this.state.rooms.find(t=>t.entity_id===this._entityId)}get _season(){return this.state.seasons.find(t=>t.id===this._seasonId)}_key(t){return`${this._entityId}|${t}`}_programs(t,e){return this._drafts[`${t.entity_id}|${e}`]??t.programs[e]??[]}_error(t){bt(this,this.localize("error.save",{error:t?.message??String(t)}))}async _call(t){try{await t}catch(t){this._error(t)}}_setPrograms(t,e,s=700){const i=this._key(t);this._drafts={...this._drafts,[i]:e};const a=this._timers.get(i);void 0!==a&&clearTimeout(a),this._timers.set(i,window.setTimeout(()=>this._flush(i),s))}async _flush(t){const e=this._timers.get(t);void 0!==e&&clearTimeout(e),this._timers.delete(t);const s=this._drafts[t];if(!s)return;const[i,a]=t.split("|");this._inflight.set(t,(this._inflight.get(t)??0)+1);try{await gt(this.hass,i,{programs:{[a]:s}})}catch(t){this._error(t)}finally{const e=(this._inflight.get(t)??1)-1;if(e>0?this._inflight.set(t,e):this._inflight.delete(t),!this._timers.has(t)&&!this._inflight.has(t)){const{[t]:e,...s}=this._drafts;this._drafts=s}}}_updateProgram(t,e,s,i,a){this._setPrograms(t,e.map(t=>t.id===s?{...t,...i}:t),a)}_toggleDay(t,e,s,i){const a=!e.find(t=>t.id===s).days.includes(i);this._setPrograms(t,e.map(t=>{return t.id===s?{...t,days:a?(e=[...t.days,i],le.filter(t=>e.includes(t))):t.days.filter(t=>t!==i)}:a?{...t,days:t.days.filter(t=>t!==i)}:t;var e}),0)}_addProgram(t,e){const s=((t,e)=>e.filter(e=>!t.some(t=>t.days.includes(e))))(e,le),i=this.localize(7===s.length?"programs.every_day":"programs.new_name");var a;this._setPrograms(t,[...e,{id:Pe(),name:i,days:s,blocks:(a=this.state.unit,a===Kt?[{start:"00:00",temperature:63},{start:"06:30",temperature:68},{start:"22:30",temperature:63}]:[{start:"00:00",temperature:17},{start:"06:30",temperature:20},{start:"22:30",temperature:17}])}],0)}_duplicate(t,e,s){const i={id:Pe(),name:this.localize("programs.copy",{name:s.name}).slice(0,50),days:[],blocks:s.blocks.map(t=>({...t}))},a=e.indexOf(s);this._setPrograms(t,[...e.slice(0,a+1),i,...e.slice(a+1)],0)}async _saveSeason(t){this._seasonDialog=null;const e=this.state.seasons.some(e=>e.id===t.id),s=e?this.state.seasons.map(e=>e.id===t.id?t:e):[...this.state.seasons,t];await this._call(ft(this.hass,s)),this._seasonId=t.id}_discard(t){const e={...this._drafts};for(const s of new Set([...Object.keys(e),...this._timers.keys()])){const[i,a]=s.split("|");if(!t(i,a))continue;const o=this._timers.get(s);void 0!==o&&clearTimeout(o),this._timers.delete(s),delete e[s]}this._drafts=e}async _removeSeason(t){this._deleteSeason=null,this._discard((e,s)=>s===t.id),await this._call(ft(this.hass,this.state.seasons.filter(e=>e.id!==t.id))),this._seasonId===t.id&&(this._seasonId=void 0)}async _addRoom(t){this._addOpen=!1;try{await((t,e)=>t.callWS({type:`${mt}/room/add`,entity_id:e}))(this.hass,t),this._entityId=t}catch(t){this._error(t)}}async _removeRoom(){this._removeOpen=!1;const t=this._entityId;this._entityId=void 0,this._discard(e=>e===t),await this._call(((t,e)=>t.callWS({type:`${mt}/room/remove`,entity_id:e}))(this.hass,t))}render(){const t=this.narrow||"always_hidden"===this.hass.dockedSidebar,e=this._room;return F`
+    `]}};t([pt({type:Boolean})],Re.prototype,"open",void 0),t([pt({attribute:!1})],Re.prototype,"season",void 0),t([pt({attribute:!1})],Re.prototype,"seasons",void 0),t([pt({attribute:!1})],Re.prototype,"localize",void 0),t([ut()],Re.prototype,"_draft",void 0),Re=t([$t("shs-season-dialog")],Re);const je=t=>{try{const e=new Intl.DateTimeFormat("en-US",{timeZone:t,month:"numeric",day:"numeric"}).formatToParts(new Date),s=t=>Number(e.find(e=>e.type===t)?.value);return[s("month"),s("day")]}catch{const t=new Date;return[t.getMonth()+1,t.getDate()]}};let Be=class extends lt{constructor(){super(...arguments),this.narrow=!1,this._drafts={},this._addOpen=!1,this._removeOpen=!1,this._resetOpen=!1,this._seasonDialog=null,this._deleteSeason=null,this._deleteProgram=null,this._rename=null,this._timers=new Map,this._inflight=new Map}disconnectedCallback(){super.disconnectedCallback();for(const t of[...this._timers.keys()])this._flush(t)}willUpdate(t){if(!t.has("state"))return;const e=Object.fromEntries(Object.entries(this._drafts).filter(([t])=>this._timers.has(t)||this._inflight.has(t)));Object.keys(e).length!==Object.keys(this._drafts).length&&(this._drafts=e),!this._room&&this.state.rooms.length&&(this._entityId=this.state.rooms[0].entity_id),this._season||(this._seasonId=this.state.season??this.state.seasons[0]?.id)}get _readOnly(){return!this.hass.user?.is_admin}get _room(){return this.state.rooms.find(t=>t.entity_id===this._entityId)}get _season(){return this.state.seasons.find(t=>t.id===this._seasonId)}_key(t){return`${this._entityId}|${t}`}_programs(t,e){return this._drafts[`${t.entity_id}|${e}`]??t.programs[e]??[]}_error(t){yt(this,this.localize("error.save",{error:t?.message??String(t)}))}async _call(t){try{await t}catch(t){this._error(t)}}_setPrograms(t,e,s=700){const i=this._key(t);this._drafts={...this._drafts,[i]:e};const a=this._timers.get(i);void 0!==a&&clearTimeout(a),this._timers.set(i,window.setTimeout(()=>this._flush(i),s))}async _flush(t){const e=this._timers.get(t);void 0!==e&&clearTimeout(e),this._timers.delete(t);const s=this._drafts[t];if(!s)return;const[i,a]=t.split("|");this._inflight.set(t,(this._inflight.get(t)??0)+1);try{await gt(this.hass,i,{programs:{[a]:s}})}catch(t){this._error(t)}finally{const e=(this._inflight.get(t)??1)-1;if(e>0?this._inflight.set(t,e):this._inflight.delete(t),!this._timers.has(t)&&!this._inflight.has(t)){const{[t]:e,...s}=this._drafts;this._drafts=s}}}_updateProgram(t,e,s,i,a){this._setPrograms(t,e.map(t=>t.id===s?{...t,...i}:t),a)}_toggleDay(t,e,s,i){const a=!e.find(t=>t.id===s).days.includes(i);this._setPrograms(t,e.map(t=>{return t.id===s?{...t,days:a?(e=[...t.days,i],le.filter(t=>e.includes(t))):t.days.filter(t=>t!==i)}:a?{...t,days:t.days.filter(t=>t!==i)}:t;var e}),0)}_addProgram(t,e){const s=((t,e)=>e.filter(e=>!t.some(t=>t.days.includes(e))))(e,le),i=this.localize(7===s.length?"programs.every_day":"programs.new_name");var a;this._setPrograms(t,[...e,{id:Te(),name:i,days:s,blocks:(a=this.state.unit,a===Kt?[{start:"00:00",temperature:63},{start:"06:30",temperature:68},{start:"22:30",temperature:63}]:[{start:"00:00",temperature:17},{start:"06:30",temperature:20},{start:"22:30",temperature:17}])}],0)}_duplicate(t,e,s){const i={id:Te(),name:this.localize("programs.copy",{name:s.name}).slice(0,50),days:[],blocks:s.blocks.map(t=>({...t}))},a=e.indexOf(s);this._setPrograms(t,[...e.slice(0,a+1),i,...e.slice(a+1)],0)}async _saveSeason(t){this._seasonDialog=null;const e=this.state.seasons.some(e=>e.id===t.id),s=e?this.state.seasons.map(e=>e.id===t.id?t:e):[...this.state.seasons,t];await this._call(ft(this.hass,s)),this._seasonId=t.id}_discard(t){const e={...this._drafts};for(const s of new Set([...Object.keys(e),...this._timers.keys()])){const[i,a]=s.split("|");if(!t(i,a))continue;const o=this._timers.get(s);void 0!==o&&clearTimeout(o),this._timers.delete(s),delete e[s]}this._drafts=e}async _removeSeason(t){this._deleteSeason=null,this._discard((e,s)=>s===t.id),await this._call(ft(this.hass,this.state.seasons.filter(e=>e.id!==t.id))),this._seasonId===t.id&&(this._seasonId=void 0)}async _addRoom(t){this._addOpen=!1;try{await((t,e)=>t.callWS({type:`${mt}/room/add`,entity_id:e}))(this.hass,t),this._entityId=t}catch(t){this._error(t)}}async _removeRoom(){this._removeOpen=!1;const t=this._entityId;this._entityId=void 0,this._discard(e=>e===t),await this._call(((t,e)=>t.callWS({type:`${mt}/room/remove`,entity_id:e}))(this.hass,t))}render(){const t=this.narrow||"always_hidden"===this.hass.dockedSidebar,e=this._room;return F`
       <div class="toolbar">
         ${t?F`<ha-icon-button
               .path=${"M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"}
               .label=${"Menu"}
-              @click=${()=>yt(this,"hass-toggle-menu")}
+              @click=${()=>bt(this,"hass-toggle-menu")}
             ></ha-icon-button>`:q}
         <div class="title">${this.localize("title")}</div>
         <label class="away">
@@ -1037,7 +1074,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
                 @click=${()=>this._removeOpen=!0}
               ></ha-icon-button>`}
       </div>
-    </ha-card>`}_renderSeasons(){const t=this.hass.locale.language,e=Ee(je(this.hass.config.time_zone)),s=(t=>{const e=new Array(367).fill(!1);for(const s of t)for(const[t,i]of He(s))for(let s=t;s<=i;s++)e[s]=!0;const s=[];let i=1;for(;i<=ze;){if(e[i]){i++;continue}let t=i;for(;t+1<=ze&&!e[t+1];)t++;s.push([i,t]),i=t+1}return s})(this.state.seasons),i=s.map(([e,s])=>`${Me(Se(Ce(e)),t,"short")} – ${Me(Se(Ce(s)),t,"short")}`).join(", "),a=this._room;return F`<ha-card class="seasons">
+    </ha-card>`}_renderSeasons(){const t=this.hass.locale.language,e=Ce(je(this.hass.config.time_zone)),s=(t=>{const e=new Array(367).fill(!1);for(const s of t)for(const[t,i]of Me(s))for(let s=t;s<=i;s++)e[s]=!0;const s=[];let i=1;for(;i<=Ae;){if(e[i]){i++;continue}let t=i;for(;t+1<=Ae&&!e[t+1];)t++;s.push([i,t]),i=t+1}return s})(this.state.seasons),i=s.map(([e,s])=>`${Pe(Ee(Oe(e)),t,"short")} – ${Pe(Ee(Oe(s)),t,"short")}`).join(", "),a=this._room;return F`<ha-card class="seasons">
       <div class="section-header">
         <div class="heading">
           <h2>${this.localize("seasons.title")}</h2>
@@ -1071,7 +1108,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
                   ${e.id===this.state.season?F`<span class="badge">${this.localize("seasons.today")}</span>`:q}</span
                 >
                 <span class="secondary small"
-                  >${Me(e.start,t,"short")} → ${Me(e.end,t,"short")}${i?` · ${i}`:""}</span
+                  >${Pe(e.start,t,"short")} → ${Pe(e.end,t,"short")}${i?` · ${i}`:""}</span
                 >
               </span>
             </button>
@@ -1082,15 +1119,15 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
                 ></ha-icon-button>`}
           </div>`})}
       </div>
-    </ha-card>`}_renderNow(t){const e=this.state.unit,s=this.hass.locale.language,i=Gt(this.hass.states[t.entity_id],e),a=t.status,o=this.state.seasons.find(t=>t.id===a.season),r=o?t.programs[o.id]?.find(t=>t.id===a.program):void 0,n=Re(t,this.localize,{unit:e,step:.5,h12:ge(this.hass),language:s,timeZone:this.hass.config.time_zone}),l=this._nextSeason(),d=null===a.temperature?this.localize("now.off"):ee(a.temperature,e,.5,!1,s),c=this.hass.states[t.entity_id]?.attributes.preset_modes?.includes("away")?this.localize("away.preset"):this.localize("away.temperature",{temperature:ee(this.state.away_temperature,e,i.step,!1,s)});return F`<ha-card class="now">
+    </ha-card>`}_renderNow(t){const e=this.state.unit,s=this.hass.locale.language,i=Gt(this.hass.states[t.entity_id],e),a=t.status,o=this.state.seasons.find(t=>t.id===a.season),r=o?t.programs[o.id]?.find(t=>t.id===a.program):void 0,n=((t,e,s)=>{const{status:i}=t;if(!t.enabled)return{text:e("status.disabled"),error:!1};if(i.last_error)return{text:e("status.error",{error:i.last_error}),error:!0};if(i.pending)return{text:e("status.pending"),error:!1};const a=null===i.temperature?null:ee(i.temperature,s.unit,s.step,!1,s.language);if(!i.end)return null===a?{text:e("status.constant_off"),error:!1}:{text:e("status.constant",{temperature:a}),error:!1};const o=_e(i.end,s.h12,s.timeZone);return null===a?{text:e("status.off_until",{time:o}),error:!1}:{text:e("status.until",{temperature:a,time:o}),error:!1}})(t,this.localize,{unit:e,step:.5,h12:ge(this.hass),language:s,timeZone:this.hass.config.time_zone}),l=this._nextSeason(),d=ge(this.hass),c=this.hass.config.time_zone,h=t=>t?_e(t,d,c):null,p=a.start||a.end?`${h(a.start)??"…"} – ${h(a.end)??"…"}`:this.localize("now.none"),u=null===a.end?this.localize("now.none"):`${h(a.end)} → ${null===a.next_temperature?this.localize("now.off"):ee(a.next_temperature,e,.5,!1,s)}`,m=null===a.temperature?this.localize("now.off"):ee(a.temperature,e,.5,!1,s),g=this.hass.states[t.entity_id]?.attributes.preset_modes?.includes("away")?this.localize("away.preset"):this.localize("away.temperature",{temperature:ee(this.state.away_temperature,e,i.step,!1,s)});return F`<ha-card class="now">
       <div class="section-header">
         <h2>${this.localize("now.title")}</h2>
       </div>
       ${this.state.away?F`<div class="away-banner">
             <strong>${this.localize("away.active")}</strong>
-            <span class="small">${c}</span>
+            <span class="small">${g}</span>
           </div>`:F`<div class="big">
-              <span class="value">${t.enabled?d:"—"}</span>
+              <span class="value">${t.enabled?m:"—"}</span>
               <span class="${n.error?"error":"secondary"} small">${n.text}</span>
             </div>
             <dl>
@@ -1103,14 +1140,22 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
                 <dd>${r?.name??this.localize("now.none")}</dd>
               </div>
               <div>
+                <dt>${this.localize("now.block")}</dt>
+                <dd>${p}</dd>
+              </div>
+              <div>
+                <dt>${this.localize("now.next")}</dt>
+                <dd>${u}</dd>
+              </div>
+              <div>
                 <dt>${this.localize("now.next_season")}</dt>
                 <dd>
-                  ${l?`${l.name} · ${Me(l.start,s)}`:this.localize("now.none")}
+                  ${l?`${l.name} · ${Pe(l.start,s)}`:this.localize("now.none")}
                 </dd>
               </div>
             </dl>`}
       ${t.enabled&&a.overridden?F`<shs-resume-row .hass=${this.hass} .entityId=${t.entity_id} .localize=${this.localize}></shs-resume-row>`:F`<span class="secondary small">${this.localize("now.manual_hint")}</span>`}
-    </ha-card>`}_nextSeason(){const t=Ee(je(this.hass.config.time_zone));let e,s=1/0;for(const i of this.state.seasons){const a=(Ee(Ae(i.start))-t+366)%366;a>0&&a<s&&(e=i,s=a)}return e}_renderPrograms(t){const e=this._season;if(!e)return q;const s=this._programs(t,e.id),i=this.hass.locale.language,a=this.state.unit,o=this.hass.states[t.entity_id],r=Gt(o,a),n=(t=>[...le.slice(t),...le.slice(0,t)])((t=>{const e=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],s=t.locale.first_weekday;if(s&&e.includes(s))return e.indexOf(s);try{const e=new Intl.Locale(t.locale.language),s=e.getWeekInfo?.()??e.weekInfo;if(s)return(s.firstDay+6)%7}catch{}return 0})(this.hass)),l=n.filter(t=>!s.some(e=>e.days.includes(t))),d=be(new Date,this.hass.config.time_zone),c=je(this.hass.config.time_zone),h=((t,e)=>{const s=Ae(t.start),i=Ae(t.end);return Oe(s,i)<=0?Oe(s,e)<=0&&Oe(e,i)<=0:Oe(e,s)>=0||Oe(e,i)<=0})(e,c);return F`
+    </ha-card>`}_nextSeason(){const t=Ce(je(this.hass.config.time_zone));let e,s=1/0;for(const i of this.state.seasons){const a=(Ce(Se(i.start))-t+366)%366;a>0&&a<s&&(e=i,s=a)}return e}_renderPrograms(t){const e=this._season;if(!e)return q;const s=this._programs(t,e.id),i=this.hass.locale.language,a=this.state.unit,o=this.hass.states[t.entity_id],r=Gt(o,a),n=(t=>[...le.slice(t),...le.slice(0,t)])((t=>{const e=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],s=t.locale.first_weekday;if(s&&e.includes(s))return e.indexOf(s);try{const e=new Intl.Locale(t.locale.language),s=e.getWeekInfo?.()??e.weekInfo;if(s)return(s.firstDay+6)%7}catch{}return 0})(this.hass)),l=n.filter(t=>!s.some(e=>e.days.includes(t))),d=ye(new Date,this.hass.config.time_zone),c=je(this.hass.config.time_zone),h=((t,e)=>{const s=Se(t.start),i=Se(t.end);return He(s,i)<=0?He(s,e)<=0&&He(e,i)<=0:He(e,s)>=0||He(e,i)<=0})(e,c);return F`
       <div class="section-header">
         <div class="heading">
           <h2><span class="dot" style="--season-color:${e.color??"#607d8b"}"></span>${this.localize("programs.title",{season:e.name})}</h2>
@@ -1124,7 +1169,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         ${this._legend(a,i).map(({color:t,label:e})=>F`<span><span class="swatch" style="background:${t}"></span>${e}</span>`)}
       </div>
       ${s.length?l.length?F`<div class="warning" role="status">
-              <ha-svg-icon .path=${Ct}></ha-svg-icon>${this.localize("programs.uncovered",{days:l.map(t=>ve(i,le.indexOf(t))).join(", ")})}
+              <ha-svg-icon .path=${Ct}></ha-svg-icon>${this.localize("programs.uncovered",{days:l.map(t=>$e(i,le.indexOf(t))).join(", ")})}
             </div>`:q:F`<div class="warning" role="status">
             <ha-svg-icon .path=${Ct}></ha-svg-icon>${this.localize("programs.empty")}
           </div>`}
@@ -1206,7 +1251,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
     </shs-dialog>`}static{this.styles=[At,Et,n`
       :host {
         display: block;
-        font-size: 13px;
+        font-size: 14px;
       }
       .toolbar .title {
         font-size: 18px;
@@ -1223,24 +1268,24 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
         margin: 0 auto;
         max-width: 1180px;
-        padding: 12px 12px 32px;
+        padding: 16px 16px 32px;
       }
       ha-card {
-        padding: 12px 14px;
+        padding: 14px 16px;
       }
       h2 {
         align-items: center;
         display: flex;
-        font-size: 15px;
+        font-size: 17px;
         font-weight: 600;
         gap: 8px;
         margin: 0;
       }
       .small {
-        font-size: 12px;
+        font-size: 13px;
       }
       .notice {
         margin: 0;
@@ -1263,10 +1308,10 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       .outlined-button {
         align-items: center;
         display: inline-flex;
-        font-size: 13px;
+        font-size: 14px;
         gap: 6px;
-        min-height: 36px;
-        padding: 0 14px;
+        min-height: 40px;
+        padding: 0 16px;
       }
       .outlined-button {
         background: none;
@@ -1312,11 +1357,11 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       }
       .field-label {
         color: var(--secondary-text-color);
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 600;
       }
       .entity-name {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
       }
       select,
@@ -1350,7 +1395,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       .seasons {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
       }
       .season-list {
         display: flex;
@@ -1415,14 +1460,14 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         align-items: flex-start;
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 16px;
       }
       .now {
         box-sizing: border-box;
         display: flex;
         flex: 1 1 260px;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
       }
       .big {
         display: flex;
@@ -1430,19 +1475,19 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         gap: 2px;
       }
       .big .value {
-        font-size: 30px;
+        font-size: 34px;
         font-weight: 700;
         letter-spacing: -0.02em;
       }
       dl {
         display: grid;
-        gap: 8px 12px;
+        gap: 10px 12px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         margin: 0;
       }
       dt {
         color: var(--secondary-text-color);
-        font-size: 11px;
+        font-size: 12px;
       }
       dd {
         font-weight: 600;
@@ -1460,15 +1505,15 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         display: flex;
         flex: 999 1 520px;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         min-width: 0;
       }
       .legend {
         color: var(--secondary-text-color);
         display: flex;
         flex-wrap: wrap;
-        font-size: 11px;
-        gap: 4px 12px;
+        font-size: 12px;
+        gap: 4px 14px;
       }
       .legend > span {
         align-items: center;
@@ -1486,9 +1531,9 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         background: color-mix(in srgb, var(--warning-color, #ff9800) 14%, transparent);
         border-radius: 10px;
         display: flex;
-        font-size: 12px;
+        font-size: 13px;
         gap: 8px;
-        padding: 8px 12px;
+        padding: 10px 12px;
       }
       .warning ha-svg-icon {
         color: var(--warning-color, #ff9800);

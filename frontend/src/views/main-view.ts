@@ -12,7 +12,7 @@ import "../components/resume-row";
 import "../components/season-bar";
 import "../dialogs/entity-picker-dialog";
 import "../dialogs/season-dialog";
-import { firstWeekday, uses12h, weekdayName, zonedTime } from "../format";
+import { firstWeekday, formatIsoTime, uses12h, weekdayName, zonedTime } from "../format";
 import { canTurnOff, entityName, fireEvent, safeCustomElement, showToast } from "../ha";
 import type { Localize } from "../localize";
 import { orderedDays, WEEKDAYS } from "../schedule";
@@ -472,6 +472,19 @@ export class MainView extends LitElement {
       timeZone: this.hass.config.time_zone,
     });
     const nextSeason = this._nextSeason();
+    const h12 = uses12h(this.hass);
+    const timeZone = this.hass.config.time_zone;
+    const at = (iso: string | null) => (iso ? formatIsoTime(iso, h12, timeZone) : null);
+    const block =
+      status.start || status.end ? `${at(status.start) ?? "…"} – ${at(status.end) ?? "…"}` : this.localize("now.none");
+    const next =
+      status.end === null
+        ? this.localize("now.none")
+        : `${at(status.end)} → ${
+            status.next_temperature === null
+              ? this.localize("now.off")
+              : formatTemperature(status.next_temperature, unit, 0.5, false, language)
+          }`;
     const temperature =
       status.temperature === null
         ? this.localize("now.off")
@@ -504,6 +517,14 @@ export class MainView extends LitElement {
               <div>
                 <dt>${this.localize("now.program")}</dt>
                 <dd>${program?.name ?? this.localize("now.none")}</dd>
+              </div>
+              <div>
+                <dt>${this.localize("now.block")}</dt>
+                <dd>${block}</dd>
+              </div>
+              <div>
+                <dt>${this.localize("now.next")}</dt>
+                <dd>${next}</dd>
               </div>
               <div>
                 <dt>${this.localize("now.next_season")}</dt>
@@ -751,7 +772,7 @@ export class MainView extends LitElement {
     css`
       :host {
         display: block;
-        font-size: 13px;
+        font-size: 14px;
       }
       .toolbar .title {
         font-size: 18px;
@@ -768,24 +789,24 @@ export class MainView extends LitElement {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
         margin: 0 auto;
         max-width: 1180px;
-        padding: 12px 12px 32px;
+        padding: 16px 16px 32px;
       }
       ha-card {
-        padding: 12px 14px;
+        padding: 14px 16px;
       }
       h2 {
         align-items: center;
         display: flex;
-        font-size: 15px;
+        font-size: 17px;
         font-weight: 600;
         gap: 8px;
         margin: 0;
       }
       .small {
-        font-size: 12px;
+        font-size: 13px;
       }
       .notice {
         margin: 0;
@@ -808,10 +829,10 @@ export class MainView extends LitElement {
       .outlined-button {
         align-items: center;
         display: inline-flex;
-        font-size: 13px;
+        font-size: 14px;
         gap: 6px;
-        min-height: 36px;
-        padding: 0 14px;
+        min-height: 40px;
+        padding: 0 16px;
       }
       .outlined-button {
         background: none;
@@ -857,11 +878,11 @@ export class MainView extends LitElement {
       }
       .field-label {
         color: var(--secondary-text-color);
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 600;
       }
       .entity-name {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
       }
       select,
@@ -895,7 +916,7 @@ export class MainView extends LitElement {
       .seasons {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
       }
       .season-list {
         display: flex;
@@ -960,14 +981,14 @@ export class MainView extends LitElement {
         align-items: flex-start;
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 16px;
       }
       .now {
         box-sizing: border-box;
         display: flex;
         flex: 1 1 260px;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
       }
       .big {
         display: flex;
@@ -975,19 +996,19 @@ export class MainView extends LitElement {
         gap: 2px;
       }
       .big .value {
-        font-size: 30px;
+        font-size: 34px;
         font-weight: 700;
         letter-spacing: -0.02em;
       }
       dl {
         display: grid;
-        gap: 8px 12px;
+        gap: 10px 12px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         margin: 0;
       }
       dt {
         color: var(--secondary-text-color);
-        font-size: 11px;
+        font-size: 12px;
       }
       dd {
         font-weight: 600;
@@ -1005,15 +1026,15 @@ export class MainView extends LitElement {
         display: flex;
         flex: 999 1 520px;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         min-width: 0;
       }
       .legend {
         color: var(--secondary-text-color);
         display: flex;
         flex-wrap: wrap;
-        font-size: 11px;
-        gap: 4px 12px;
+        font-size: 12px;
+        gap: 4px 14px;
       }
       .legend > span {
         align-items: center;
@@ -1031,9 +1052,9 @@ export class MainView extends LitElement {
         background: color-mix(in srgb, var(--warning-color, #ff9800) 14%, transparent);
         border-radius: 10px;
         display: flex;
-        font-size: 12px;
+        font-size: 13px;
         gap: 8px;
-        padding: 8px 12px;
+        padding: 10px 12px;
       }
       .warning ha-svg-icon {
         color: var(--warning-color, #ff9800);

@@ -86,7 +86,9 @@ export const it: Strings = {
     day_free: "{day}: senza programma",
   },
   block: {
-    hint: "Tocca una fascia nella barra per modificarla.",
+    hint: "Tocca una fascia nella barra per modificarla; con ‹ › raggiungi anche quelle più strette.",
+    previous: "Fascia precedente",
+    next: "Fascia successiva",
     split: "Dividi",
     delete: "Elimina fascia",
     close: "Chiudi",

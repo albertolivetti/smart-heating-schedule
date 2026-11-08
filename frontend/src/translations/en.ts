@@ -85,7 +85,9 @@ export const en = {
     day_free: "{day}: no program",
   },
   block: {
-    hint: "Tap a block on the bar to edit it.",
+    hint: "Tap a block on the bar to edit it; use ‹ › to reach short blocks.",
+    previous: "Previous block",
+    next: "Next block",
     split: "Split",
     delete: "Delete block",
     close: "Close",

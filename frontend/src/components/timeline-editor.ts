@@ -1,4 +1,12 @@
-import { mdiArrowSplitVertical, mdiClose, mdiDeleteOutline, mdiMinus, mdiPlus } from "@mdi/js";
+import {
+  mdiArrowSplitVertical,
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiClose,
+  mdiDeleteOutline,
+  mdiMinus,
+  mdiPlus,
+} from "@mdi/js";
 import { css, html, LitElement, nothing, type PropertyValues, unsafeCSS } from "lit";
 import { property, state } from "lit/decorators.js";
 
@@ -247,14 +255,36 @@ export class TimelineEditor extends LitElement {
 
     return html`<div class="editor" style="--block-color:${temperatureColor(segment.temperature, this.unit)}">
       <div class="editor-header">
+        <button
+          class="plain icon"
+          ?disabled=${first}
+          aria-label=${this.localize("block.previous")}
+          title=${this.localize("block.previous")}
+          @click=${() => (this._selected = index - 1)}
+        >
+          <ha-svg-icon .path=${mdiChevronLeft}></ha-svg-icon>
+        </button>
         <span class="swatch"></span>
         <span class="range">${range}</span>
         <button
-          class="outlined"
+          class="plain icon"
+          ?disabled=${last}
+          aria-label=${this.localize("block.next")}
+          title=${this.localize("block.next")}
+          @click=${() => (this._selected = index + 1)}
+        >
+          <ha-svg-icon .path=${mdiChevronRight}></ha-svg-icon>
+        </button>
+        <span class="spacer"></span>
+        <button
+          class="outlined split"
+          aria-label=${this.localize("block.split")}
+          title=${this.localize("block.split")}
           ?disabled=${segment.end - segment.start < 2 * SLOT}
           @click=${() => this._split(index)}
         >
-          <ha-svg-icon .path=${mdiArrowSplitVertical}></ha-svg-icon>${this.localize("block.split")}
+          <ha-svg-icon .path=${mdiArrowSplitVertical}></ha-svg-icon
+          ><span class="split-label">${this.localize("block.split")}</span>
         </button>
         <button
           class="outlined icon danger"
@@ -348,12 +378,12 @@ export class TimelineEditor extends LitElement {
         margin: 0 10px;
       }
       .labels {
-        height: 16px;
+        height: 18px;
         position: relative;
       }
       .labels span {
         color: var(--secondary-text-color);
-        font-size: 11px;
+        font-size: 12px;
         font-variant-numeric: tabular-nums;
         position: absolute;
         transform: translateX(-50%);
@@ -364,7 +394,7 @@ export class TimelineEditor extends LitElement {
         font-weight: 700;
       }
       .track {
-        height: 44px;
+        height: 48px;
         position: relative;
         touch-action: none;
       }
@@ -387,7 +417,7 @@ export class TimelineEditor extends LitElement {
         cursor: pointer;
         display: flex;
         font: inherit;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
         justify-content: center;
         overflow: hidden;
@@ -417,7 +447,7 @@ export class TimelineEditor extends LitElement {
         border: none;
         cursor: ew-resize;
         display: flex;
-        height: 56px;
+        height: 60px;
         justify-content: center;
         padding: 0;
         position: absolute;
@@ -431,7 +461,7 @@ export class TimelineEditor extends LitElement {
         border: 2px solid var(--primary-text-color);
         border-radius: 5px;
         box-sizing: border-box;
-        height: 34px;
+        height: 38px;
         width: 8px;
       }
       .divider.active span {
@@ -454,13 +484,13 @@ export class TimelineEditor extends LitElement {
       .ticks {
         color: var(--secondary-text-color);
         display: flex;
-        font-size: 11px;
+        font-size: 12px;
         justify-content: space-between;
-        margin-top: 4px;
+        margin-top: 6px;
       }
       .hint {
-        font-size: 12px;
-        margin: 8px 0 0;
+        font-size: 13px;
+        margin: 10px 0 0;
       }
       .editor {
         background: color-mix(in srgb, var(--primary-text-color) 4%, transparent);
@@ -468,14 +498,17 @@ export class TimelineEditor extends LitElement {
         border-radius: 10px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin-top: 10px;
-        padding: 8px 12px 10px;
+        gap: 12px;
+        margin-top: 12px;
+        padding: 10px 14px 12px;
       }
       .editor-header {
         align-items: center;
         display: flex;
         gap: 6px;
+      }
+      .spacer {
+        flex: 1;
       }
       .swatch {
         background: var(--block-color);
@@ -484,9 +517,21 @@ export class TimelineEditor extends LitElement {
         height: 12px;
         width: 12px;
       }
+      .editor {
+        container-type: inline-size;
+      }
+      @container (max-width: 360px) {
+        .split-label {
+          display: none;
+        }
+        button.split {
+          padding: 0;
+          width: 36px;
+        }
+      }
       .range {
-        flex: 1;
-        font-size: 13px;
+        white-space: nowrap;
+        font-size: 14px;
         font-variant-numeric: tabular-nums;
         font-weight: 700;
         min-width: 0;
@@ -503,7 +548,7 @@ export class TimelineEditor extends LitElement {
         gap: 6px;
       }
       .temperature {
-        font-size: 19px;
+        font-size: 22px;
         font-variant-numeric: tabular-nums;
         font-weight: 700;
         min-width: 4.2em;
