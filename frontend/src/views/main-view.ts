@@ -501,18 +501,34 @@ export class MainView extends LitElement {
             temperature: formatTemperature(this.state.away_temperature, unit, limits.step, false, language),
           });
 
-    return html`<ha-card class="now">
+    const overridden = room.enabled && status.overridden && !this.state.away;
+    return html`<ha-card class="now ${overridden ? "overridden" : ""}">
       <div class="section-header">
         <h2>${this.localize("now.title")}</h2>
       </div>
+      ${overridden
+        ? html`<shs-resume-row
+            .hass=${this.hass}
+            .entityId=${room.entity_id}
+            .localize=${this.localize}
+          ></shs-resume-row>`
+        : nothing}
       ${this.state.away
         ? html`<div class="away-banner">
             <strong>${this.localize("away.active")}</strong>
             <span class="small">${awayText}</span>
           </div>`
         : html`<div class="big">
-              <span class="value">${room.enabled ? temperature : "—"}</span>
-              <span class="${statusText.error ? "error" : "secondary"} small">${statusText.text}</span>
+              ${overridden
+                ? html`<span class="value manual">${this._actualTarget(room) ?? temperature}</span>
+                    <span class="secondary small"
+                      >${this.localize(status.end ? "now.manual_until" : "now.manual", {
+                        scheduled: temperature,
+                        time: at(status.end) ?? "",
+                      })}</span
+                    >`
+                : html`<span class="value">${room.enabled ? temperature : "—"}</span>
+                    <span class="${statusText.error ? "error" : "secondary"} small">${statusText.text}</span>`}
             </div>
             <dl>
               <div>
@@ -540,10 +556,19 @@ export class MainView extends LitElement {
                 </dd>
               </div>
             </dl>`}
-      ${room.enabled && status.overridden
-        ? html`<shs-resume-row .hass=${this.hass} .entityId=${room.entity_id} .localize=${this.localize}></shs-resume-row>`
-        : html`<span class="secondary small">${this.localize("now.manual_hint")}</span>`}
+      ${overridden ? nothing : html`<span class="secondary small">${this.localize("now.manual_hint")}</span>`}
     </ha-card>`;
+  }
+
+  /** What the thermostat was set to by hand: its target temperature, or off. */
+  private _actualTarget(room: Room): string | null {
+    const entity = this.hass.states[room.entity_id];
+    if (!entity) return null;
+    if (entity.state === "off") return this.localize("now.off");
+    const target = entity.attributes.temperature;
+    return typeof target === "number"
+      ? formatTemperature(target, this.state.unit, 0.5, false, this.hass.locale.language)
+      : null;
   }
 
   private _nextSeason(): Season | undefined {
@@ -1004,6 +1029,12 @@ export class MainView extends LitElement {
         font-size: 34px;
         font-weight: 700;
         letter-spacing: -0.02em;
+      }
+      .now.overridden {
+        box-shadow: inset 0 0 0 2px var(--warning-color, #ff9800);
+      }
+      .big .value.manual {
+        color: color-mix(in srgb, var(--warning-color, #ff9800) 80%, var(--primary-text-color));
       }
       dl {
         display: grid;

@@ -63,6 +63,8 @@ export const it: Strings = {
     next: "Prossimo cambio",
     next_season: "Prossima stagione",
     none: "Nessuno",
+    manual_until: "Programma: {scheduled}, riprende alle {time}",
+    manual: "Programma: {scheduled}",
     manual_hint: "Se cambi la temperatura a mano, vale fino al prossimo cambio di fascia.",
   },
   programs: {
@@ -116,6 +118,7 @@ export const it: Strings = {
   },
   room: {
     overridden: "Modificato a mano",
+    overridden_hint: "La temperatura del termostato è stata cambiata fuori dal programma.",
     resume: "Torna al programma",
   },
   common: {
