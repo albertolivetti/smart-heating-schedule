@@ -1,6 +1,6 @@
 [project]
 name = "cronotermostato-stagionale"
-version = "0.3.1"
+version = "0.3.2"
 requires-python = ">=3.13.2"
 
 [tool.pytest.ini_options]
