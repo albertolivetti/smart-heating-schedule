@@ -117,8 +117,8 @@ export const it: Strings = {
   },
   room: {
     overridden: "Modifica manuale",
-    overridden_until: "Vale fino al prossimo cambio di fascia, alle {time}: poi il programma riprende da solo.",
-    overridden_hint: "Vale fino al prossimo cambio di fascia: poi il programma riprende da solo.",
+    overridden_until: "Vale fino al prossimo cambio di fascia, alle {time}: poi il programma riprende.",
+    overridden_hint: "Vale fino al prossimo cambio di fascia: poi il programma riprende.",
     resume: "Torna al programma",
   },
   common: {
