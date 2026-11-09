@@ -556,7 +556,7 @@ export class MainView extends LitElement {
                 </dd>
               </div>
             </dl>`}
-      ${overridden ? nothing : html`<span class="secondary small">${this.localize("now.manual_hint")}</span>`}
+      <span class="secondary small">${this.localize("now.manual_hint")}</span>
     </ha-card>`;
   }
 

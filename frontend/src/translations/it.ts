@@ -117,7 +117,7 @@ export const it: Strings = {
     error: "Impossibile aggiornare il termostato: {error}",
   },
   room: {
-    overridden: "Modificato a mano",
+    overridden: "Modifica manuale",
     overridden_hint: "La temperatura del termostato è stata cambiata fuori dal programma.",
     resume: "Torna al programma",
   },

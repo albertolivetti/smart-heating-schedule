@@ -116,7 +116,7 @@ export const en = {
     error: "Could not update the thermostat: {error}",
   },
   room: {
-    overridden: "Changed by hand",
+    overridden: "Manual change",
     overridden_hint: "The thermostat was set to a different temperature than the schedule.",
     resume: "Back to the schedule",
   },
