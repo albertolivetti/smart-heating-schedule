@@ -64,6 +64,7 @@ export const it: Strings = {
     next_season: "Prossima stagione",
     none: "Nessuno",
     manual: "Temperatura del programma: {scheduled}",
+    manual_off: "Secondo il programma la caldaia sarebbe spenta",
     manual_hint: "Se cambi la temperatura a mano, vale fino al prossimo cambio di fascia.",
   },
   programs: {

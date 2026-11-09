@@ -523,7 +523,9 @@ export class MainView extends LitElement {
               ${overridden
                 ? html`<span class="value manual">${this._actualTarget(room) ?? temperature}</span>
                     <span class="secondary small"
-                      >${this.localize("now.manual", { scheduled: temperature })}</span
+                      >${status.temperature === null
+                        ? this.localize("now.manual_off")
+                        : this.localize("now.manual", { scheduled: temperature })}</span
                     >`
                 : html`<span class="value">${room.enabled ? temperature : "—"}</span>
                     <span class="${statusText.error ? "error" : "secondary"} small">${statusText.text}</span>`}

@@ -1,4 +1,4 @@
-function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,i);else for(var n=t.length-1;n>=0;n--)(a=t[n])&&(r=(o<3?a(r):o>3?a(e,s,r):a(e,s))||r);return o>3&&r&&Object.defineProperty(e,s,r),r}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,s=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),a=new WeakMap;let o=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(s&&void 0===t){const s=void 0!==e&&1===e.length;s&&(t=a.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&a.set(e,t))}return t}toString(){return this.cssText}};const r=t=>new o("string"==typeof t?t:t+"",void 0,i),n=(t,...e)=>{const s=1===t.length?t[0]:e.reduce((e,s,i)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[i+1],t[0]);return new o(s,t,i)},l=s?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r(e)})(t):t,{is:d,defineProperty:c,getOwnPropertyDescriptor:h,getOwnPropertyNames:p,getOwnPropertySymbols:u,getPrototypeOf:m}=Object,g=globalThis,f=g.trustedTypes,b=f?f.emptyScript:"",y=g.reactiveElementPolyfillSupport,_=(t,e)=>t,v={toAttribute(t,e){switch(e){case Boolean:t=t?b:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let s=t;switch(e){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t)}catch(t){s=null}}return s}},x=(t,e)=>!d(t,e),$={attribute:!0,type:String,converter:v,reflect:!1,useDefault:!1,hasChanged:x};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=$){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const s=Symbol(),i=this.getPropertyDescriptor(t,s,e);void 0!==i&&c(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){const{get:i,set:a}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:i,set(e){const o=i?.call(this);a?.call(this,e),this.requestUpdate(t,o,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??$}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const t=m(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const t=this.properties,e=[...p(t),...u(t)];for(const s of e)this.createProperty(s,t[s])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,s]of e)this.elementProperties.set(t,s)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const s=this._$Eu(t,e);void 0!==s&&this._$Eh.set(s,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const s=new Set(t.flat(1/0).reverse());for(const t of s)e.unshift(l(t))}else void 0!==t&&e.push(l(t));return e}static _$Eu(t,e){const s=e.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,i)=>{if(s)t.adoptedStyleSheets=i.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const s of i){const i=document.createElement("style"),a=e.litNonce;void 0!==a&&i.setAttribute("nonce",a),i.textContent=s.cssText,t.appendChild(i)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){const s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(void 0!==i&&!0===s.reflect){const a=(void 0!==s.converter?.toAttribute?s.converter:v).toAttribute(e,s.type);this._$Em=t,null==a?this.removeAttribute(i):this.setAttribute(i,a),this._$Em=null}}_$AK(t,e){const s=this.constructor,i=s._$Eh.get(t);if(void 0!==i&&this._$Em!==i){const t=s.getPropertyOptions(i),a="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:v;this._$Em=i;const o=a.fromAttribute(e,t.type);this[i]=o??this._$Ej?.get(i)??o,this._$Em=null}}requestUpdate(t,e,s,i=!1,a){if(void 0!==t){const o=this.constructor;if(!1===i&&(a=this[t]),s??=o.getPropertyOptions(t),!((s.hasChanged??x)(a,e)||s.useDefault&&s.reflect&&a===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,s))))return;this.C(t,e,s)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:a},o){s&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==a||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),!0===i&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,s]of t){const{wrapped:t}=s,i=this[e];!0!==t||this._$AL.has(e)||void 0===i||this.C(e,void 0,s,i)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[_("elementProperties")]=new Map,w[_("finalized")]=new Map,y?.({ReactiveElement:w}),(g.reactiveElementVersions??=[]).push("2.1.2");const k=globalThis,z=t=>t,A=k.trustedTypes,S=A?A.createPolicy("lit-html",{createHTML:t=>t}):void 0,C="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,O="?"+E,H=`<${O}>`,M=document,T=()=>M.createComment(""),P=t=>null===t||"object"!=typeof t&&"function"!=typeof t,L=Array.isArray,V="[ \t\n\f\r]",D=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,N=/-->/g,I=/>/g,U=RegExp(`>|${V}(?:([^\\s"'>=/]+)(${V}*=${V}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),R=/'/g,j=/"/g,B=/^(?:script|style|textarea|title)$/i,F=(t=>(e,...s)=>({_$litType$:t,strings:e,values:s}))(1),Z=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),W=new WeakMap,X=M.createTreeWalker(M,129);function K(t,e){if(!L(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==S?S.createHTML(e):e}class J{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let a=0,o=0;const r=t.length-1,n=this.parts,[l,d]=((t,e)=>{const s=t.length-1,i=[];let a,o=2===e?"<svg>":3===e?"<math>":"",r=D;for(let e=0;e<s;e++){const s=t[e];let n,l,d=-1,c=0;for(;c<s.length&&(r.lastIndex=c,l=r.exec(s),null!==l);)c=r.lastIndex,r===D?"!--"===l[1]?r=N:void 0!==l[1]?r=I:void 0!==l[2]?(B.test(l[2])&&(a=RegExp("</"+l[2],"g")),r=U):void 0!==l[3]&&(r=U):r===U?">"===l[0]?(r=a??D,d=-1):void 0===l[1]?d=-2:(d=r.lastIndex-l[2].length,n=l[1],r=void 0===l[3]?U:'"'===l[3]?j:R):r===j||r===R?r=U:r===N||r===I?r=D:(r=U,a=void 0);const h=r===U&&t[e+1].startsWith("/>")?" ":"";o+=r===D?s+H:d>=0?(i.push(n),s.slice(0,d)+C+s.slice(d)+E+h):s+E+(-2===d?e:h)}return[K(t,o+(t[s]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),i]})(t,e);if(this.el=J.createElement(l,s),X.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(i=X.nextNode())&&n.length<r;){if(1===i.nodeType){if(i.hasAttributes())for(const t of i.getAttributeNames())if(t.endsWith(C)){const e=d[o++],s=i.getAttribute(t).split(E),r=/([.?@])?(.*)/.exec(e);n.push({type:1,index:a,name:r[2],strings:s,ctor:"."===r[1]?et:"?"===r[1]?st:"@"===r[1]?it:tt}),i.removeAttribute(t)}else t.startsWith(E)&&(n.push({type:6,index:a}),i.removeAttribute(t));if(B.test(i.tagName)){const t=i.textContent.split(E),e=t.length-1;if(e>0){i.textContent=A?A.emptyScript:"";for(let s=0;s<e;s++)i.append(t[s],T()),X.nextNode(),n.push({type:2,index:++a});i.append(t[e],T())}}}else if(8===i.nodeType)if(i.data===O)n.push({type:2,index:a});else{let t=-1;for(;-1!==(t=i.data.indexOf(E,t+1));)n.push({type:7,index:a}),t+=E.length-1}a++}}static createElement(t,e){const s=M.createElement("template");return s.innerHTML=t,s}}function Q(t,e,s=t,i){if(e===Z)return e;let a=void 0!==i?s._$Co?.[i]:s._$Cl;const o=P(e)?void 0:e._$litDirective$;return a?.constructor!==o&&(a?._$AO?.(!1),void 0===o?a=void 0:(a=new o(t),a._$AT(t,s,i)),void 0!==i?(s._$Co??=[])[i]=a:s._$Cl=a),void 0!==a&&(e=Q(t,a._$AS(t,e.values),a,i)),e}class G{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??M).importNode(e,!0);X.currentNode=i;let a=X.nextNode(),o=0,r=0,n=s[0];for(;void 0!==n;){if(o===n.index){let e;2===n.type?e=new Y(a,a.nextSibling,this,t):1===n.type?e=new n.ctor(a,n.name,n.strings,this,t):6===n.type&&(e=new at(a,this,t)),this._$AV.push(e),n=s[++r]}o!==n?.index&&(a=X.nextNode(),o++)}return X.currentNode=M,i}p(t){let e=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}}class Y{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Q(this,t,e),P(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==Z&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>L(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&P(this._$AH)?this._$AA.nextSibling.data=t:this.T(M.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:s}=t,i="number"==typeof s?this._$AC(t):(void 0===s.el&&(s.el=J.createElement(K(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{const t=new G(i,this),s=t.u(this.options);t.p(e),this.T(s),this._$AH=t}}_$AC(t){let e=W.get(t.strings);return void 0===e&&W.set(t.strings,e=new J(t)),e}k(t){L(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let s,i=0;for(const a of t)i===e.length?e.push(s=new Y(this.O(T()),this.O(T()),this,this.options)):s=e[i],s._$AI(a),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=z(t).nextSibling;z(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class tt{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,a){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=a,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=q}_$AI(t,e=this,s,i){const a=this.strings;let o=!1;if(void 0===a)t=Q(this,t,e,0),o=!P(t)||t!==this._$AH&&t!==Z,o&&(this._$AH=t);else{const i=t;let r,n;for(t=a[0],r=0;r<a.length-1;r++)n=Q(this,i[s+r],e,r),n===Z&&(n=this._$AH[r]),o||=!P(n)||n!==this._$AH[r],n===q?t=q:t!==q&&(t+=(n??"")+a[r+1]),this._$AH[r]=n}o&&!i&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class et extends tt{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class st extends tt{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class it extends tt{constructor(t,e,s,i,a){super(t,e,s,i,a),this.type=5}_$AI(t,e=this){if((t=Q(this,t,e,0)??q)===Z)return;const s=this._$AH,i=t===q&&s!==q||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,a=t!==q&&(s===q||i);i&&this.element.removeEventListener(this.name,this,s),a&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class at{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){Q(this,t)}}const ot={I:Y},rt=k.litHtmlPolyfillSupport;rt?.(J,Y),(k.litHtmlVersions??=[]).push("3.3.3");const nt=globalThis;let lt=class extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,s)=>{const i=s?.renderBefore??e;let a=i._$litPart$;if(void 0===a){const t=s?.renderBefore??null;i._$litPart$=a=new Y(e.insertBefore(T(),t),t,void 0,s??{})}return a._$AI(t),a})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return Z}};lt._$litElement$=!0,lt.finalized=!0,nt.litElementHydrateSupport?.({LitElement:lt});const dt=nt.litElementPolyfillSupport;dt?.({LitElement:lt}),(nt.litElementVersions??=[]).push("4.2.2");const ct={attribute:!0,type:String,converter:v,reflect:!1,hasChanged:x},ht=(t=ct,e,s)=>{const{kind:i,metadata:a}=s;let o=globalThis.litPropertyMetadata.get(a);if(void 0===o&&globalThis.litPropertyMetadata.set(a,o=new Map),"setter"===i&&((t=Object.create(t)).wrapped=!0),o.set(s.name,t),"accessor"===i){const{name:i}=s;return{set(s){const a=e.get.call(this);e.set.call(this,s),this.requestUpdate(i,a,t,!0,s)},init(e){return void 0!==e&&this.C(i,void 0,t,e),e}}}if("setter"===i){const{name:i}=s;return function(s){const a=this[i];e.call(this,s),this.requestUpdate(i,a,t,!0,s)}}throw Error("Unsupported decorator location: "+i)};function pt(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,e,s)=>{const i=e.hasOwnProperty(s);return e.constructor.createProperty(s,t),i?Object.getOwnPropertyDescriptor(e,s):void 0})(t,e,s)}function ut(t){return pt({...t,state:!0,attribute:!1})}const mt="smart_heating_schedule",gt=(t,e,s)=>t.callWS({type:`${mt}/room/save`,entity_id:e,...s}),ft=(t,e)=>t.callWS({type:`${mt}/seasons/save`,seasons:e}),bt=(t,e,s)=>{t.dispatchEvent(new CustomEvent(e,{bubbles:!0,composed:!0,detail:s}))},yt=(t,e)=>{bt(t,"hass-notification",{message:e})};let _t;const vt=(t,e)=>{const s=t.states[e]?.attributes.friendly_name;if(s)return s;const i=t.entities?.[e]?.device_id,a=i?t.devices?.[i]:void 0;return a?.name_by_user||a?.name||e},xt=t=>e=>{customElements.get(t)||customElements.define(t,e)},$t={title:"Heating schedule",loading:"Loading…",not_loaded:"The seasonal heating schedule is not set up. Add the integration under Settings → Devices & services.",read_only:"Only administrators can change schedules.",away:{label:"Away",active:"Away is on",preset:"The thermostat uses its away preset. The schedule resumes when you turn Away off.",temperature:"The thermostat keeps {temperature}. The schedule resumes when you turn Away off."},entity:{label:"Entity controlled by the schedule",add:"Add thermostat",choose:"Choose the thermostat to schedule",none_title:"Choose what to schedule",none_text:"Pick the climate entity of your boiler or thermostat. The schedule sets its temperature and turns it off outside the seasons.",no_thermostats:"All climate entities already have a schedule.",enabled:"Schedule active",remove:"Remove schedule",remove_text:"Stop scheduling {name} and delete its programs?",measured:"Measured {temperature}"},seasons:{title:"Seasons",subtitle:"Dates repeat every year and apply to all thermostats.",reset:"From Home Assistant",reset_title:"Use Home Assistant's seasons",reset_text:"Replace your seasons with winter, spring, summer and autumn as Home Assistant defines them. Programs of seasons that no longer exist are deleted.",new:"New",edit:"Edit {name}",select:"Show {name}",today:"today",outside:"Outside the seasons ({ranges}) heating is off",always:"The seasons cover the whole year",programs_one:"1 program",programs:"{count} programs",programs_none:"no programs: off"},season_dialog:{new:"New season",edit:"Edit season",name:"Name",color:"Color",start:"Start",end:"End",year:"The year is ignored: the season repeats every year.",wraps:"Runs across new year.",overlap:"Overlaps with {name}.",delete:"Delete season",delete_text:"Delete {name} and the programs in it?"},now:{title:"Now",scheduled:"requested",off:"Off",season:"Season",program:"Program",block:"Current block",next:"Next change",next_season:"Next season",none:"None",manual:"Scheduled temperature: {scheduled}",manual_hint:"If you change the temperature by hand, it holds until the next block."},programs:{title:"Programs · {season}",legend:"Temperature colours",hint:"Tap a day to move it here. Tap a block to change its temperature and times.",new:"Program",new_name:"New program",every_day:"Every day",no_days:"No day selected",empty:"No programs in this season: heating is off.",uncovered:"No program on {days}: heating is off on those days.",duplicate:"Duplicate {name}",delete:"Delete {name}",delete_text:"Delete the program {name}?",rename:"Rename {name}",name:"Name",copy:"{name} (copy)",day_mine:"{day}: in this program",day_other:"{day}: in {program}, tap to move it here",day_free:"{day}: no program"},block:{hint:"Tap a block on the bar to edit it; use ‹ › to reach short blocks.",hint_touch:"Tap a block to edit it; − and + change its times. Use ‹ › to reach short blocks.",previous:"Previous block",next:"Next block",split:"Split",delete:"Delete block",close:"Close",lower:"Lower by {step}",raise:"Raise by {step}",off:"Off",start:"Start",end:"End",earlier:"{what} 15 minutes earlier",later:"{what} 15 minutes later",divider:"Change at {time}: drag, or use the left and right arrow keys",name:"Name",name_placeholder:"Optional, e.g. Wake up"},status:{until:"{temperature} until {time}",off_until:"Off until {time}",constant:"{temperature}",constant_off:"Off",named:"{name} · {status}",disabled:"Schedule is off",pending:"Waiting for the thermostat",error:"Could not update the thermostat: {error}"},room:{overridden:"Manual change",overridden_until:"It lasts until the next block, at {time}: then the schedule takes over again.",overridden_hint:"It lasts until the next block: then the schedule takes over again.",resume:"Back to the schedule"},common:{cancel:"Cancel",save:"Save",add:"Add",delete:"Delete",close:"Close",replace:"Replace"},error:{save:"Could not save: {error}",resume:"Could not restore the schedule: {error}"}},wt={en:$t,it:{title:"Cronotermostato",loading:"Caricamento…",not_loaded:"Il cronotermostato stagionale non è configurato. Aggiungi l'integrazione in Impostazioni → Dispositivi e servizi.",read_only:"Solo gli amministratori possono modificare la programmazione.",away:{label:"Fuori casa",active:"Fuori casa attivo",preset:"Il termostato usa il suo preset Fuori casa. Il programma riprende quando disattivi Fuori casa.",temperature:"Il termostato tiene {temperature}. Il programma riprende quando disattivi Fuori casa."},entity:{label:"Entità comandata dalla programmazione",add:"Aggiungi termostato",choose:"Scegli il termostato da programmare",none_title:"Scegli cosa programmare",none_text:"Seleziona l'entità climate della caldaia o del termostato. Il programma ne imposta la temperatura e la spegne fuori stagione.",no_thermostats:"Tutte le entità climate hanno già una programmazione.",enabled:"Programmazione attiva",remove:"Rimuovi programmazione",remove_text:"Smettere di programmare {name} ed eliminare i suoi programmi?",measured:"Misurata {temperature}"},seasons:{title:"Stagioni",subtitle:"Le date si ripetono ogni anno e valgono per tutti i termostati.",reset:"Da Home Assistant",reset_title:"Usa le stagioni di Home Assistant",reset_text:"Sostituisce le tue stagioni con inverno, primavera, estate e autunno come li definisce Home Assistant. I programmi delle stagioni che non esistono più vengono eliminati.",new:"Nuova",edit:"Modifica {name}",select:"Mostra {name}",today:"oggi",outside:"Fuori stagione ({ranges}) la caldaia resta spenta",always:"Le stagioni coprono tutto l'anno",programs_one:"1 programma",programs:"{count} programmi",programs_none:"nessun programma: spento"},season_dialog:{new:"Nuova stagione",edit:"Modifica stagione",name:"Nome",color:"Colore",start:"Inizio",end:"Fine",year:"L'anno non conta: la stagione si ripete ogni anno.",wraps:"Attraversa il capodanno.",overlap:"Si sovrappone a {name}.",delete:"Elimina stagione",delete_text:"Eliminare {name} e i suoi programmi?"},now:{title:"Adesso",scheduled:"richiesti",off:"Spento",season:"Stagione",program:"Programma",block:"Fascia attuale",next:"Prossimo cambio",next_season:"Prossima stagione",none:"Nessuno",manual:"Temperatura del programma: {scheduled}",manual_hint:"Se cambi la temperatura a mano, vale fino al prossimo cambio di fascia."},programs:{title:"Programmi · {season}",legend:"Colori delle temperature",hint:"Tocca un giorno per spostarlo qui. Tocca una fascia per cambiarne temperatura e orari.",new:"Programma",new_name:"Nuovo programma",every_day:"Tutti i giorni",no_days:"Nessun giorno selezionato",empty:"Nessun programma in questa stagione: la caldaia resta spenta.",uncovered:"Nessun programma per {days}: in quei giorni la caldaia resta spenta.",duplicate:"Duplica {name}",delete:"Elimina {name}",delete_text:"Eliminare il programma {name}?",rename:"Rinomina {name}",name:"Nome",copy:"{name} (copia)",day_mine:"{day}: in questo programma",day_other:"{day}: in {program}, tocca per spostarlo qui",day_free:"{day}: senza programma"},block:{hint:"Tocca una fascia nella barra per modificarla; con ‹ › raggiungi anche quelle più strette.",hint_touch:"Tocca una fascia per modificarla: con − e + cambi gli orari, con ‹ › passi alle fasce vicine.",previous:"Fascia precedente",next:"Fascia successiva",split:"Dividi",delete:"Elimina fascia",close:"Chiudi",lower:"Diminuisci di {step}",raise:"Aumenta di {step}",off:"Spento",start:"Inizio",end:"Fine",earlier:"{what} 15 minuti prima",later:"{what} 15 minuti dopo",divider:"Cambio alle {time}: trascina, oppure usa le frecce sinistra e destra",name:"Nome",name_placeholder:"Facoltativo, es. Risveglio"},status:{until:"{temperature} fino alle {time}",off_until:"Spento fino alle {time}",constant:"{temperature}",constant_off:"Spento",named:"{name} · {status}",disabled:"Programmazione disattivata",pending:"In attesa del termostato",error:"Impossibile aggiornare il termostato: {error}"},room:{overridden:"Modifica manuale",overridden_until:"Vale fino al prossimo cambio di fascia, alle {time}: poi il programma riprende.",overridden_hint:"Vale fino al prossimo cambio di fascia: poi il programma riprende.",resume:"Torna al programma"},common:{cancel:"Annulla",save:"Salva",add:"Aggiungi",delete:"Elimina",close:"Chiudi",replace:"Sostituisci"},error:{save:"Impossibile salvare: {error}",resume:"Impossibile ripristinare il programma: {error}"}}},kt=(t,e)=>{let s=t;for(const t of e.split("."))s=s?.[t];return"string"==typeof s?s:void 0},zt=t=>{const e=wt[t]??wt[t.split("-")[0]];return(t,s)=>{let i=kt(e,t)??kt($t,t)??t;for(const[t,e]of Object.entries(s??{}))i=i.replaceAll(`{${t}}`,e);return i}},At=n`
+function e(e,t,s,i){var a,o=arguments.length,r=o<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,s,i);else for(var n=e.length-1;n>=0;n--)(a=e[n])&&(r=(o<3?a(r):o>3?a(t,s,r):a(t,s))||r);return o>3&&r&&Object.defineProperty(t,s,r),r}"function"==typeof SuppressedError&&SuppressedError;const t=globalThis,s=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),a=new WeakMap;let o=class{constructor(e,t,s){if(this._$cssResult$=!0,s!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=t}get styleSheet(){let e=this.o;const t=this.t;if(s&&void 0===e){const s=void 0!==t&&1===t.length;s&&(e=a.get(t)),void 0===e&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),s&&a.set(t,e))}return e}toString(){return this.cssText}};const r=e=>new o("string"==typeof e?e:e+"",void 0,i),n=(e,...t)=>{const s=1===e.length?e[0]:t.reduce((t,s,i)=>t+(e=>{if(!0===e._$cssResult$)return e.cssText;if("number"==typeof e)return e;throw Error("Value passed to 'css' function must be a 'css' function result: "+e+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+e[i+1],e[0]);return new o(s,e,i)},l=s?e=>e:e=>e instanceof CSSStyleSheet?(e=>{let t="";for(const s of e.cssRules)t+=s.cssText;return r(t)})(e):e,{is:d,defineProperty:c,getOwnPropertyDescriptor:h,getOwnPropertyNames:p,getOwnPropertySymbols:u,getPrototypeOf:m}=Object,g=globalThis,f=g.trustedTypes,b=f?f.emptyScript:"",y=g.reactiveElementPolyfillSupport,_=(e,t)=>e,v={toAttribute(e,t){switch(t){case Boolean:e=e?b:null;break;case Object:case Array:e=null==e?e:JSON.stringify(e)}return e},fromAttribute(e,t){let s=e;switch(t){case Boolean:s=null!==e;break;case Number:s=null===e?null:Number(e);break;case Object:case Array:try{s=JSON.parse(e)}catch(e){s=null}}return s}},x=(e,t)=>!d(e,t),$={attribute:!0,type:String,converter:v,reflect:!1,useDefault:!1,hasChanged:x};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,t=$){if(t.state&&(t.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((t=Object.create(t)).wrapped=!0),this.elementProperties.set(e,t),!t.noAccessor){const s=Symbol(),i=this.getPropertyDescriptor(e,s,t);void 0!==i&&c(this.prototype,e,i)}}static getPropertyDescriptor(e,t,s){const{get:i,set:a}=h(this.prototype,e)??{get(){return this[t]},set(e){this[t]=e}};return{get:i,set(t){const o=i?.call(this);a?.call(this,t),this.requestUpdate(e,o,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??$}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const e=m(this);e.finalize(),void 0!==e.l&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const e=this.properties,t=[...p(e),...u(e)];for(const s of t)this.createProperty(s,e[s])}const e=this[Symbol.metadata];if(null!==e){const t=litPropertyMetadata.get(e);if(void 0!==t)for(const[e,s]of t)this.elementProperties.set(e,s)}this._$Eh=new Map;for(const[e,t]of this.elementProperties){const s=this._$Eu(e,t);void 0!==s&&this._$Eh.set(s,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const t=[];if(Array.isArray(e)){const s=new Set(e.flat(1/0).reverse());for(const e of s)t.unshift(l(e))}else void 0!==e&&t.push(l(e));return t}static _$Eu(e,t){const s=t.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof e?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),void 0!==this.renderRoot&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,t=this.constructor.elementProperties;for(const s of t.keys())this.hasOwnProperty(s)&&(e.set(s,this[s]),delete this[s]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((e,i)=>{if(s)e.adoptedStyleSheets=i.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const s of i){const i=document.createElement("style"),a=t.litNonce;void 0!==a&&i.setAttribute("nonce",a),i.textContent=s.cssText,e.appendChild(i)}})(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,t,s){this._$AK(e,s)}_$ET(e,t){const s=this.constructor.elementProperties.get(e),i=this.constructor._$Eu(e,s);if(void 0!==i&&!0===s.reflect){const a=(void 0!==s.converter?.toAttribute?s.converter:v).toAttribute(t,s.type);this._$Em=e,null==a?this.removeAttribute(i):this.setAttribute(i,a),this._$Em=null}}_$AK(e,t){const s=this.constructor,i=s._$Eh.get(e);if(void 0!==i&&this._$Em!==i){const e=s.getPropertyOptions(i),a="function"==typeof e.converter?{fromAttribute:e.converter}:void 0!==e.converter?.fromAttribute?e.converter:v;this._$Em=i;const o=a.fromAttribute(t,e.type);this[i]=o??this._$Ej?.get(i)??o,this._$Em=null}}requestUpdate(e,t,s,i=!1,a){if(void 0!==e){const o=this.constructor;if(!1===i&&(a=this[e]),s??=o.getPropertyOptions(e),!((s.hasChanged??x)(a,t)||s.useDefault&&s.reflect&&a===this._$Ej?.get(e)&&!this.hasAttribute(o._$Eu(e,s))))return;this.C(e,t,s)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(e,t,{useDefault:s,reflect:i,wrapped:a},o){s&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,o??t??this[e]),!0!==a||void 0!==o)||(this._$AL.has(e)||(this.hasUpdated||s||(t=void 0),this._$AL.set(e,t)),!0===i&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const e=this.scheduleUpdate();return null!=e&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[e,t]of this._$Ep)this[e]=t;this._$Ep=void 0}const e=this.constructor.elementProperties;if(e.size>0)for(const[t,s]of e){const{wrapped:e}=s,i=this[t];!0!==e||this._$AL.has(t)||void 0===i||this.C(t,void 0,s,i)}}let e=!1;const t=this._$AL;try{e=this.shouldUpdate(t),e?(this.willUpdate(t),this._$EO?.forEach(e=>e.hostUpdate?.()),this.update(t)):this._$EM()}catch(t){throw e=!1,this._$EM(),t}e&&this._$AE(t)}willUpdate(e){}_$AE(e){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(e=>this._$ET(e,this[e])),this._$EM()}updated(e){}firstUpdated(e){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[_("elementProperties")]=new Map,w[_("finalized")]=new Map,y?.({ReactiveElement:w}),(g.reactiveElementVersions??=[]).push("2.1.2");const k=globalThis,z=e=>e,A=k.trustedTypes,S=A?A.createPolicy("lit-html",{createHTML:e=>e}):void 0,C="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,O="?"+E,H=`<${O}>`,M=document,T=()=>M.createComment(""),P=e=>null===e||"object"!=typeof e&&"function"!=typeof e,L=Array.isArray,V="[ \t\n\f\r]",D=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,N=/-->/g,I=/>/g,U=RegExp(`>|${V}(?:([^\\s"'>=/]+)(${V}*=${V}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),R=/'/g,j=/"/g,B=/^(?:script|style|textarea|title)$/i,F=(e=>(t,...s)=>({_$litType$:e,strings:t,values:s}))(1),Z=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),W=new WeakMap,X=M.createTreeWalker(M,129);function K(e,t){if(!L(e)||!e.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==S?S.createHTML(t):t}class J{constructor({strings:e,_$litType$:t},s){let i;this.parts=[];let a=0,o=0;const r=e.length-1,n=this.parts,[l,d]=((e,t)=>{const s=e.length-1,i=[];let a,o=2===t?"<svg>":3===t?"<math>":"",r=D;for(let t=0;t<s;t++){const s=e[t];let n,l,d=-1,c=0;for(;c<s.length&&(r.lastIndex=c,l=r.exec(s),null!==l);)c=r.lastIndex,r===D?"!--"===l[1]?r=N:void 0!==l[1]?r=I:void 0!==l[2]?(B.test(l[2])&&(a=RegExp("</"+l[2],"g")),r=U):void 0!==l[3]&&(r=U):r===U?">"===l[0]?(r=a??D,d=-1):void 0===l[1]?d=-2:(d=r.lastIndex-l[2].length,n=l[1],r=void 0===l[3]?U:'"'===l[3]?j:R):r===j||r===R?r=U:r===N||r===I?r=D:(r=U,a=void 0);const h=r===U&&e[t+1].startsWith("/>")?" ":"";o+=r===D?s+H:d>=0?(i.push(n),s.slice(0,d)+C+s.slice(d)+E+h):s+E+(-2===d?t:h)}return[K(e,o+(e[s]||"<?>")+(2===t?"</svg>":3===t?"</math>":"")),i]})(e,t);if(this.el=J.createElement(l,s),X.currentNode=this.el.content,2===t||3===t){const e=this.el.content.firstChild;e.replaceWith(...e.childNodes)}for(;null!==(i=X.nextNode())&&n.length<r;){if(1===i.nodeType){if(i.hasAttributes())for(const e of i.getAttributeNames())if(e.endsWith(C)){const t=d[o++],s=i.getAttribute(e).split(E),r=/([.?@])?(.*)/.exec(t);n.push({type:1,index:a,name:r[2],strings:s,ctor:"."===r[1]?te:"?"===r[1]?se:"@"===r[1]?ie:ee}),i.removeAttribute(e)}else e.startsWith(E)&&(n.push({type:6,index:a}),i.removeAttribute(e));if(B.test(i.tagName)){const e=i.textContent.split(E),t=e.length-1;if(t>0){i.textContent=A?A.emptyScript:"";for(let s=0;s<t;s++)i.append(e[s],T()),X.nextNode(),n.push({type:2,index:++a});i.append(e[t],T())}}}else if(8===i.nodeType)if(i.data===O)n.push({type:2,index:a});else{let e=-1;for(;-1!==(e=i.data.indexOf(E,e+1));)n.push({type:7,index:a}),e+=E.length-1}a++}}static createElement(e,t){const s=M.createElement("template");return s.innerHTML=e,s}}function Q(e,t,s=e,i){if(t===Z)return t;let a=void 0!==i?s._$Co?.[i]:s._$Cl;const o=P(t)?void 0:t._$litDirective$;return a?.constructor!==o&&(a?._$AO?.(!1),void 0===o?a=void 0:(a=new o(e),a._$AT(e,s,i)),void 0!==i?(s._$Co??=[])[i]=a:s._$Cl=a),void 0!==a&&(t=Q(e,a._$AS(e,t.values),a,i)),t}class G{constructor(e,t){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=t}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:t},parts:s}=this._$AD,i=(e?.creationScope??M).importNode(t,!0);X.currentNode=i;let a=X.nextNode(),o=0,r=0,n=s[0];for(;void 0!==n;){if(o===n.index){let t;2===n.type?t=new Y(a,a.nextSibling,this,e):1===n.type?t=new n.ctor(a,n.name,n.strings,this,e):6===n.type&&(t=new ae(a,this,e)),this._$AV.push(t),n=s[++r]}o!==n?.index&&(a=X.nextNode(),o++)}return X.currentNode=M,i}p(e){let t=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(e,s,t),t+=s.strings.length-2):s._$AI(e[t])),t++}}class Y{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,t,s,i){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=e,this._$AB=t,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const t=this._$AM;return void 0!==t&&11===e?.nodeType&&(e=t.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,t=this){e=Q(this,e,t),P(e)?e===q||null==e||""===e?(this._$AH!==q&&this._$AR(),this._$AH=q):e!==this._$AH&&e!==Z&&this._(e):void 0!==e._$litType$?this.$(e):void 0!==e.nodeType?this.T(e):(e=>L(e)||"function"==typeof e?.[Symbol.iterator])(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==q&&P(this._$AH)?this._$AA.nextSibling.data=e:this.T(M.createTextNode(e)),this._$AH=e}$(e){const{values:t,_$litType$:s}=e,i="number"==typeof s?this._$AC(e):(void 0===s.el&&(s.el=J.createElement(K(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(t);else{const e=new G(i,this),s=e.u(this.options);e.p(t),this.T(s),this._$AH=e}}_$AC(e){let t=W.get(e.strings);return void 0===t&&W.set(e.strings,t=new J(e)),t}k(e){L(this._$AH)||(this._$AH=[],this._$AR());const t=this._$AH;let s,i=0;for(const a of e)i===t.length?t.push(s=new Y(this.O(T()),this.O(T()),this,this.options)):s=t[i],s._$AI(a),i++;i<t.length&&(this._$AR(s&&s._$AB.nextSibling,i),t.length=i)}_$AR(e=this._$AA.nextSibling,t){for(this._$AP?.(!1,!0,t);e!==this._$AB;){const t=z(e).nextSibling;z(e).remove(),e=t}}setConnected(e){void 0===this._$AM&&(this._$Cv=e,this._$AP?.(e))}}class ee{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,t,s,i,a){this.type=1,this._$AH=q,this._$AN=void 0,this.element=e,this.name=t,this._$AM=i,this.options=a,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=q}_$AI(e,t=this,s,i){const a=this.strings;let o=!1;if(void 0===a)e=Q(this,e,t,0),o=!P(e)||e!==this._$AH&&e!==Z,o&&(this._$AH=e);else{const i=e;let r,n;for(e=a[0],r=0;r<a.length-1;r++)n=Q(this,i[s+r],t,r),n===Z&&(n=this._$AH[r]),o||=!P(n)||n!==this._$AH[r],n===q?e=q:e!==q&&(e+=(n??"")+a[r+1]),this._$AH[r]=n}o&&!i&&this.j(e)}j(e){e===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class te extends ee{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===q?void 0:e}}class se extends ee{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==q)}}class ie extends ee{constructor(e,t,s,i,a){super(e,t,s,i,a),this.type=5}_$AI(e,t=this){if((e=Q(this,e,t,0)??q)===Z)return;const s=this._$AH,i=e===q&&s!==q||e.capture!==s.capture||e.once!==s.once||e.passive!==s.passive,a=e!==q&&(s===q||i);i&&this.element.removeEventListener(this.name,this,s),a&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class ae{constructor(e,t,s){this.element=e,this.type=6,this._$AN=void 0,this._$AM=t,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(e){Q(this,e)}}const oe={I:Y},re=k.litHtmlPolyfillSupport;re?.(J,Y),(k.litHtmlVersions??=[]).push("3.3.3");const ne=globalThis;let le=class extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const t=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=((e,t,s)=>{const i=s?.renderBefore??t;let a=i._$litPart$;if(void 0===a){const e=s?.renderBefore??null;i._$litPart$=a=new Y(t.insertBefore(T(),e),e,void 0,s??{})}return a._$AI(e),a})(t,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return Z}};le._$litElement$=!0,le.finalized=!0,ne.litElementHydrateSupport?.({LitElement:le});const de=ne.litElementPolyfillSupport;de?.({LitElement:le}),(ne.litElementVersions??=[]).push("4.2.2");const ce={attribute:!0,type:String,converter:v,reflect:!1,hasChanged:x},he=(e=ce,t,s)=>{const{kind:i,metadata:a}=s;let o=globalThis.litPropertyMetadata.get(a);if(void 0===o&&globalThis.litPropertyMetadata.set(a,o=new Map),"setter"===i&&((e=Object.create(e)).wrapped=!0),o.set(s.name,e),"accessor"===i){const{name:i}=s;return{set(s){const a=t.get.call(this);t.set.call(this,s),this.requestUpdate(i,a,e,!0,s)},init(t){return void 0!==t&&this.C(i,void 0,e,t),t}}}if("setter"===i){const{name:i}=s;return function(s){const a=this[i];t.call(this,s),this.requestUpdate(i,a,e,!0,s)}}throw Error("Unsupported decorator location: "+i)};function pe(e){return(t,s)=>"object"==typeof s?he(e,t,s):((e,t,s)=>{const i=t.hasOwnProperty(s);return t.constructor.createProperty(s,e),i?Object.getOwnPropertyDescriptor(t,s):void 0})(e,t,s)}function ue(e){return pe({...e,state:!0,attribute:!1})}const me="smart_heating_schedule",ge=(e,t,s)=>e.callWS({type:`${me}/room/save`,entity_id:t,...s}),fe=(e,t)=>e.callWS({type:`${me}/seasons/save`,seasons:t}),be=(e,t,s)=>{e.dispatchEvent(new CustomEvent(t,{bubbles:!0,composed:!0,detail:s}))},ye=(e,t)=>{be(e,"hass-notification",{message:t})};let _e;const ve=(e,t)=>{const s=e.states[t]?.attributes.friendly_name;if(s)return s;const i=e.entities?.[t]?.device_id,a=i?e.devices?.[i]:void 0;return a?.name_by_user||a?.name||t},xe=e=>t=>{customElements.get(e)||customElements.define(e,t)},$e={title:"Heating schedule",loading:"Loading…",not_loaded:"The seasonal heating schedule is not set up. Add the integration under Settings → Devices & services.",read_only:"Only administrators can change schedules.",away:{label:"Away",active:"Away is on",preset:"The thermostat uses its away preset. The schedule resumes when you turn Away off.",temperature:"The thermostat keeps {temperature}. The schedule resumes when you turn Away off."},entity:{label:"Entity controlled by the schedule",add:"Add thermostat",choose:"Choose the thermostat to schedule",none_title:"Choose what to schedule",none_text:"Pick the climate entity of your boiler or thermostat. The schedule sets its temperature and turns it off outside the seasons.",no_thermostats:"All climate entities already have a schedule.",enabled:"Schedule active",remove:"Remove schedule",remove_text:"Stop scheduling {name} and delete its programs?",measured:"Measured {temperature}"},seasons:{title:"Seasons",subtitle:"Dates repeat every year and apply to all thermostats.",reset:"From Home Assistant",reset_title:"Use Home Assistant's seasons",reset_text:"Replace your seasons with winter, spring, summer and autumn as Home Assistant defines them. Programs of seasons that no longer exist are deleted.",new:"New",edit:"Edit {name}",select:"Show {name}",today:"today",outside:"Outside the seasons ({ranges}) heating is off",always:"The seasons cover the whole year",programs_one:"1 program",programs:"{count} programs",programs_none:"no programs: off"},season_dialog:{new:"New season",edit:"Edit season",name:"Name",color:"Color",start:"Start",end:"End",year:"The year is ignored: the season repeats every year.",wraps:"Runs across new year.",overlap:"Overlaps with {name}.",delete:"Delete season",delete_text:"Delete {name} and the programs in it?"},now:{title:"Now",scheduled:"requested",off:"Off",season:"Season",program:"Program",block:"Current block",next:"Next change",next_season:"Next season",none:"None",manual:"Scheduled temperature: {scheduled}",manual_off:"The schedule has the heating off now",manual_hint:"If you change the temperature by hand, it holds until the next block."},programs:{title:"Programs · {season}",legend:"Temperature colours",hint:"Tap a day to move it here. Tap a block to change its temperature and times.",new:"Program",new_name:"New program",every_day:"Every day",no_days:"No day selected",empty:"No programs in this season: heating is off.",uncovered:"No program on {days}: heating is off on those days.",duplicate:"Duplicate {name}",delete:"Delete {name}",delete_text:"Delete the program {name}?",rename:"Rename {name}",name:"Name",copy:"{name} (copy)",day_mine:"{day}: in this program",day_other:"{day}: in {program}, tap to move it here",day_free:"{day}: no program"},block:{hint:"Tap a block on the bar to edit it; use ‹ › to reach short blocks.",hint_touch:"Tap a block to edit it; − and + change its times. Use ‹ › to reach short blocks.",previous:"Previous block",next:"Next block",split:"Split",delete:"Delete block",close:"Close",lower:"Lower by {step}",raise:"Raise by {step}",off:"Off",start:"Start",end:"End",earlier:"{what} 15 minutes earlier",later:"{what} 15 minutes later",divider:"Change at {time}: drag, or use the left and right arrow keys",name:"Name",name_placeholder:"Optional, e.g. Wake up"},status:{until:"{temperature} until {time}",off_until:"Off until {time}",constant:"{temperature}",constant_off:"Off",named:"{name} · {status}",disabled:"Schedule is off",pending:"Waiting for the thermostat",error:"Could not update the thermostat: {error}"},room:{overridden:"Manual change",overridden_until:"It lasts until the next block, at {time}: then the schedule takes over again.",overridden_hint:"It lasts until the next block: then the schedule takes over again.",resume:"Back to the schedule"},common:{cancel:"Cancel",save:"Save",add:"Add",delete:"Delete",close:"Close",replace:"Replace"},error:{save:"Could not save: {error}",resume:"Could not restore the schedule: {error}"}},we={en:$e,it:{title:"Cronotermostato",loading:"Caricamento…",not_loaded:"Il cronotermostato stagionale non è configurato. Aggiungi l'integrazione in Impostazioni → Dispositivi e servizi.",read_only:"Solo gli amministratori possono modificare la programmazione.",away:{label:"Fuori casa",active:"Fuori casa attivo",preset:"Il termostato usa il suo preset Fuori casa. Il programma riprende quando disattivi Fuori casa.",temperature:"Il termostato tiene {temperature}. Il programma riprende quando disattivi Fuori casa."},entity:{label:"Entità comandata dalla programmazione",add:"Aggiungi termostato",choose:"Scegli il termostato da programmare",none_title:"Scegli cosa programmare",none_text:"Seleziona l'entità climate della caldaia o del termostato. Il programma ne imposta la temperatura e la spegne fuori stagione.",no_thermostats:"Tutte le entità climate hanno già una programmazione.",enabled:"Programmazione attiva",remove:"Rimuovi programmazione",remove_text:"Smettere di programmare {name} ed eliminare i suoi programmi?",measured:"Misurata {temperature}"},seasons:{title:"Stagioni",subtitle:"Le date si ripetono ogni anno e valgono per tutti i termostati.",reset:"Da Home Assistant",reset_title:"Usa le stagioni di Home Assistant",reset_text:"Sostituisce le tue stagioni con inverno, primavera, estate e autunno come li definisce Home Assistant. I programmi delle stagioni che non esistono più vengono eliminati.",new:"Nuova",edit:"Modifica {name}",select:"Mostra {name}",today:"oggi",outside:"Fuori stagione ({ranges}) la caldaia resta spenta",always:"Le stagioni coprono tutto l'anno",programs_one:"1 programma",programs:"{count} programmi",programs_none:"nessun programma: spento"},season_dialog:{new:"Nuova stagione",edit:"Modifica stagione",name:"Nome",color:"Colore",start:"Inizio",end:"Fine",year:"L'anno non conta: la stagione si ripete ogni anno.",wraps:"Attraversa il capodanno.",overlap:"Si sovrappone a {name}.",delete:"Elimina stagione",delete_text:"Eliminare {name} e i suoi programmi?"},now:{title:"Adesso",scheduled:"richiesti",off:"Spento",season:"Stagione",program:"Programma",block:"Fascia attuale",next:"Prossimo cambio",next_season:"Prossima stagione",none:"Nessuno",manual:"Temperatura del programma: {scheduled}",manual_off:"Secondo il programma la caldaia sarebbe spenta",manual_hint:"Se cambi la temperatura a mano, vale fino al prossimo cambio di fascia."},programs:{title:"Programmi · {season}",legend:"Colori delle temperature",hint:"Tocca un giorno per spostarlo qui. Tocca una fascia per cambiarne temperatura e orari.",new:"Programma",new_name:"Nuovo programma",every_day:"Tutti i giorni",no_days:"Nessun giorno selezionato",empty:"Nessun programma in questa stagione: la caldaia resta spenta.",uncovered:"Nessun programma per {days}: in quei giorni la caldaia resta spenta.",duplicate:"Duplica {name}",delete:"Elimina {name}",delete_text:"Eliminare il programma {name}?",rename:"Rinomina {name}",name:"Nome",copy:"{name} (copia)",day_mine:"{day}: in questo programma",day_other:"{day}: in {program}, tocca per spostarlo qui",day_free:"{day}: senza programma"},block:{hint:"Tocca una fascia nella barra per modificarla; con ‹ › raggiungi anche quelle più strette.",hint_touch:"Tocca una fascia per modificarla: con − e + cambi gli orari, con ‹ › passi alle fasce vicine.",previous:"Fascia precedente",next:"Fascia successiva",split:"Dividi",delete:"Elimina fascia",close:"Chiudi",lower:"Diminuisci di {step}",raise:"Aumenta di {step}",off:"Spento",start:"Inizio",end:"Fine",earlier:"{what} 15 minuti prima",later:"{what} 15 minuti dopo",divider:"Cambio alle {time}: trascina, oppure usa le frecce sinistra e destra",name:"Nome",name_placeholder:"Facoltativo, es. Risveglio"},status:{until:"{temperature} fino alle {time}",off_until:"Spento fino alle {time}",constant:"{temperature}",constant_off:"Spento",named:"{name} · {status}",disabled:"Programmazione disattivata",pending:"In attesa del termostato",error:"Impossibile aggiornare il termostato: {error}"},room:{overridden:"Modifica manuale",overridden_until:"Vale fino al prossimo cambio di fascia, alle {time}: poi il programma riprende.",overridden_hint:"Vale fino al prossimo cambio di fascia: poi il programma riprende.",resume:"Torna al programma"},common:{cancel:"Annulla",save:"Salva",add:"Aggiungi",delete:"Elimina",close:"Chiudi",replace:"Sostituisci"},error:{save:"Impossibile salvare: {error}",resume:"Impossibile ripristinare il programma: {error}"}}},ke=(e,t)=>{let s=e;for(const e of t.split("."))s=s?.[e];return"string"==typeof s?s:void 0},ze=e=>{const t=we[e]??we[e.split("-")[0]];return(e,s)=>{let i=ke(t,e)??ke($e,e)??e;for(const[e,t]of Object.entries(s??{}))i=i.replaceAll(`{${e}}`,t);return i}},Ae=n`
   :host {
     color: var(--primary-text-color);
   }
@@ -73,20 +73,20 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
     position: absolute;
     width: 1px;
   }
-`,St=(t,e,s,i=!1)=>customElements.get("ha-switch")?F`<ha-switch
-        .checked=${t}
+`,Se=(e,t,s,i=!1)=>customElements.get("ha-switch")?F`<ha-switch
+        .checked=${e}
         .disabled=${i}
         aria-label=${s}
-        @change=${t=>e(t.target.checked)}
+        @change=${e=>t(e.target.checked)}
       ></ha-switch>`:F`<input
         type="checkbox"
         role="switch"
         class="switch-fallback"
-        .checked=${t}
+        .checked=${e}
         ?disabled=${i}
         aria-label=${s}
-        @change=${t=>e(t.target.checked)}
-      />`,Ct=n`
+        @change=${e=>t(e.target.checked)}
+      />`,Ce=n`
   .toolbar {
     align-items: center;
     background: var(--app-header-background-color);
@@ -112,7 +112,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
   .toolbar ha-icon-button {
     color: inherit;
   }
-`;var Et="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z",Ot="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z",Ht="M19,13H5V11H19V13Z",Mt="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z",Tt="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z",Pt="M16.95,16.95L14.83,14.83C15.55,14.1 16,13.1 16,12C16,11.26 15.79,10.57 15.43,10L17.6,7.81C18.5,9 19,10.43 19,12C19,13.93 18.22,15.68 16.95,16.95M12,5C13.57,5 15,5.5 16.19,6.4L14,8.56C13.43,8.21 12.74,8 12,8A4,4 0 0,0 8,12C8,13.1 8.45,14.1 9.17,14.83L7.05,16.95C5.78,15.68 5,13.93 5,12A7,7 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z";const Lt=2,Vt=t=>(...e)=>({_$litDirective$:t,values:e});let Dt=class{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,s){this._$Ct=t,this._$AM=e,this._$Ci=s}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}};const{I:Nt}=ot,It=t=>t,Ut=()=>document.createComment(""),Rt=(t,e,s)=>{const i=t._$AA.parentNode,a=void 0===e?t._$AB:e._$AA;if(void 0===s){const e=i.insertBefore(Ut(),a),o=i.insertBefore(Ut(),a);s=new Nt(e,o,t,t.options)}else{const e=s._$AB.nextSibling,o=s._$AM,r=o!==t;if(r){let e;s._$AQ?.(t),s._$AM=t,void 0!==s._$AP&&(e=t._$AU)!==o._$AU&&s._$AP(e)}if(e!==a||r){let t=s._$AA;for(;t!==e;){const e=It(t).nextSibling;It(i).insertBefore(t,a),t=e}}}return s},jt=(t,e,s=t)=>(t._$AI(e,s),t),Bt={},Ft=(t,e=Bt)=>t._$AH=e,Zt=t=>{t._$AR(),t._$AA.remove()},qt=Vt(class extends Dt{constructor(){super(...arguments),this.key=q}render(t,e){return this.key=t,e}update(t,[e,s]){return e!==this.key&&(Ft(t),this.key=e),s}}),Wt=(t,e,s)=>{const i=new Map;for(let a=e;a<=s;a++)i.set(t[a],a);return i},Xt=Vt(class extends Dt{constructor(t){if(super(t),t.type!==Lt)throw Error("repeat() can only be used in text expressions")}dt(t,e,s){let i;void 0===s?s=e:void 0!==e&&(i=e);const a=[],o=[];let r=0;for(const e of t)a[r]=i?i(e,r):r,o[r]=s(e,r),r++;return{values:o,keys:a}}render(t,e,s){return this.dt(t,e,s).values}update(t,[e,s,i]){const a=(t=>t._$AH)(t),{values:o,keys:r}=this.dt(e,s,i);if(!Array.isArray(a))return this.ut=r,o;const n=this.ut??=[],l=[];let d,c,h=0,p=a.length-1,u=0,m=o.length-1;for(;h<=p&&u<=m;)if(null===a[h])h++;else if(null===a[p])p--;else if(n[h]===r[u])l[u]=jt(a[h],o[u]),h++,u++;else if(n[p]===r[m])l[m]=jt(a[p],o[m]),p--,m--;else if(n[h]===r[m])l[m]=jt(a[h],o[m]),Rt(t,l[m+1],a[h]),h++,m--;else if(n[p]===r[u])l[u]=jt(a[p],o[u]),Rt(t,a[h],a[p]),p--,u++;else if(void 0===d&&(d=Wt(r,u,m),c=Wt(n,h,p)),d.has(n[h]))if(d.has(n[p])){const e=c.get(r[u]),s=void 0!==e?a[e]:null;if(null===s){const e=Rt(t,a[h]);jt(e,o[u]),l[u]=e}else l[u]=jt(s,o[u]),Rt(t,a[h],s),a[e]=null;u++}else Zt(a[p]),p--;else Zt(a[h]),h++;for(;u<=m;){const e=Rt(t,l[m+1]);jt(e,o[u]),l[u++]=e}for(;h<=p;){const t=a[h++];null!==t&&Zt(t)}return this.ut=r,Ft(t,l),Z}}),Kt="°F",Jt={"°C":{min:5,max:30,step:.5},"°F":{min:41,max:86,step:1}},Qt=t=>Jt[t]??Jt["°C"],Gt=(t,e)=>{const s=Qt(e),i=t?.attributes??{};return{min:Number(i.min_temp??s.min),max:Number(i.max_temp??s.max),step:Number(i.target_temp_step||s.step)}},Yt=t=>t===Kt?68:20,te=(t,e)=>{const s=Math.round(t/e.step)*e.step;return Math.min(e.max,Math.max(e.min,Number(s.toFixed(2))))},ee=(t,e,s=Qt(e).step,i=!1,a)=>{const o=((t,e)=>e<1?e<.1?2:1:t===Kt?0:1)(e,s);return`${new Intl.NumberFormat(a,{minimumFractionDigits:i?0:o,maximumFractionDigits:o}).format(t)}°`},se=[{name:"cold",upTo:16,color:"#a9cbee"},{name:"cool",upTo:18,color:"#f5cf9a"},{name:"warm",upTo:20,color:"#ef9f5c"},{name:"hot",upTo:1/0,color:"#e5794a"}],ie="#d5d9df",ae=(t,e)=>{if(null===t)return`var(--shs-color-off, ${ie})`;const s=(i=((t,e)=>e===Kt?5*(t-32)/9:t)(t,e),se.find(t=>i<=t.upTo));var i;return`var(--shs-color-${s.name}, ${s.color})`};let oe=class extends lt{constructor(){super(...arguments),this.heading="",this.open=!1,this._previousFocus=null,this._keydown=t=>{"Escape"===t.key&&this.open&&(t.stopPropagation(),this._close())}}_close(){bt(this,"closed")}connectedCallback(){super.connectedCallback(),window.addEventListener("keydown",this._keydown)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("keydown",this._keydown)}updated(t){t.has("open")&&(this.open?(this._previousFocus=document.activeElement,this.renderRoot.querySelector(".surface")?.focus()):this._previousFocus instanceof HTMLElement&&this._previousFocus.focus())}render(){return this.open?F`
+`;var Ee="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z",Oe="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z",He="M19,13H5V11H19V13Z",Me="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z",Te="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z",Pe="M16.95,16.95L14.83,14.83C15.55,14.1 16,13.1 16,12C16,11.26 15.79,10.57 15.43,10L17.6,7.81C18.5,9 19,10.43 19,12C19,13.93 18.22,15.68 16.95,16.95M12,5C13.57,5 15,5.5 16.19,6.4L14,8.56C13.43,8.21 12.74,8 12,8A4,4 0 0,0 8,12C8,13.1 8.45,14.1 9.17,14.83L7.05,16.95C5.78,15.68 5,13.93 5,12A7,7 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z";const Le=2,Ve=e=>(...t)=>({_$litDirective$:e,values:t});let De=class{constructor(e){}get _$AU(){return this._$AM._$AU}_$AT(e,t,s){this._$Ct=e,this._$AM=t,this._$Ci=s}_$AS(e,t){return this.update(e,t)}update(e,t){return this.render(...t)}};const{I:Ne}=oe,Ie=e=>e,Ue=()=>document.createComment(""),Re=(e,t,s)=>{const i=e._$AA.parentNode,a=void 0===t?e._$AB:t._$AA;if(void 0===s){const t=i.insertBefore(Ue(),a),o=i.insertBefore(Ue(),a);s=new Ne(t,o,e,e.options)}else{const t=s._$AB.nextSibling,o=s._$AM,r=o!==e;if(r){let t;s._$AQ?.(e),s._$AM=e,void 0!==s._$AP&&(t=e._$AU)!==o._$AU&&s._$AP(t)}if(t!==a||r){let e=s._$AA;for(;e!==t;){const t=Ie(e).nextSibling;Ie(i).insertBefore(e,a),e=t}}}return s},je=(e,t,s=e)=>(e._$AI(t,s),e),Be={},Fe=(e,t=Be)=>e._$AH=t,Ze=e=>{e._$AR(),e._$AA.remove()},qe=Ve(class extends De{constructor(){super(...arguments),this.key=q}render(e,t){return this.key=e,t}update(e,[t,s]){return t!==this.key&&(Fe(e),this.key=t),s}}),We=(e,t,s)=>{const i=new Map;for(let a=t;a<=s;a++)i.set(e[a],a);return i},Xe=Ve(class extends De{constructor(e){if(super(e),e.type!==Le)throw Error("repeat() can only be used in text expressions")}dt(e,t,s){let i;void 0===s?s=t:void 0!==t&&(i=t);const a=[],o=[];let r=0;for(const t of e)a[r]=i?i(t,r):r,o[r]=s(t,r),r++;return{values:o,keys:a}}render(e,t,s){return this.dt(e,t,s).values}update(e,[t,s,i]){const a=(e=>e._$AH)(e),{values:o,keys:r}=this.dt(t,s,i);if(!Array.isArray(a))return this.ut=r,o;const n=this.ut??=[],l=[];let d,c,h=0,p=a.length-1,u=0,m=o.length-1;for(;h<=p&&u<=m;)if(null===a[h])h++;else if(null===a[p])p--;else if(n[h]===r[u])l[u]=je(a[h],o[u]),h++,u++;else if(n[p]===r[m])l[m]=je(a[p],o[m]),p--,m--;else if(n[h]===r[m])l[m]=je(a[h],o[m]),Re(e,l[m+1],a[h]),h++,m--;else if(n[p]===r[u])l[u]=je(a[p],o[u]),Re(e,a[h],a[p]),p--,u++;else if(void 0===d&&(d=We(r,u,m),c=We(n,h,p)),d.has(n[h]))if(d.has(n[p])){const t=c.get(r[u]),s=void 0!==t?a[t]:null;if(null===s){const t=Re(e,a[h]);je(t,o[u]),l[u]=t}else l[u]=je(s,o[u]),Re(e,a[h],s),a[t]=null;u++}else Ze(a[p]),p--;else Ze(a[h]),h++;for(;u<=m;){const t=Re(e,l[m+1]);je(t,o[u]),l[u++]=t}for(;h<=p;){const e=a[h++];null!==e&&Ze(e)}return this.ut=r,Fe(e,l),Z}}),Ke="°F",Je={"°C":{min:5,max:30,step:.5},"°F":{min:41,max:86,step:1}},Qe=e=>Je[e]??Je["°C"],Ge=(e,t)=>{const s=Qe(t),i=e?.attributes??{};return{min:Number(i.min_temp??s.min),max:Number(i.max_temp??s.max),step:Number(i.target_temp_step||s.step)}},Ye=e=>e===Ke?68:20,et=(e,t)=>{const s=Math.round(e/t.step)*t.step;return Math.min(t.max,Math.max(t.min,Number(s.toFixed(2))))},tt=(e,t,s=Qe(t).step,i=!1,a)=>{const o=((e,t)=>t<1?t<.1?2:1:e===Ke?0:1)(t,s);return`${new Intl.NumberFormat(a,{minimumFractionDigits:i?0:o,maximumFractionDigits:o}).format(e)}°`},st=[{name:"cold",upTo:16,color:"#a9cbee"},{name:"cool",upTo:18,color:"#f5cf9a"},{name:"warm",upTo:20,color:"#ef9f5c"},{name:"hot",upTo:1/0,color:"#e5794a"}],it="#d5d9df",at=(e,t)=>{if(null===e)return`var(--shs-color-off, ${it})`;const s=(i=((e,t)=>t===Ke?5*(e-32)/9:e)(e,t),st.find(e=>i<=e.upTo));var i;return`var(--shs-color-${s.name}, ${s.color})`};let ot=class extends le{constructor(){super(...arguments),this.heading="",this.open=!1,this._previousFocus=null,this._keydown=e=>{"Escape"===e.key&&this.open&&(e.stopPropagation(),this._close())}}_close(){be(this,"closed")}connectedCallback(){super.connectedCallback(),window.addEventListener("keydown",this._keydown)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("keydown",this._keydown)}updated(e){e.has("open")&&(this.open?(this._previousFocus=document.activeElement,this.renderRoot.querySelector(".surface")?.focus()):this._previousFocus instanceof HTMLElement&&this._previousFocus.focus())}render(){return this.open?F`
       <div class="scrim" @click=${this._close}></div>
       <div class="surface" role="dialog" aria-modal="true" aria-labelledby="heading" tabindex="-1">
         <h2 id="heading">${this.heading}</h2>
@@ -175,55 +175,55 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
     .spacer {
       flex: 1;
     }
-  `}};t([pt()],oe.prototype,"heading",void 0),t([pt({type:Boolean,reflect:!0})],oe.prototype,"open",void 0),oe=t([xt("shs-dialog")],oe);const re=15,ne=1440,le=["mon","tue","wed","thu","fri","sat","sun"],de=t=>{const[e,s]=t.split(":").map(Number);return 60*e+s},ce=t=>`${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}`,he=t=>t.map((e,s)=>({start:de(e.start),end:s+1<t.length?de(t[s+1].start):ne,temperature:e.temperature,...e.name?{name:e.name}:{}})),pe=(t,e)=>{if(t.length<=1)return t;const s=he(t),i=s[e];return e>0?s[e-1]={...s[e-1],end:i.end}:s[1]={...s[1],start:0},(t=>t.filter(t=>t.end>t.start).sort((t,e)=>t.start-e.start).map(t=>{const e={start:ce(t.start),temperature:t.temperature};return t.name&&(e.name=t.name),e}))(s.filter((t,s)=>s!==e))},ue=(t,e,s)=>{if(e<=0||e>=t.length)return t;const i=he(t),a=i[e-1].start+re,o=i[e].end-re,r=Math.round(s/re)*re,n=Math.min(o,Math.max(a,r));return t.map((t,s)=>s===e?{...t,start:ce(n)}:t)},me=(t,e,s)=>t.map((t,i)=>i===e?{...t,temperature:s}:t),ge=t=>{const e=t.locale.time_format;if("12"===e)return!0;if("24"===e)return!1;const s="system"===e?void 0:t.locale.language;return new Intl.DateTimeFormat(s,{hour:"numeric"}).resolvedOptions().hour12??!1},fe=(t,e,s=!1)=>{if(!e&&s&&t===ne)return"24:00";const i=t%ne,a=Math.floor(i/60),o=String(i%60).padStart(2,"0");if(e){return`${a%12||12}:${o} ${a<12?"AM":"PM"}`}return`${s?a:String(a).padStart(2,"0")}:${o}`},be={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6},ye=(t,e)=>{let s;try{s=new Intl.DateTimeFormat("en-US",{timeZone:e,weekday:"short",hour:"numeric",minute:"numeric",hourCycle:"h23"}).formatToParts(t)}catch{return ye(t)}const i=t=>s.find(e=>e.type===t)?.value??"0";return{weekday:be[i("weekday")]??0,minutes:60*Number(i("hour"))+Number(i("minute"))}},_e=(t,e,s)=>fe(ye(new Date(t),s).minutes,e),ve=new Date(2024,0,1),xe=(t,e,s="long")=>{const i=new Date(ve);i.setDate(ve.getDate()+e);const a=new Intl.DateTimeFormat(t,{weekday:s}).format(i);return a.charAt(0).toUpperCase()+a.slice(1)};let $e=class extends lt{constructor(){super(...arguments),this.blocks=[],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null,this._selected=null,this._drag=null,this._width=0,this._resize=new ResizeObserver(t=>{this._width=t[0]?.contentRect.width??0})}connectedCallback(){super.connectedCallback(),this._resize.observe(this)}disconnectedCallback(){super.disconnectedCallback(),this._resize.disconnect()}willUpdate(t){t.has("blocks")&&null!==this._selected&&this._selected>=this.blocks.length&&(this._selected=this.blocks.length-1)}get _step(){return Math.max(this.limits.step,this.unit===Kt?1:.5)}get _blocks(){return this._drag?.blocks??this.blocks}_emit(t,e=!0){bt(this,"blocks-changed",{blocks:t,final:e})}_select(t){this._selected=this._selected===t?null:t}get _touch(){return window.matchMedia?.("(pointer: coarse)").matches??!1}_tap(t,e){if(0===t.detail)return void this._select(e);const s=this.renderRoot.querySelector(".track").getBoundingClientRect(),i=14/s.width*ne,a=(t.clientX-s.left)/s.width*ne,o=he(this.blocks);let r=e;for(const[t,e]of o.entries()){const s=e.start<=a+i&&e.end>=a-i,n=e.end-e.start;s&&n<o[r].end-o[r].start&&(r=t)}this._select(r)}_minutesAt(t){const e=this.renderRoot.querySelector(".track").getBoundingClientRect();return(t-e.left)/e.width*ne}_pointerDown(t,e){if(this.readOnly||t.button>0)return;t.preventDefault();const s=t.currentTarget;s.setPointerCapture?.(t.pointerId),s.focus();const i=this.blocks;this._drag={index:e,blocks:i};const a=t=>{if(!this._drag)return;const s=ue(i,e,this._minutesAt(t.clientX));s[e].start!==this._drag.blocks[e].start&&(this._drag={index:e,blocks:s})},o=()=>{s.removeEventListener("pointermove",a),s.removeEventListener("pointerup",o),s.removeEventListener("pointercancel",o);const t=this._drag?.blocks??i;this._drag=null,t[e].start!==i[e].start&&this.blocks.length===i.length&&this._emit(ue(this.blocks,e,de(t[e].start)))};s.addEventListener("pointermove",a),s.addEventListener("pointerup",o),s.addEventListener("pointercancel",o)}_dividerKey(t,e,s){const i={ArrowLeft:-15,ArrowDown:-15,ArrowRight:re,ArrowUp:re}[t.key];i&&!this.readOnly&&(t.preventDefault(),this._emit(ue(this.blocks,e,s+i)))}_changeTemperature(t,e){const s=this.blocks[t].temperature??Yt(this.unit),i={...this.limits,step:this._step};this._emit(me(this.blocks,t,te(s+e*this._step,i)))}_toggleOff(t,e){const s=e?null:te(Yt(this.unit),{...this.limits,step:this._step});this._emit(me(this.blocks,t,s))}_rename(t,e){(this.blocks[t].name??"")!==e.trim()&&this._emit(((t,e,s)=>t.map((t,i)=>{if(i!==e)return t;const a=s.trim().slice(0,30),{name:o,...r}=t;return a?{...r,name:a}:r}))(this.blocks,t,e))}_split(t){const e=((t,e)=>{const s=he(t)[e];if(!s||s.end-s.start<30)return null;const i=Math.round((s.start+s.end)/2/re)*re,a=[...t];return a.splice(e+1,0,{start:ce(i),temperature:s.temperature}),a})(this.blocks,t);e&&(this._selected=t+1,this._emit(e))}_delete(t){this._selected=Math.max(0,t-1),this._emit(pe(this.blocks,t))}_time(t){return t!==ne||this.h12?fe(t,this.h12):"24:00"}_label(t,e=!0){return null===t?this.localize("block.off"):ee(t,this.unit,this._step,e,this.language)}render(){const t=he(this._blocks),e=t.slice(1).map((t,e)=>({index:e+1,minutes:t.start})),s=this._selected,i=t=>this._drag?.index===t||t===s||null!==s&&t===s+1,a=this._width?40/this._width*ne:0,o=[];for(const t of e){const e=o[o.length-1];if(e&&t.minutes-e.minutes<a){if(!i(t.index)||i(e.index))continue;o.pop()}o.push(t)}return F`
+  `}};e([pe()],ot.prototype,"heading",void 0),e([pe({type:Boolean,reflect:!0})],ot.prototype,"open",void 0),ot=e([xe("shs-dialog")],ot);const rt=15,nt=1440,lt=["mon","tue","wed","thu","fri","sat","sun"],dt=e=>{const[t,s]=e.split(":").map(Number);return 60*t+s},ct=e=>`${String(Math.floor(e/60)).padStart(2,"0")}:${String(e%60).padStart(2,"0")}`,ht=e=>e.map((t,s)=>({start:dt(t.start),end:s+1<e.length?dt(e[s+1].start):nt,temperature:t.temperature,...t.name?{name:t.name}:{}})),pt=(e,t)=>{if(e.length<=1)return e;const s=ht(e),i=s[t];return t>0?s[t-1]={...s[t-1],end:i.end}:s[1]={...s[1],start:0},(e=>e.filter(e=>e.end>e.start).sort((e,t)=>e.start-t.start).map(e=>{const t={start:ct(e.start),temperature:e.temperature};return e.name&&(t.name=e.name),t}))(s.filter((e,s)=>s!==t))},ut=(e,t,s)=>{if(t<=0||t>=e.length)return e;const i=ht(e),a=i[t-1].start+rt,o=i[t].end-rt,r=Math.round(s/rt)*rt,n=Math.min(o,Math.max(a,r));return e.map((e,s)=>s===t?{...e,start:ct(n)}:e)},mt=(e,t,s)=>e.map((e,i)=>i===t?{...e,temperature:s}:e),gt=e=>{const t=e.locale.time_format;if("12"===t)return!0;if("24"===t)return!1;const s="system"===t?void 0:e.locale.language;return new Intl.DateTimeFormat(s,{hour:"numeric"}).resolvedOptions().hour12??!1},ft=(e,t,s=!1)=>{if(!t&&s&&e===nt)return"24:00";const i=e%nt,a=Math.floor(i/60),o=String(i%60).padStart(2,"0");if(t){return`${a%12||12}:${o} ${a<12?"AM":"PM"}`}return`${s?a:String(a).padStart(2,"0")}:${o}`},bt={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6},yt=(e,t)=>{let s;try{s=new Intl.DateTimeFormat("en-US",{timeZone:t,weekday:"short",hour:"numeric",minute:"numeric",hourCycle:"h23"}).formatToParts(e)}catch{return yt(e)}const i=e=>s.find(t=>t.type===e)?.value??"0";return{weekday:bt[i("weekday")]??0,minutes:60*Number(i("hour"))+Number(i("minute"))}},_t=(e,t,s)=>ft(yt(new Date(e),s).minutes,t),vt=new Date(2024,0,1),xt=(e,t,s="long")=>{const i=new Date(vt);i.setDate(vt.getDate()+t);const a=new Intl.DateTimeFormat(e,{weekday:s}).format(i);return a.charAt(0).toUpperCase()+a.slice(1)};let $t=class extends le{constructor(){super(...arguments),this.blocks=[],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null,this._selected=null,this._drag=null,this._width=0,this._resize=new ResizeObserver(e=>{this._width=e[0]?.contentRect.width??0})}connectedCallback(){super.connectedCallback(),this._resize.observe(this)}disconnectedCallback(){super.disconnectedCallback(),this._resize.disconnect()}willUpdate(e){e.has("blocks")&&null!==this._selected&&this._selected>=this.blocks.length&&(this._selected=this.blocks.length-1)}get _step(){return Math.max(this.limits.step,this.unit===Ke?1:.5)}get _blocks(){return this._drag?.blocks??this.blocks}_emit(e,t=!0){be(this,"blocks-changed",{blocks:e,final:t})}_select(e){this._selected=this._selected===e?null:e}get _touch(){return window.matchMedia?.("(pointer: coarse)").matches??!1}_tap(e,t){if(0===e.detail)return void this._select(t);const s=this.renderRoot.querySelector(".track").getBoundingClientRect(),i=14/s.width*nt,a=(e.clientX-s.left)/s.width*nt,o=ht(this.blocks);let r=t;for(const[e,t]of o.entries()){const s=t.start<=a+i&&t.end>=a-i,n=t.end-t.start;s&&n<o[r].end-o[r].start&&(r=e)}this._select(r)}_minutesAt(e){const t=this.renderRoot.querySelector(".track").getBoundingClientRect();return(e-t.left)/t.width*nt}_pointerDown(e,t){if(this.readOnly||e.button>0)return;e.preventDefault();const s=e.currentTarget;s.setPointerCapture?.(e.pointerId),s.focus();const i=this.blocks;this._drag={index:t,blocks:i};const a=e=>{if(!this._drag)return;const s=ut(i,t,this._minutesAt(e.clientX));s[t].start!==this._drag.blocks[t].start&&(this._drag={index:t,blocks:s})},o=()=>{s.removeEventListener("pointermove",a),s.removeEventListener("pointerup",o),s.removeEventListener("pointercancel",o);const e=this._drag?.blocks??i;this._drag=null,e[t].start!==i[t].start&&this.blocks.length===i.length&&this._emit(ut(this.blocks,t,dt(e[t].start)))};s.addEventListener("pointermove",a),s.addEventListener("pointerup",o),s.addEventListener("pointercancel",o)}_dividerKey(e,t,s){const i={ArrowLeft:-15,ArrowDown:-15,ArrowRight:rt,ArrowUp:rt}[e.key];i&&!this.readOnly&&(e.preventDefault(),this._emit(ut(this.blocks,t,s+i)))}_changeTemperature(e,t){const s=this.blocks[e].temperature??Ye(this.unit),i={...this.limits,step:this._step};this._emit(mt(this.blocks,e,et(s+t*this._step,i)))}_toggleOff(e,t){const s=t?null:et(Ye(this.unit),{...this.limits,step:this._step});this._emit(mt(this.blocks,e,s))}_rename(e,t){(this.blocks[e].name??"")!==t.trim()&&this._emit(((e,t,s)=>e.map((e,i)=>{if(i!==t)return e;const a=s.trim().slice(0,30),{name:o,...r}=e;return a?{...r,name:a}:r}))(this.blocks,e,t))}_split(e){const t=((e,t)=>{const s=ht(e)[t];if(!s||s.end-s.start<30)return null;const i=Math.round((s.start+s.end)/2/rt)*rt,a=[...e];return a.splice(t+1,0,{start:ct(i),temperature:s.temperature}),a})(this.blocks,e);t&&(this._selected=e+1,this._emit(t))}_delete(e){this._selected=Math.max(0,e-1),this._emit(pt(this.blocks,e))}_time(e){return e!==nt||this.h12?ft(e,this.h12):"24:00"}_label(e,t=!0){return null===e?this.localize("block.off"):tt(e,this.unit,this._step,t,this.language)}render(){const e=ht(this._blocks),t=e.slice(1).map((e,t)=>({index:t+1,minutes:e.start})),s=this._selected,i=e=>this._drag?.index===e||e===s||null!==s&&e===s+1,a=this._width?40/this._width*nt:0,o=[];for(const e of t){const t=o[o.length-1];if(t&&e.minutes-t.minutes<a){if(!i(e.index)||i(t.index))continue;o.pop()}o.push(e)}return F`
       <div class="labels" aria-hidden="true">
-        ${o.map(({index:t,minutes:e})=>F`<span class=${i(t)?"active":""} style="left:${e/ne*100}%"
-              >${fe(e,this.h12)}</span
+        ${o.map(({index:e,minutes:t})=>F`<span class=${i(e)?"active":""} style="left:${t/nt*100}%"
+              >${ft(t,this.h12)}</span
             >`)}
       </div>
       <div class="track">
         <div class="bar">
-          ${t.map((t,e)=>{const i=this._label(t.temperature),a=`${this._time(t.start)} – ${this._time(t.end)}`,o=t.name?`${t.name}, `:"";return F`<button
-              class="block ${e===s?"selected":""} ${null===t.temperature?"off":""}"
-              style="left:${t.start/ne*100}%;width:${(t.end-t.start)/ne*100}%;--block-color:${ae(t.temperature,this.unit)}"
-              aria-pressed=${e===s}
+          ${e.map((e,t)=>{const i=this._label(e.temperature),a=`${this._time(e.start)} – ${this._time(e.end)}`,o=e.name?`${e.name}, `:"";return F`<button
+              class="block ${t===s?"selected":""} ${null===e.temperature?"off":""}"
+              style="left:${e.start/nt*100}%;width:${(e.end-e.start)/nt*100}%;--block-color:${at(e.temperature,this.unit)}"
+              aria-pressed=${t===s}
               aria-label="${o}${a}, ${i}"
-              title=${t.name??q}
-              @click=${t=>this._tap(t,e)}
+              title=${e.name??q}
+              @click=${e=>this._tap(e,t)}
             >
               <span class="text"
-                >${t.name?F`<span class="name">${t.name}</span>`:q}<span>${i}</span></span
+                >${e.name?F`<span class="name">${e.name}</span>`:q}<span>${i}</span></span
               >
             </button>`})}
         </div>
-        ${this.readOnly||this._touch?q:e.map(({index:t,minutes:e})=>F`<button
-                class="divider ${i(t)?"active":""}"
-                style="left:${e/ne*100}%"
-                aria-label=${this.localize("block.divider",{time:fe(e,this.h12)})}
-                @pointerdown=${e=>this._pointerDown(e,t)}
-                @keydown=${s=>this._dividerKey(s,t,e)}
+        ${this.readOnly||this._touch?q:t.map(({index:e,minutes:t})=>F`<button
+                class="divider ${i(e)?"active":""}"
+                style="left:${t/nt*100}%"
+                aria-label=${this.localize("block.divider",{time:ft(t,this.h12)})}
+                @pointerdown=${t=>this._pointerDown(t,e)}
+                @keydown=${s=>this._dividerKey(s,e,t)}
               >
                 <span></span>
               </button>`)}
-        ${null!==s&&t[s]?F`<div
+        ${null!==s&&e[s]?F`<div
               class="selection"
               aria-hidden="true"
-              style="--center:${(t[s].start+t[s].end)/2/ne*100}%;--width:${(t[s].end-t[s].start)/ne*100}%"
+              style="--center:${(e[s].start+e[s].end)/2/nt*100}%;--width:${(e[s].end-e[s].start)/nt*100}%"
             ></div>`:q}
-        ${null===this.now?q:F`<div class="now" style="left:${this.now/ne*100}%" aria-hidden="true"></div>`}
+        ${null===this.now?q:F`<div class="now" style="left:${this.now/nt*100}%" aria-hidden="true"></div>`}
       </div>
       <div class="ticks" aria-hidden="true">
-        ${[0,6,12,18,24].map(t=>F`<span>${this.h12?fe(60*t,!0,!0):String(t).padStart(2,"0")}</span>`)}
+        ${[0,6,12,18,24].map(e=>F`<span>${this.h12?ft(60*e,!0,!0):String(e).padStart(2,"0")}</span>`)}
       </div>
-      ${null===s||this.readOnly?this.readOnly?q:F`<p class="hint secondary">${this.localize(this._touch?"block.hint_touch":"block.hint")}</p>`:this._renderEditor(t,s)}
-    `}_renderEditor(t,e){const s=t[e];if(!s)return q;const i=null===s.temperature,a=0===e,o=e===t.length-1,r=ee(this._step,this.unit,this._step,!0,this.language),n=this.localize("block.start"),l=this.localize("block.end"),d=`${this._time(s.start)} – ${this._time(s.end)}`,c=s.temperature;return F`<div class="editor" style="--block-color:${ae(s.temperature,this.unit)}">
+      ${null===s||this.readOnly?this.readOnly?q:F`<p class="hint secondary">${this.localize(this._touch?"block.hint_touch":"block.hint")}</p>`:this._renderEditor(e,s)}
+    `}_renderEditor(e,t){const s=e[t];if(!s)return q;const i=null===s.temperature,a=0===t,o=t===e.length-1,r=tt(this._step,this.unit,this._step,!0,this.language),n=this.localize("block.start"),l=this.localize("block.end"),d=`${this._time(s.start)} – ${this._time(s.end)}`,c=s.temperature;return F`<div class="editor" style="--block-color:${at(s.temperature,this.unit)}">
       <div class="editor-header">
         <button
           class="plain icon"
           ?disabled=${a}
           aria-label=${this.localize("block.previous")}
           title=${this.localize("block.previous")}
-          @click=${()=>this._selected=e-1}
+          @click=${()=>this._selected=t-1}
         >
           <ha-svg-icon .path=${"M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"}></ha-svg-icon>
         </button>
@@ -234,7 +234,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           ?disabled=${o}
           aria-label=${this.localize("block.next")}
           title=${this.localize("block.next")}
-          @click=${()=>this._selected=e+1}
+          @click=${()=>this._selected=t+1}
         >
           <ha-svg-icon .path=${"M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"}></ha-svg-icon>
         </button>
@@ -244,19 +244,19 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           aria-label=${this.localize("block.split")}
           title=${this.localize("block.split")}
           ?disabled=${s.end-s.start<30}
-          @click=${()=>this._split(e)}
+          @click=${()=>this._split(t)}
         >
           <ha-svg-icon .path=${"M18,16V13H15V22H13V2H15V11H18V8L22,12L18,16M2,12L6,16V13H9V22H11V2H9V11H6V8L2,12Z"}></ha-svg-icon
           ><span class="split-label">${this.localize("block.split")}</span>
         </button>
         <button
           class="outlined icon danger"
-          ?disabled=${t.length<2}
+          ?disabled=${e.length<2}
           aria-label=${this.localize("block.delete")}
           title=${this.localize("block.delete")}
-          @click=${()=>this._delete(e)}
+          @click=${()=>this._delete(t)}
         >
-          <ha-svg-icon .path=${Ot}></ha-svg-icon>
+          <ha-svg-icon .path=${Oe}></ha-svg-icon>
         </button>
         <button
           class="plain icon"
@@ -274,8 +274,8 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           maxlength=${30}
           .value=${s.name??""}
           placeholder=${this.localize("block.name_placeholder")}
-          @change=${t=>this._rename(e,t.target.value)}
-          @keydown=${t=>{"Enter"===t.key&&t.target.blur()}}
+          @change=${e=>this._rename(t,e.target.value)}
+          @keydown=${e=>{"Enter"===e.key&&e.target.blur()}}
         />
       </label>
       <div class="controls">
@@ -284,50 +284,50 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
             class="round"
             ?disabled=${i||null!==c&&c<=this.limits.min}
             aria-label=${this.localize("block.lower",{step:r})}
-            @click=${()=>this._changeTemperature(e,-1)}
+            @click=${()=>this._changeTemperature(t,-1)}
           >
-            <ha-svg-icon .path=${Ht}></ha-svg-icon>
+            <ha-svg-icon .path=${He}></ha-svg-icon>
           </button>
           <span class="temperature" aria-live="polite">${this._label(c,!1)}</span>
           <button
             class="round"
             ?disabled=${i||null!==c&&c>=this.limits.max}
             aria-label=${this.localize("block.raise",{step:r})}
-            @click=${()=>this._changeTemperature(e,1)}
+            @click=${()=>this._changeTemperature(t,1)}
           >
-            <ha-svg-icon .path=${Tt}></ha-svg-icon>
+            <ha-svg-icon .path=${Te}></ha-svg-icon>
           </button>
           <label class="off">
             <input
               type="checkbox"
               .checked=${i}
-              @change=${t=>this._toggleOff(e,t.target.checked)}
+              @change=${e=>this._toggleOff(t,e.target.checked)}
             />${this.localize("block.off")}
           </label>
         </div>
-        ${this._renderTime(n,s.start,a,t=>this._emit(ue(this.blocks,e,t)))}
-        ${this._renderTime(l,s.end,o,t=>this._emit(ue(this.blocks,e+1,t)))}
+        ${this._renderTime(n,s.start,a,e=>this._emit(ut(this.blocks,t,e)))}
+        ${this._renderTime(l,s.end,o,e=>this._emit(ut(this.blocks,t+1,e)))}
       </div>
-    </div>`}_renderTime(t,e,s,i){return F`<div class="group time">
-      <span class="time-label secondary">${t}</span>
+    </div>`}_renderTime(e,t,s,i){return F`<div class="group time">
+      <span class="time-label secondary">${e}</span>
       <button
         class="outlined small"
         ?disabled=${s}
-        aria-label=${this.localize("block.earlier",{what:t})}
-        @click=${()=>i(e-re)}
+        aria-label=${this.localize("block.earlier",{what:e})}
+        @click=${()=>i(t-rt)}
       >
-        <ha-svg-icon .path=${Ht}></ha-svg-icon>
+        <ha-svg-icon .path=${He}></ha-svg-icon>
       </button>
-      <span class="time-value">${this._time(e)}</span>
+      <span class="time-value">${this._time(t)}</span>
       <button
         class="outlined small"
         ?disabled=${s}
-        aria-label=${this.localize("block.later",{what:t})}
-        @click=${()=>i(e+re)}
+        aria-label=${this.localize("block.later",{what:e})}
+        @click=${()=>i(t+rt)}
       >
-        <ha-svg-icon .path=${Tt}></ha-svg-icon>
+        <ha-svg-icon .path=${Te}></ha-svg-icon>
       </button>
-    </div>`}static{this.styles=[At,n`
+    </div>`}static{this.styles=[Ae,n`
       :host {
         display: block;
         user-select: none;
@@ -680,40 +680,40 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       ha-svg-icon {
         --mdc-icon-size: 18px;
       }
-    `]}};t([pt({attribute:!1})],$e.prototype,"blocks",void 0),t([pt()],$e.prototype,"unit",void 0),t([pt({attribute:!1})],$e.prototype,"limits",void 0),t([pt({type:Boolean})],$e.prototype,"canTurnOff",void 0),t([pt()],$e.prototype,"language",void 0),t([pt({type:Boolean})],$e.prototype,"h12",void 0),t([pt({type:Boolean})],$e.prototype,"readOnly",void 0),t([pt({attribute:!1})],$e.prototype,"now",void 0),t([pt({attribute:!1})],$e.prototype,"localize",void 0),t([ut()],$e.prototype,"_selected",void 0),t([ut()],$e.prototype,"_drag",void 0),t([ut()],$e.prototype,"_width",void 0),$e=t([xt("shs-timeline-editor")],$e);let we=class extends lt{constructor(){super(...arguments),this.others=[],this.days=[...le],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null}_dayName(t,e="long"){const s=le.indexOf(t);return"narrow"===e?new Intl.DateTimeFormat(this.language,{weekday:"narrow"}).format(new Date(2024,0,1+s)):xe(this.language,s,e)}_daysLabel(){const{days:t}=this.program;return 7===t.length?this.localize("programs.every_day"):t.length?this.days.filter(e=>t.includes(e)).map(t=>this._dayName(t,"short")).join(" · "):this.localize("programs.no_days")}render(){const t=this.program.name;return F`
+    `]}};e([pe({attribute:!1})],$t.prototype,"blocks",void 0),e([pe()],$t.prototype,"unit",void 0),e([pe({attribute:!1})],$t.prototype,"limits",void 0),e([pe({type:Boolean})],$t.prototype,"canTurnOff",void 0),e([pe()],$t.prototype,"language",void 0),e([pe({type:Boolean})],$t.prototype,"h12",void 0),e([pe({type:Boolean})],$t.prototype,"readOnly",void 0),e([pe({attribute:!1})],$t.prototype,"now",void 0),e([pe({attribute:!1})],$t.prototype,"localize",void 0),e([ue()],$t.prototype,"_selected",void 0),e([ue()],$t.prototype,"_drag",void 0),e([ue()],$t.prototype,"_width",void 0),$t=e([xe("shs-timeline-editor")],$t);let wt=class extends le{constructor(){super(...arguments),this.others=[],this.days=[...lt],this.unit="°C",this.limits={min:5,max:30,step:.5},this.canTurnOff=!0,this.language="en",this.h12=!1,this.readOnly=!1,this.now=null}_dayName(e,t="long"){const s=lt.indexOf(e);return"narrow"===t?new Intl.DateTimeFormat(this.language,{weekday:"narrow"}).format(new Date(2024,0,1+s)):xt(this.language,s,t)}_daysLabel(){const{days:e}=this.program;return 7===e.length?this.localize("programs.every_day"):e.length?this.days.filter(t=>e.includes(t)).map(e=>this._dayName(e,"short")).join(" · "):this.localize("programs.no_days")}render(){const e=this.program.name;return F`
       <ha-card>
         <div class="header">
           <div class="title">
-            <h3>${t}</h3>
+            <h3>${e}</h3>
             <span class="secondary">${this._daysLabel()}</span>
           </div>
           ${this.readOnly?q:F`<ha-icon-button
-                  .path=${Mt}
-                  .label=${this.localize("programs.rename",{name:t})}
-                  @click=${()=>bt(this,"rename")}
+                  .path=${Me}
+                  .label=${this.localize("programs.rename",{name:e})}
+                  @click=${()=>be(this,"rename")}
                 ></ha-icon-button>
                 <ha-icon-button
                   .path=${"M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"}
-                  .label=${this.localize("programs.duplicate",{name:t})}
-                  @click=${()=>bt(this,"duplicate")}
+                  .label=${this.localize("programs.duplicate",{name:e})}
+                  @click=${()=>be(this,"duplicate")}
                 ></ha-icon-button>
                 <ha-icon-button
-                  .path=${Ot}
-                  .label=${this.localize("programs.delete",{name:t})}
-                  @click=${()=>bt(this,"delete")}
+                  .path=${Oe}
+                  .label=${this.localize("programs.delete",{name:e})}
+                  @click=${()=>be(this,"delete")}
                 ></ha-icon-button>`}
         </div>
 
         <div class="days" role="group" aria-label=${this._daysLabel()}>
-          ${this.days.map(t=>{const e=this.program.days.includes(t),s=e?void 0:this.others.find(e=>e.days.includes(t)),i=this._dayName(t),a=e?this.localize("programs.day_mine",{day:i}):s?this.localize("programs.day_other",{day:i,program:s.name}):this.localize("programs.day_free",{day:i});return F`<button
-              class="day ${e?"mine":s?"other":"free"}"
-              aria-pressed=${e}
+          ${this.days.map(e=>{const t=this.program.days.includes(e),s=t?void 0:this.others.find(t=>t.days.includes(e)),i=this._dayName(e),a=t?this.localize("programs.day_mine",{day:i}):s?this.localize("programs.day_other",{day:i,program:s.name}):this.localize("programs.day_free",{day:i});return F`<button
+              class="day ${t?"mine":s?"other":"free"}"
+              aria-pressed=${t}
               aria-label=${a}
               title=${a}
               ?disabled=${this.readOnly}
-              @click=${()=>bt(this,"day-toggled",{day:t})}
+              @click=${()=>be(this,"day-toggled",{day:e})}
             >
-              ${this._dayName(t,"narrow")}
+              ${this._dayName(e,"narrow")}
             </button>`})}
         </div>
 
@@ -729,7 +729,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           .localize=${this.localize}
         ></shs-timeline-editor>
       </ha-card>
-    `}static{this.styles=[At,n`
+    `}static{this.styles=[Ae,n`
       :host {
         display: block;
       }
@@ -805,7 +805,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       .day[disabled] {
         cursor: default;
       }
-    `]}};t([pt({attribute:!1})],we.prototype,"program",void 0),t([pt({attribute:!1})],we.prototype,"others",void 0),t([pt({attribute:!1})],we.prototype,"days",void 0),t([pt()],we.prototype,"unit",void 0),t([pt({attribute:!1})],we.prototype,"limits",void 0),t([pt({type:Boolean})],we.prototype,"canTurnOff",void 0),t([pt()],we.prototype,"language",void 0),t([pt({type:Boolean})],we.prototype,"h12",void 0),t([pt({type:Boolean})],we.prototype,"readOnly",void 0),t([pt({attribute:!1})],we.prototype,"now",void 0),t([pt({attribute:!1})],we.prototype,"localize",void 0),we=t([xt("shs-program-card")],we);let ke=class extends lt{constructor(){super(...arguments),this.entityId="",this.until="",this._busy=!1}async _resume(){this._busy=!0;try{await(t=this.hass,e=this.entityId,t.callWS({type:`${mt}/room/resume`,entity_id:e}))}catch(t){yt(this,this.localize("error.resume",{error:t?.message??String(t)}))}finally{this._busy=!1}var t,e}render(){return F`
+    `]}};e([pe({attribute:!1})],wt.prototype,"program",void 0),e([pe({attribute:!1})],wt.prototype,"others",void 0),e([pe({attribute:!1})],wt.prototype,"days",void 0),e([pe()],wt.prototype,"unit",void 0),e([pe({attribute:!1})],wt.prototype,"limits",void 0),e([pe({type:Boolean})],wt.prototype,"canTurnOff",void 0),e([pe()],wt.prototype,"language",void 0),e([pe({type:Boolean})],wt.prototype,"h12",void 0),e([pe({type:Boolean})],wt.prototype,"readOnly",void 0),e([pe({attribute:!1})],wt.prototype,"now",void 0),e([pe({attribute:!1})],wt.prototype,"localize",void 0),wt=e([xe("shs-program-card")],wt);let kt=class extends le{constructor(){super(...arguments),this.entityId="",this.until="",this._busy=!1}async _resume(){this._busy=!0;try{await(e=this.hass,t=this.entityId,e.callWS({type:`${me}/room/resume`,entity_id:t}))}catch(e){ye(this,this.localize("error.resume",{error:e?.message??String(e)}))}finally{this._busy=!1}var e,t}render(){return F`
       <div class="text" role="status">
         <strong
           ><ha-svg-icon class="hand" .path=${"M21 7C21 5.62 19.88 4.5 18.5 4.5C18.33 4.5 18.16 4.5 18 4.55V4C18 2.62 16.88 1.5 15.5 1.5C15.27 1.5 15.04 1.53 14.83 1.59C14.46 .66 13.56 0 12.5 0C11.27 0 10.25 .89 10.04 2.06C9.87 2 9.69 2 9.5 2C8.12 2 7 3.12 7 4.5V10.39C6.66 10.08 6.24 9.85 5.78 9.73L5 9.5C4.18 9.29 3.31 9.61 2.82 10.35C2.44 10.92 2.42 11.66 2.67 12.3L5.23 18.73C6.5 21.91 9.57 24 13 24C17.42 24 21 20.42 21 16V7M19 16C19 19.31 16.31 22 13 22C10.39 22 8.05 20.41 7.09 18L4.5 11.45L5 11.59C5.5 11.71 5.85 12.05 6 12.5L7 15H9V4.5C9 4.22 9.22 4 9.5 4S10 4.22 10 4.5V12H12V2.5C12 2.22 12.22 2 12.5 2S13 2.22 13 2.5V12H15V4C15 3.72 15.22 3.5 15.5 3.5S16 3.72 16 4V12H18V7C18 6.72 18.22 6.5 18.5 6.5S19 6.72 19 7V16Z"}></ha-svg-icon>${this.localize("room.overridden")}</strong
@@ -817,7 +817,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       <button class="resume" ?disabled=${this._busy} @click=${this._resume}>
         <ha-svg-icon .path=${"M18,11V12.5C21.19,12.5 23.09,16.05 21.33,18.71L20.24,17.62C21.06,15.96 19.85,14 18,14V15.5L15.75,13.25L18,11M18,22V20.5C14.81,20.5 12.91,16.95 14.67,14.29L15.76,15.38C14.94,17.04 16.15,19 18,19V17.5L20.25,19.75L18,22M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H14C13.36,20.45 12.86,19.77 12.5,19H5V8H19V10.59C19.71,10.7 20.39,10.94 21,11.31V5A2,2 0 0,0 19,3Z"}></ha-svg-icon>${this.localize("room.resume")}
       </button>
-    `}static{this.styles=[At,n`
+    `}static{this.styles=[Ae,n`
       :host {
         --shs-manual: var(--warning-color, #ff9800);
         background: color-mix(in srgb, var(--shs-manual) 14%, transparent);
@@ -872,21 +872,21 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       ha-svg-icon {
         --mdc-icon-size: 18px;
       }
-    `]}};t([pt({attribute:!1})],ke.prototype,"hass",void 0),t([pt()],ke.prototype,"entityId",void 0),t([pt({attribute:!1})],ke.prototype,"localize",void 0),t([pt()],ke.prototype,"until",void 0),t([ut()],ke.prototype,"_busy",void 0),ke=t([xt("shs-resume-row")],ke);const ze=[31,29,31,30,31,30,31,31,30,31,30,31],Ae=366,Se=t=>{const[e,s]=t.split("-").map(Number);return[e,s]},Ce=([t,e])=>`${String(t).padStart(2,"0")}-${String(e).padStart(2,"0")}`,Ee=([t,e])=>ze.slice(0,t-1).reduce((t,e)=>t+e,0)+e,Oe=t=>{let e=t,s=0;for(;e>ze[s];)e-=ze[s],s++;return[s+1,e]},He=(t,e)=>t[0]-e[0]||t[1]-e[1],Me=t=>{const e=Ee(Se(t.start)),s=Ee(Se(t.end));return e<=s?[[e,s]]:[[e,Ae],[1,s]]},Te=(t,e,s="long")=>{const[i,a]=Se(t);return new Intl.DateTimeFormat(e,{day:"numeric",month:s}).format(new Date(2024,i-1,a))},Pe=()=>Math.random().toString(36).slice(2,10),Le=["#2f6fca","#23794a","#b7791f","#a85b14","#7a4cc2","#b23a48"];let Ve=class extends lt{constructor(){super(...arguments),this.seasons=[],this.selected=null,this.today=null,this.language="en"}render(){const t=(e=this.language,Array.from({length:12},(t,s)=>new Intl.DateTimeFormat(e,{month:"narrow"}).format(new Date(2024,s,1))));var e;const s=ze.map(t=>t/Ae);return F`
+    `]}};e([pe({attribute:!1})],kt.prototype,"hass",void 0),e([pe()],kt.prototype,"entityId",void 0),e([pe({attribute:!1})],kt.prototype,"localize",void 0),e([pe()],kt.prototype,"until",void 0),e([ue()],kt.prototype,"_busy",void 0),kt=e([xe("shs-resume-row")],kt);const zt=[31,29,31,30,31,30,31,31,30,31,30,31],At=366,St=e=>{const[t,s]=e.split("-").map(Number);return[t,s]},Ct=([e,t])=>`${String(e).padStart(2,"0")}-${String(t).padStart(2,"0")}`,Et=([e,t])=>zt.slice(0,e-1).reduce((e,t)=>e+t,0)+t,Ot=e=>{let t=e,s=0;for(;t>zt[s];)t-=zt[s],s++;return[s+1,t]},Ht=(e,t)=>e[0]-t[0]||e[1]-t[1],Mt=e=>{const t=Et(St(e.start)),s=Et(St(e.end));return t<=s?[[t,s]]:[[t,At],[1,s]]},Tt=(e,t,s="long")=>{const[i,a]=St(e);return new Intl.DateTimeFormat(t,{day:"numeric",month:s}).format(new Date(2024,i-1,a))},Pt=()=>Math.random().toString(36).slice(2,10),Lt=["#2f6fca","#23794a","#b7791f","#a85b14","#7a4cc2","#b23a48"];let Vt=class extends le{constructor(){super(...arguments),this.seasons=[],this.selected=null,this.today=null,this.language="en"}render(){const e=(t=this.language,Array.from({length:12},(e,s)=>new Intl.DateTimeFormat(t,{month:"narrow"}).format(new Date(2024,s,1))));var t;const s=zt.map(e=>e/At);return F`
       <div class="months" aria-hidden="true">
-        ${t.map((t,e)=>F`<span style="width:${100*s[e]}%">${t}</span>`)}
+        ${e.map((e,t)=>F`<span style="width:${100*s[t]}%">${e}</span>`)}
       </div>
       <div class="bar">
-        ${this.seasons.flatMap(t=>Me(t).map(([e,s])=>{const i=(s-e+1)/Ae;return F`<button
-              class=${t.id===this.selected?"selected":""}
-              style="left:${(e-1)/Ae*100}%;width:${100*i}%;background:${t.color??"#607d8b"}"
-              aria-label=${this.localize("seasons.select",{name:t.name})}
-              aria-pressed=${t.id===this.selected}
-              @click=${()=>bt(this,"select",{id:t.id})}
+        ${this.seasons.flatMap(e=>Mt(e).map(([t,s])=>{const i=(s-t+1)/At;return F`<button
+              class=${e.id===this.selected?"selected":""}
+              style="left:${(t-1)/At*100}%;width:${100*i}%;background:${e.color??"#607d8b"}"
+              aria-label=${this.localize("seasons.select",{name:e.name})}
+              aria-pressed=${e.id===this.selected}
+              @click=${()=>be(this,"select",{id:e.id})}
             >
-              <span>${t.name}</span>
+              <span>${e.name}</span>
             </button>`}))}
-        ${null===this.today?q:F`<div class="today" style="left:${(this.today-.5)/Ae*100}%"></div>`}
+        ${null===this.today?q:F`<div class="today" style="left:${(this.today-.5)/At*100}%"></div>`}
       </div>
     `}static{this.styles=n`
     :host {
@@ -949,25 +949,25 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       width: 2px;
       z-index: 2;
     }
-  `}};t([pt({attribute:!1})],Ve.prototype,"seasons",void 0),t([pt()],Ve.prototype,"selected",void 0),t([pt({attribute:!1})],Ve.prototype,"today",void 0),t([pt()],Ve.prototype,"language",void 0),t([pt({attribute:!1})],Ve.prototype,"localize",void 0),Ve=t([xt("shs-season-bar")],Ve);let De=class extends lt{constructor(){super(...arguments),this.open=!1,this.heading="",this.description="",this.emptyText="",this.confirmLabel="",this.multiple=!1,this.entityIds=[],this._selected=new Set}willUpdate(t){t.has("open")&&this.open&&(this._selected=new Set)}_toggle(t,e){const s=new Set(this._selected);e?s.add(t):s.delete(t),this._selected=s}_pick(t){bt(this,"picked",{entityIds:t})}render(){const t=[...this.entityIds].sort((t,e)=>vt(this.hass,t).localeCompare(vt(this.hass,e)));return F`<shs-dialog .open=${this.open} .heading=${this.heading} @closed=${()=>bt(this,"closed")}>
+  `}};e([pe({attribute:!1})],Vt.prototype,"seasons",void 0),e([pe()],Vt.prototype,"selected",void 0),e([pe({attribute:!1})],Vt.prototype,"today",void 0),e([pe()],Vt.prototype,"language",void 0),e([pe({attribute:!1})],Vt.prototype,"localize",void 0),Vt=e([xe("shs-season-bar")],Vt);let Dt=class extends le{constructor(){super(...arguments),this.open=!1,this.heading="",this.description="",this.emptyText="",this.confirmLabel="",this.multiple=!1,this.entityIds=[],this._selected=new Set}willUpdate(e){e.has("open")&&this.open&&(this._selected=new Set)}_toggle(e,t){const s=new Set(this._selected);t?s.add(e):s.delete(e),this._selected=s}_pick(e){be(this,"picked",{entityIds:e})}render(){const e=[...this.entityIds].sort((e,t)=>ve(this.hass,e).localeCompare(ve(this.hass,t)));return F`<shs-dialog .open=${this.open} .heading=${this.heading} @closed=${()=>be(this,"closed")}>
       ${this.description?F`<p class="secondary">${this.description}</p>`:q}
-      ${t.length?F`<ul>
-            ${t.map(t=>{const e=((t,e)=>{const s=t.entities?.[e],i=s?.area_id??(s?.device_id?t.devices?.[s.device_id]?.area_id:void 0);return i?t.areas?.[i]?.name:void 0})(this.hass,t),s=F`<span class="name">${vt(this.hass,t)}</span>
-                <span class="secondary">${e?`${e} · `:""}${t}</span>`;return F`<li>
+      ${e.length?F`<ul>
+            ${e.map(e=>{const t=((e,t)=>{const s=e.entities?.[t],i=s?.area_id??(s?.device_id?e.devices?.[s.device_id]?.area_id:void 0);return i?e.areas?.[i]?.name:void 0})(this.hass,e),s=F`<span class="name">${ve(this.hass,e)}</span>
+                <span class="secondary">${t?`${t} · `:""}${e}</span>`;return F`<li>
                 ${this.multiple?F`<label class="item">
                       <input
                         type="checkbox"
-                        .checked=${this._selected.has(t)}
-                        @change=${e=>this._toggle(t,e.target.checked)}
+                        .checked=${this._selected.has(e)}
+                        @change=${t=>this._toggle(e,t.target.checked)}
                       />
                       <span class="text">${s}</span>
-                    </label>`:F`<button class="item" @click=${()=>this._pick([t])}>
-                      <ha-svg-icon .path=${Pt}></ha-svg-icon>
+                    </label>`:F`<button class="item" @click=${()=>this._pick([e])}>
+                      <ha-svg-icon .path=${Pe}></ha-svg-icon>
                       <span class="text">${s}</span>
                     </button>`}
               </li>`})}
           </ul>`:F`<p class="secondary">${this.emptyText}</p>`}
-      <button slot="actions" class="text-button" @click=${()=>bt(this,"closed")}>
+      <button slot="actions" class="text-button" @click=${()=>be(this,"closed")}>
         ${this.localize("common.cancel")}
       </button>
       ${this.multiple?F`<button
@@ -978,7 +978,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           >
             ${this.confirmLabel}
           </button>`:q}
-    </shs-dialog>`}static{this.styles=[At,n`
+    </shs-dialog>`}static{this.styles=[Ae,n`
       p {
         margin: 0 0 12px;
       }
@@ -1026,10 +1026,10 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         overflow: hidden;
         text-overflow: ellipsis;
       }
-    `]}};t([pt({attribute:!1})],De.prototype,"hass",void 0),t([pt({type:Boolean})],De.prototype,"open",void 0),t([pt()],De.prototype,"heading",void 0),t([pt()],De.prototype,"description",void 0),t([pt()],De.prototype,"emptyText",void 0),t([pt()],De.prototype,"confirmLabel",void 0),t([pt({type:Boolean})],De.prototype,"multiple",void 0),t([pt({attribute:!1})],De.prototype,"entityIds",void 0),t([pt({attribute:!1})],De.prototype,"localize",void 0),t([ut()],De.prototype,"_selected",void 0),De=t([xt("shs-entity-picker-dialog")],De);const Ne=2024,Ie=t=>`2024-${t}`,Ue=t=>t.slice(5);let Re=class extends lt{constructor(){super(...arguments),this.open=!1,this.season=null,this.seasons=[],this._draft={id:"",name:"",start:"10-15",end:"04-15",color:Le[0]}}willUpdate(t){t.has("open")&&this.open&&(this._draft=this.season?{...this.season}:{id:Pe(),name:"",start:"10-15",end:"04-15",color:Le[this.seasons.length%Le.length]})}_set(t){this._draft={...this._draft,...t}}render(){const t=this._draft,e=((t,e)=>{const s=new Set;for(const[e,i]of Me(t))for(let t=e;t<=i;t++)s.add(t);return e.find(e=>e.id!==t.id&&Me(e).some(([t,e])=>{for(let i=t;i<=e;i++)if(s.has(i))return!0;return!1}))})(t,this.seasons),s=t.name.trim().length>0&&!e;return F`<shs-dialog
+    `]}};e([pe({attribute:!1})],Dt.prototype,"hass",void 0),e([pe({type:Boolean})],Dt.prototype,"open",void 0),e([pe()],Dt.prototype,"heading",void 0),e([pe()],Dt.prototype,"description",void 0),e([pe()],Dt.prototype,"emptyText",void 0),e([pe()],Dt.prototype,"confirmLabel",void 0),e([pe({type:Boolean})],Dt.prototype,"multiple",void 0),e([pe({attribute:!1})],Dt.prototype,"entityIds",void 0),e([pe({attribute:!1})],Dt.prototype,"localize",void 0),e([ue()],Dt.prototype,"_selected",void 0),Dt=e([xe("shs-entity-picker-dialog")],Dt);const Nt=2024,It=e=>`2024-${e}`,Ut=e=>e.slice(5);let Rt=class extends le{constructor(){super(...arguments),this.open=!1,this.season=null,this.seasons=[],this._draft={id:"",name:"",start:"10-15",end:"04-15",color:Lt[0]}}willUpdate(e){e.has("open")&&this.open&&(this._draft=this.season?{...this.season}:{id:Pt(),name:"",start:"10-15",end:"04-15",color:Lt[this.seasons.length%Lt.length]})}_set(e){this._draft={...this._draft,...e}}render(){const e=this._draft,t=((e,t)=>{const s=new Set;for(const[t,i]of Mt(e))for(let e=t;e<=i;e++)s.add(e);return t.find(t=>t.id!==e.id&&Mt(t).some(([e,t])=>{for(let i=e;i<=t;i++)if(s.has(i))return!0;return!1}))})(e,this.seasons),s=e.name.trim().length>0&&!t;return F`<shs-dialog
       .open=${this.open}
       .heading=${this.localize(this.season?"season_dialog.edit":"season_dialog.new")}
-      @closed=${()=>bt(this,"closed")}
+      @closed=${()=>be(this,"closed")}
     >
       <div class="form">
         <label class="field">
@@ -1037,20 +1037,20 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           <input
             type="text"
             maxlength="50"
-            .value=${t.name}
-            @input=${t=>this._set({name:t.target.value})}
+            .value=${e.name}
+            @input=${e=>this._set({name:e.target.value})}
           />
         </label>
         <div class="field">
           <span id="color-label">${this.localize("season_dialog.color")}</span>
           <div class="colors" role="radiogroup" aria-labelledby="color-label">
-            ${Le.map(e=>F`<button
+            ${Lt.map(t=>F`<button
                 role="radio"
-                aria-checked=${t.color===e}
-                aria-label=${e}
-                class=${t.color===e?"selected":""}
-                style="background:${e}"
-                @click=${()=>this._set({color:e})}
+                aria-checked=${e.color===t}
+                aria-label=${t}
+                class=${e.color===t?"selected":""}
+                style="background:${t}"
+                @click=${()=>this._set({color:t})}
               ></button>`)}
           </div>
         </div>
@@ -1059,50 +1059,50 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
             <span>${this.localize("season_dialog.start")}</span>
             <input
               type="date"
-              min="${Ne}-01-01"
-              max="${Ne}-12-31"
-              .value=${Ie(t.start)}
-              @change=${t=>{const e=t.target.value;e&&this._set({start:Ue(e)})}}
+              min="${Nt}-01-01"
+              max="${Nt}-12-31"
+              .value=${It(e.start)}
+              @change=${e=>{const t=e.target.value;t&&this._set({start:Ut(t)})}}
             />
           </label>
           <label class="field">
             <span>${this.localize("season_dialog.end")}</span>
             <input
               type="date"
-              min="${Ne}-01-01"
-              max="${Ne}-12-31"
-              .value=${Ie(t.end)}
-              @change=${t=>{const e=t.target.value;e&&this._set({end:Ue(e)})}}
+              min="${Nt}-01-01"
+              max="${Nt}-12-31"
+              .value=${It(e.end)}
+              @change=${e=>{const t=e.target.value;t&&this._set({end:Ut(t)})}}
             />
           </label>
         </div>
         <p class="secondary note">
           ${this.localize("season_dialog.year")}
-          ${i=t,He(Se(i.start),Se(i.end))>0?this.localize("season_dialog.wraps"):q}
+          ${i=e,Ht(St(i.start),St(i.end))>0?this.localize("season_dialog.wraps"):q}
         </p>
-        ${e?F`<p class="error note" role="alert">
-              ${this.localize("season_dialog.overlap",{name:e.name})}
+        ${t?F`<p class="error note" role="alert">
+              ${this.localize("season_dialog.overlap",{name:t.name})}
             </p>`:q}
       </div>
       ${this.season?F`<button
             slot="secondary"
             class="text-button danger"
-            @click=${()=>bt(this,"delete",{season:this.season})}
+            @click=${()=>be(this,"delete",{season:this.season})}
           >
             ${this.localize("season_dialog.delete")}
           </button>`:q}
-      <button slot="actions" class="text-button" @click=${()=>bt(this,"closed")}>
+      <button slot="actions" class="text-button" @click=${()=>be(this,"closed")}>
         ${this.localize("common.cancel")}
       </button>
       <button
         slot="actions"
         class="filled-button"
         ?disabled=${!s}
-        @click=${()=>bt(this,"save",{season:{...t,name:t.name.trim()}})}
+        @click=${()=>be(this,"save",{season:{...e,name:e.name.trim()}})}
       >
         ${this.localize("common.save")}
       </button>
-    </shs-dialog>`;var i}static{this.styles=[At,n`
+    </shs-dialog>`;var i}static{this.styles=[Ae,n`
       .form {
         display: flex;
         flex-direction: column;
@@ -1153,71 +1153,71 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         font-size: 13px;
         margin: 0;
       }
-    `]}};t([pt({type:Boolean})],Re.prototype,"open",void 0),t([pt({attribute:!1})],Re.prototype,"season",void 0),t([pt({attribute:!1})],Re.prototype,"seasons",void 0),t([pt({attribute:!1})],Re.prototype,"localize",void 0),t([ut()],Re.prototype,"_draft",void 0),Re=t([xt("shs-season-dialog")],Re);const je=t=>{try{const e=new Intl.DateTimeFormat("en-US",{timeZone:t,month:"numeric",day:"numeric"}).formatToParts(new Date),s=t=>Number(e.find(e=>e.type===t)?.value);return[s("month"),s("day")]}catch{const t=new Date;return[t.getMonth()+1,t.getDate()]}};let Be=class extends lt{constructor(){super(...arguments),this.narrow=!1,this._drafts={},this._addOpen=!1,this._removeOpen=!1,this._resetOpen=!1,this._seasonDialog=null,this._deleteSeason=null,this._deleteProgram=null,this._rename=null,this._timers=new Map,this._inflight=new Map}disconnectedCallback(){super.disconnectedCallback();for(const t of[...this._timers.keys()])this._flush(t)}willUpdate(t){if(!t.has("state"))return;const e=Object.fromEntries(Object.entries(this._drafts).filter(([t])=>this._timers.has(t)||this._inflight.has(t)));Object.keys(e).length!==Object.keys(this._drafts).length&&(this._drafts=e),!this._room&&this.state.rooms.length&&(this._entityId=this.state.rooms[0].entity_id),this._season||(this._seasonId=this.state.season??this.state.seasons[0]?.id)}get _readOnly(){return!this.hass.user?.is_admin}get _room(){return this.state.rooms.find(t=>t.entity_id===this._entityId)}get _season(){return this.state.seasons.find(t=>t.id===this._seasonId)}_key(t){return`${this._entityId}|${t}`}_programs(t,e){return this._drafts[`${t.entity_id}|${e}`]??t.programs[e]??[]}_error(t){yt(this,this.localize("error.save",{error:t?.message??String(t)}))}async _call(t){try{await t}catch(t){this._error(t)}}_setPrograms(t,e,s=700){const i=this._key(t);this._drafts={...this._drafts,[i]:e};const a=this._timers.get(i);void 0!==a&&clearTimeout(a),this._timers.set(i,window.setTimeout(()=>this._flush(i),s))}async _flush(t){const e=this._timers.get(t);void 0!==e&&clearTimeout(e),this._timers.delete(t);const s=this._drafts[t];if(!s)return;const[i,a]=t.split("|");this._inflight.set(t,(this._inflight.get(t)??0)+1);try{await gt(this.hass,i,{programs:{[a]:s}})}catch(t){this._error(t)}finally{const e=(this._inflight.get(t)??1)-1;if(e>0?this._inflight.set(t,e):this._inflight.delete(t),!this._timers.has(t)&&!this._inflight.has(t)){const{[t]:e,...s}=this._drafts;this._drafts=s}}}_updateProgram(t,e,s,i,a){this._setPrograms(t,e.map(t=>t.id===s?{...t,...i}:t),a)}_toggleDay(t,e,s,i){const a=!e.find(t=>t.id===s).days.includes(i);this._setPrograms(t,e.map(t=>{return t.id===s?{...t,days:a?(e=[...t.days,i],le.filter(t=>e.includes(t))):t.days.filter(t=>t!==i)}:a?{...t,days:t.days.filter(t=>t!==i)}:t;var e}),0)}_addProgram(t,e){const s=((t,e)=>e.filter(e=>!t.some(t=>t.days.includes(e))))(e,le),i=this.localize(7===s.length?"programs.every_day":"programs.new_name");var a;this._setPrograms(t,[...e,{id:Pe(),name:i,days:s,blocks:(a=this.state.unit,a===Kt?[{start:"00:00",temperature:63},{start:"06:30",temperature:68},{start:"22:30",temperature:63}]:[{start:"00:00",temperature:17},{start:"06:30",temperature:20},{start:"22:30",temperature:17}])}],0)}_duplicate(t,e,s){const i={id:Pe(),name:this.localize("programs.copy",{name:s.name}).slice(0,50),days:[],blocks:s.blocks.map(t=>({...t}))},a=e.indexOf(s);this._setPrograms(t,[...e.slice(0,a+1),i,...e.slice(a+1)],0)}async _saveSeason(t){this._seasonDialog=null;const e=this.state.seasons.some(e=>e.id===t.id),s=e?this.state.seasons.map(e=>e.id===t.id?t:e):[...this.state.seasons,t];await this._call(ft(this.hass,s)),this._seasonId=t.id}_discard(t){const e={...this._drafts};for(const s of new Set([...Object.keys(e),...this._timers.keys()])){const[i,a]=s.split("|");if(!t(i,a))continue;const o=this._timers.get(s);void 0!==o&&clearTimeout(o),this._timers.delete(s),delete e[s]}this._drafts=e}async _removeSeason(t){this._deleteSeason=null,this._discard((e,s)=>s===t.id),await this._call(ft(this.hass,this.state.seasons.filter(e=>e.id!==t.id))),this._seasonId===t.id&&(this._seasonId=void 0)}async _addRoom(t){this._addOpen=!1;try{await((t,e)=>t.callWS({type:`${mt}/room/add`,entity_id:e}))(this.hass,t),this._entityId=t}catch(t){this._error(t)}}async _removeRoom(){this._removeOpen=!1;const t=this._entityId;this._entityId=void 0,this._discard(e=>e===t),await this._call(((t,e)=>t.callWS({type:`${mt}/room/remove`,entity_id:e}))(this.hass,t))}render(){const t=this.narrow||"always_hidden"===this.hass.dockedSidebar,e=this._room;return F`
+    `]}};e([pe({type:Boolean})],Rt.prototype,"open",void 0),e([pe({attribute:!1})],Rt.prototype,"season",void 0),e([pe({attribute:!1})],Rt.prototype,"seasons",void 0),e([pe({attribute:!1})],Rt.prototype,"localize",void 0),e([ue()],Rt.prototype,"_draft",void 0),Rt=e([xe("shs-season-dialog")],Rt);const jt=e=>{try{const t=new Intl.DateTimeFormat("en-US",{timeZone:e,month:"numeric",day:"numeric"}).formatToParts(new Date),s=e=>Number(t.find(t=>t.type===e)?.value);return[s("month"),s("day")]}catch{const e=new Date;return[e.getMonth()+1,e.getDate()]}};let Bt=class extends le{constructor(){super(...arguments),this.narrow=!1,this._drafts={},this._addOpen=!1,this._removeOpen=!1,this._resetOpen=!1,this._seasonDialog=null,this._deleteSeason=null,this._deleteProgram=null,this._rename=null,this._timers=new Map,this._inflight=new Map}disconnectedCallback(){super.disconnectedCallback();for(const e of[...this._timers.keys()])this._flush(e)}willUpdate(e){if(!e.has("state"))return;const t=Object.fromEntries(Object.entries(this._drafts).filter(([e])=>this._timers.has(e)||this._inflight.has(e)));Object.keys(t).length!==Object.keys(this._drafts).length&&(this._drafts=t),!this._room&&this.state.rooms.length&&(this._entityId=this.state.rooms[0].entity_id),this._season||(this._seasonId=this.state.season??this.state.seasons[0]?.id)}get _readOnly(){return!this.hass.user?.is_admin}get _room(){return this.state.rooms.find(e=>e.entity_id===this._entityId)}get _season(){return this.state.seasons.find(e=>e.id===this._seasonId)}_key(e){return`${this._entityId}|${e}`}_programs(e,t){return this._drafts[`${e.entity_id}|${t}`]??e.programs[t]??[]}_error(e){ye(this,this.localize("error.save",{error:e?.message??String(e)}))}async _call(e){try{await e}catch(e){this._error(e)}}_setPrograms(e,t,s=700){const i=this._key(e);this._drafts={...this._drafts,[i]:t};const a=this._timers.get(i);void 0!==a&&clearTimeout(a),this._timers.set(i,window.setTimeout(()=>this._flush(i),s))}async _flush(e){const t=this._timers.get(e);void 0!==t&&clearTimeout(t),this._timers.delete(e);const s=this._drafts[e];if(!s)return;const[i,a]=e.split("|");this._inflight.set(e,(this._inflight.get(e)??0)+1);try{await ge(this.hass,i,{programs:{[a]:s}})}catch(e){this._error(e)}finally{const t=(this._inflight.get(e)??1)-1;if(t>0?this._inflight.set(e,t):this._inflight.delete(e),!this._timers.has(e)&&!this._inflight.has(e)){const{[e]:t,...s}=this._drafts;this._drafts=s}}}_updateProgram(e,t,s,i,a){this._setPrograms(e,t.map(e=>e.id===s?{...e,...i}:e),a)}_toggleDay(e,t,s,i){const a=!t.find(e=>e.id===s).days.includes(i);this._setPrograms(e,t.map(e=>{return e.id===s?{...e,days:a?(t=[...e.days,i],lt.filter(e=>t.includes(e))):e.days.filter(e=>e!==i)}:a?{...e,days:e.days.filter(e=>e!==i)}:e;var t}),0)}_addProgram(e,t){const s=((e,t)=>t.filter(t=>!e.some(e=>e.days.includes(t))))(t,lt),i=this.localize(7===s.length?"programs.every_day":"programs.new_name");var a;this._setPrograms(e,[...t,{id:Pt(),name:i,days:s,blocks:(a=this.state.unit,a===Ke?[{start:"00:00",temperature:63},{start:"06:30",temperature:68},{start:"22:30",temperature:63}]:[{start:"00:00",temperature:17},{start:"06:30",temperature:20},{start:"22:30",temperature:17}])}],0)}_duplicate(e,t,s){const i={id:Pt(),name:this.localize("programs.copy",{name:s.name}).slice(0,50),days:[],blocks:s.blocks.map(e=>({...e}))},a=t.indexOf(s);this._setPrograms(e,[...t.slice(0,a+1),i,...t.slice(a+1)],0)}async _saveSeason(e){this._seasonDialog=null;const t=this.state.seasons.some(t=>t.id===e.id),s=t?this.state.seasons.map(t=>t.id===e.id?e:t):[...this.state.seasons,e];await this._call(fe(this.hass,s)),this._seasonId=e.id}_discard(e){const t={...this._drafts};for(const s of new Set([...Object.keys(t),...this._timers.keys()])){const[i,a]=s.split("|");if(!e(i,a))continue;const o=this._timers.get(s);void 0!==o&&clearTimeout(o),this._timers.delete(s),delete t[s]}this._drafts=t}async _removeSeason(e){this._deleteSeason=null,this._discard((t,s)=>s===e.id),await this._call(fe(this.hass,this.state.seasons.filter(t=>t.id!==e.id))),this._seasonId===e.id&&(this._seasonId=void 0)}async _addRoom(e){this._addOpen=!1;try{await((e,t)=>e.callWS({type:`${me}/room/add`,entity_id:t}))(this.hass,e),this._entityId=e}catch(e){this._error(e)}}async _removeRoom(){this._removeOpen=!1;const e=this._entityId;this._entityId=void 0,this._discard(t=>t===e),await this._call(((e,t)=>e.callWS({type:`${me}/room/remove`,entity_id:t}))(this.hass,e))}render(){const e=this.narrow||"always_hidden"===this.hass.dockedSidebar,t=this._room;return F`
       <div class="toolbar">
-        ${t?F`<ha-icon-button
+        ${e?F`<ha-icon-button
               .path=${"M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"}
               .label=${"Menu"}
-              @click=${()=>bt(this,"hass-toggle-menu")}
+              @click=${()=>be(this,"hass-toggle-menu")}
             ></ha-icon-button>`:q}
         <div class="title">${this.localize("title")}</div>
         <label class="away">
           <span>${this.localize("away.label")}</span>
-          ${St(this.state.away,t=>this._call(((t,e)=>t.callWS({type:`${mt}/away/set`,away:e}))(this.hass,t)),this.localize("away.label"))}
+          ${Se(this.state.away,e=>this._call(((e,t)=>e.callWS({type:`${me}/away/set`,away:t}))(this.hass,e)),this.localize("away.label"))}
         </label>
       </div>
 
       <div class="content">
         ${this._readOnly?F`<p class="secondary notice">${this.localize("read_only")}</p>`:q}
-        ${e?this._renderEntity(e):this._renderEmpty()} ${this._renderSeasons()}
-        ${e?F`<div class="columns">
-              ${this._renderNow(e)}
-              <section class="programs">${this._renderPrograms(e)}</section>
+        ${t?this._renderEntity(t):this._renderEmpty()} ${this._renderSeasons()}
+        ${t?F`<div class="columns">
+              ${this._renderNow(t)}
+              <section class="programs">${this._renderPrograms(t)}</section>
             </div>`:q}
       </div>
-      ${this._renderDialogs(e)}
+      ${this._renderDialogs(t)}
     `}_renderEmpty(){return F`<ha-card class="empty">
-      <ha-svg-icon .path=${Pt}></ha-svg-icon>
+      <ha-svg-icon .path=${Pe}></ha-svg-icon>
       <h2>${this.localize("entity.none_title")}</h2>
       <p class="secondary">${this.localize("entity.none_text")}</p>
       ${this._readOnly?q:F`<button class="filled-button" @click=${()=>this._addOpen=!0}>
             ${this.localize("entity.add")}
           </button>`}
-    </ha-card>`}_renderEntity(t){const e=this.hass.states[t.entity_id],s=e?.attributes.current_temperature,i=this.state.unit;return F`<ha-card class="entity">
+    </ha-card>`}_renderEntity(e){const t=this.hass.states[e.entity_id],s=t?.attributes.current_temperature,i=this.state.unit;return F`<ha-card class="entity">
       <div class="entity-main">
         <label class="field-label" for="entity">${this.localize("entity.label")}</label>
         ${this.state.rooms.length>1?F`<select
               id="entity"
-              .value=${t.entity_id}
-              @change=${t=>this._entityId=t.target.value}
+              .value=${e.entity_id}
+              @change=${e=>this._entityId=e.target.value}
             >
-              ${this.state.rooms.map(e=>F`<option value=${e.entity_id} ?selected=${e.entity_id===t.entity_id}>
-                    ${vt(this.hass,e.entity_id)} · ${e.entity_id}
+              ${this.state.rooms.map(t=>F`<option value=${t.entity_id} ?selected=${t.entity_id===e.entity_id}>
+                    ${ve(this.hass,t.entity_id)} · ${t.entity_id}
                   </option>`)}
             </select>`:F`<div id="entity" class="entity-name">
-              ${vt(this.hass,t.entity_id)} <span class="secondary">· ${t.entity_id}</span>
+              ${ve(this.hass,e.entity_id)} <span class="secondary">· ${e.entity_id}</span>
             </div>`}
         ${"number"==typeof s?F`<span class="secondary small"
-              >${this.localize("entity.measured",{temperature:ee(s,i,.1,!1,this.hass.locale.language)})}</span
+              >${this.localize("entity.measured",{temperature:tt(s,i,.1,!1,this.hass.locale.language)})}</span
             >`:q}
       </div>
       <div class="entity-actions">
         <label class="switch-label">
           <span class="small">${this.localize("entity.enabled")}</span>
-          ${St(t.enabled,e=>this._call(gt(this.hass,t.entity_id,{enabled:e})),this.localize("entity.enabled"),this._readOnly)}
+          ${Se(e.enabled,t=>this._call(ge(this.hass,e.entity_id,{enabled:t})),this.localize("entity.enabled"),this._readOnly)}
         </label>
         ${this._readOnly?q:F`<ha-icon-button
-                .path=${Tt}
+                .path=${Te}
                 .label=${this.localize("entity.add")}
                 @click=${()=>this._addOpen=!0}
               ></ha-icon-button>
               <ha-icon-button
-                .path=${Ot}
+                .path=${Oe}
                 .label=${this.localize("entity.remove")}
                 @click=${()=>this._removeOpen=!0}
               ></ha-icon-button>`}
       </div>
-    </ha-card>`}_renderSeasons(){const t=this.hass.locale.language,e=Ee(je(this.hass.config.time_zone)),s=(t=>{const e=new Array(367).fill(!1);for(const s of t)for(const[t,i]of Me(s))for(let s=t;s<=i;s++)e[s]=!0;const s=[];let i=1;for(;i<=Ae;){if(e[i]){i++;continue}let t=i;for(;t+1<=Ae&&!e[t+1];)t++;s.push([i,t]),i=t+1}return s})(this.state.seasons),i=s.map(([e,s])=>`${Te(Ce(Oe(e)),t,"short")} – ${Te(Ce(Oe(s)),t,"short")}`).join(", "),a=this._room;return F`<ha-card class="seasons">
+    </ha-card>`}_renderSeasons(){const e=this.hass.locale.language,t=Et(jt(this.hass.config.time_zone)),s=(e=>{const t=new Array(367).fill(!1);for(const s of e)for(const[e,i]of Mt(s))for(let s=e;s<=i;s++)t[s]=!0;const s=[];let i=1;for(;i<=At;){if(t[i]){i++;continue}let e=i;for(;e+1<=At&&!t[e+1];)e++;s.push([i,e]),i=e+1}return s})(this.state.seasons),i=s.map(([t,s])=>`${Tt(Ct(Ot(t)),e,"short")} – ${Tt(Ct(Ot(s)),e,"short")}`).join(", "),a=this._room;return F`<ha-card class="seasons">
       <div class="section-header">
         <div class="heading">
           <h2>${this.localize("seasons.title")}</h2>
@@ -1227,48 +1227,48 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
                 <ha-svg-icon .path=${"M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"}></ha-svg-icon>${this.localize("seasons.reset")}
               </button>
               <button class="filled-button small" @click=${()=>this._seasonDialog={season:null}}>
-                <ha-svg-icon .path=${Tt}></ha-svg-icon>${this.localize("seasons.new")}
+                <ha-svg-icon .path=${Te}></ha-svg-icon>${this.localize("seasons.new")}
               </button>`}
       </div>
       <shs-season-bar
         .seasons=${this.state.seasons}
         .selected=${this._seasonId??null}
-        .today=${e}
-        .language=${t}
+        .today=${t}
+        .language=${e}
         .localize=${this.localize}
-        @select=${t=>this._seasonId=t.detail.id}
+        @select=${e=>this._seasonId=e.detail.id}
       ></shs-season-bar>
       <span class="secondary small">
         ${s.length?this.localize("seasons.outside",{ranges:i}):this.localize("seasons.always")}
       </span>
       <div class="season-list">
-        ${this.state.seasons.map(e=>{const s=a?this._programs(a,e.id).length:0,i=a?0===s?this.localize("seasons.programs_none"):1===s?this.localize("seasons.programs_one"):this.localize("seasons.programs",{count:String(s)}):"",o=e.id===this._seasonId;return F`<div class="season ${o?"selected":""}" style="--season-color:${e.color??"#607d8b"}">
-            <button class="season-select" aria-pressed=${o} @click=${()=>this._seasonId=e.id}>
+        ${this.state.seasons.map(t=>{const s=a?this._programs(a,t.id).length:0,i=a?0===s?this.localize("seasons.programs_none"):1===s?this.localize("seasons.programs_one"):this.localize("seasons.programs",{count:String(s)}):"",o=t.id===this._seasonId;return F`<div class="season ${o?"selected":""}" style="--season-color:${t.color??"#607d8b"}">
+            <button class="season-select" aria-pressed=${o} @click=${()=>this._seasonId=t.id}>
               <span class="dot"></span>
               <span class="season-text">
                 <span class="season-name"
-                  >${e.name}
-                  ${e.id===this.state.season?F`<span class="badge">${this.localize("seasons.today")}</span>`:q}</span
+                  >${t.name}
+                  ${t.id===this.state.season?F`<span class="badge">${this.localize("seasons.today")}</span>`:q}</span
                 >
                 <span class="secondary small"
-                  >${Te(e.start,t,"short")} → ${Te(e.end,t,"short")}${i?` · ${i}`:""}</span
+                  >${Tt(t.start,e,"short")} → ${Tt(t.end,e,"short")}${i?` · ${i}`:""}</span
                 >
               </span>
             </button>
             ${this._readOnly?q:F`<ha-icon-button
-                  .path=${Mt}
-                  .label=${this.localize("seasons.edit",{name:e.name})}
-                  @click=${()=>this._seasonDialog={season:e}}
+                  .path=${Me}
+                  .label=${this.localize("seasons.edit",{name:t.name})}
+                  @click=${()=>this._seasonDialog={season:t}}
                 ></ha-icon-button>`}
           </div>`})}
       </div>
-    </ha-card>`}_renderNow(t){const e=this.state.unit,s=this.hass.locale.language,i=Gt(this.hass.states[t.entity_id],e),a=t.status,o=this.state.seasons.find(t=>t.id===a.season),r=o?t.programs[o.id]?.find(t=>t.id===a.program):void 0,n=((t,e,s)=>{const{status:i}=t;if(!t.enabled)return{text:e("status.disabled"),error:!1};if(i.last_error)return{text:e("status.error",{error:i.last_error}),error:!0};if(i.pending)return{text:e("status.pending"),error:!1};const a=null===i.temperature?null:ee(i.temperature,s.unit,s.step,!1,s.language);if(!i.end)return null===a?{text:e("status.constant_off"),error:!1}:{text:e("status.constant",{temperature:a}),error:!1};const o=_e(i.end,s.h12,s.timeZone);return null===a?{text:e("status.off_until",{time:o}),error:!1}:{text:e("status.until",{temperature:a,time:o}),error:!1}})(t,this.localize,{unit:e,step:.5,h12:ge(this.hass),language:s,timeZone:this.hass.config.time_zone}),l=this._nextSeason(),d=ge(this.hass),c=this.hass.config.time_zone,h=t=>t?_e(t,d,c):null,p=(t,e)=>t?this.localize("status.named",{name:t,status:e}):e,u=p(a.name,a.start||a.end?`${h(a.start)??"…"} – ${h(a.end)??"…"}`:this.localize("now.none")),m=null===a.end?this.localize("now.none"):`${h(a.end)} → ${p(a.next_name,null===a.next_temperature?this.localize("now.off"):ee(a.next_temperature,e,.5,!1,s))}`,g=null===a.temperature?this.localize("now.off"):ee(a.temperature,e,.5,!1,s),f=this.hass.states[t.entity_id]?.attributes.preset_modes?.includes("away")?this.localize("away.preset"):this.localize("away.temperature",{temperature:ee(this.state.away_temperature,e,i.step,!1,s)}),b=t.enabled&&a.overridden&&!this.state.away;return F`<ha-card class="now ${b?"overridden":""}">
+    </ha-card>`}_renderNow(e){const t=this.state.unit,s=this.hass.locale.language,i=Ge(this.hass.states[e.entity_id],t),a=e.status,o=this.state.seasons.find(e=>e.id===a.season),r=o?e.programs[o.id]?.find(e=>e.id===a.program):void 0,n=((e,t,s)=>{const{status:i}=e;if(!e.enabled)return{text:t("status.disabled"),error:!1};if(i.last_error)return{text:t("status.error",{error:i.last_error}),error:!0};if(i.pending)return{text:t("status.pending"),error:!1};const a=null===i.temperature?null:tt(i.temperature,s.unit,s.step,!1,s.language);if(!i.end)return null===a?{text:t("status.constant_off"),error:!1}:{text:t("status.constant",{temperature:a}),error:!1};const o=_t(i.end,s.h12,s.timeZone);return null===a?{text:t("status.off_until",{time:o}),error:!1}:{text:t("status.until",{temperature:a,time:o}),error:!1}})(e,this.localize,{unit:t,step:.5,h12:gt(this.hass),language:s,timeZone:this.hass.config.time_zone}),l=this._nextSeason(),d=gt(this.hass),c=this.hass.config.time_zone,h=e=>e?_t(e,d,c):null,p=(e,t)=>e?this.localize("status.named",{name:e,status:t}):t,u=p(a.name,a.start||a.end?`${h(a.start)??"…"} – ${h(a.end)??"…"}`:this.localize("now.none")),m=null===a.end?this.localize("now.none"):`${h(a.end)} → ${p(a.next_name,null===a.next_temperature?this.localize("now.off"):tt(a.next_temperature,t,.5,!1,s))}`,g=null===a.temperature?this.localize("now.off"):tt(a.temperature,t,.5,!1,s),f=this.hass.states[e.entity_id]?.attributes.preset_modes?.includes("away")?this.localize("away.preset"):this.localize("away.temperature",{temperature:tt(this.state.away_temperature,t,i.step,!1,s)}),b=e.enabled&&a.overridden&&!this.state.away;return F`<ha-card class="now ${b?"overridden":""}">
       <div class="section-header">
         <h2>${this.localize("now.title")}</h2>
       </div>
       ${b?F`<shs-resume-row
             .hass=${this.hass}
-            .entityId=${t.entity_id}
+            .entityId=${e.entity_id}
             .localize=${this.localize}
             .until=${h(a.end)??""}
           ></shs-resume-row>`:q}
@@ -1276,10 +1276,10 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
             <strong>${this.localize("away.active")}</strong>
             <span class="small">${f}</span>
           </div>`:F`<div class="big">
-              ${b?F`<span class="value manual">${this._actualTarget(t)??g}</span>
+              ${b?F`<span class="value manual">${this._actualTarget(e)??g}</span>
                     <span class="secondary small"
-                      >${this.localize("now.manual",{scheduled:g})}</span
-                    >`:F`<span class="value">${t.enabled?g:"—"}</span>
+                      >${null===a.temperature?this.localize("now.manual_off"):this.localize("now.manual",{scheduled:g})}</span
+                    >`:F`<span class="value">${e.enabled?g:"—"}</span>
                     <span class="${n.error?"error":"secondary"} small">${n.text}</span>`}
             </div>
             <dl>
@@ -1302,57 +1302,57 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
               <div>
                 <dt>${this.localize("now.next_season")}</dt>
                 <dd>
-                  ${l?`${l.name} · ${Te(l.start,s)}`:this.localize("now.none")}
+                  ${l?`${l.name} · ${Tt(l.start,s)}`:this.localize("now.none")}
                 </dd>
               </div>
             </dl>`}
       ${b?q:F`<span class="secondary small">${this.localize("now.manual_hint")}</span>`}
-    </ha-card>`}_actualTarget(t){const e=this.hass.states[t.entity_id];if(!e)return null;if("off"===e.state)return this.localize("now.off");const s=e.attributes.temperature;return"number"==typeof s?ee(s,this.state.unit,.5,!1,this.hass.locale.language):null}_nextSeason(){const t=Ee(je(this.hass.config.time_zone));let e,s=1/0;for(const i of this.state.seasons){const a=(Ee(Se(i.start))-t+366)%366;a>0&&a<s&&(e=i,s=a)}return e}_renderPrograms(t){const e=this._season;if(!e)return q;const s=this._programs(t,e.id),i=this.hass.locale.language,a=this.state.unit,o=this.hass.states[t.entity_id],r=Gt(o,a),n=(t=>[...le.slice(t),...le.slice(0,t)])((t=>{const e=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],s=t.locale.first_weekday;if(s&&e.includes(s))return e.indexOf(s);try{const e=new Intl.Locale(t.locale.language),s=e.getWeekInfo?.()??e.weekInfo;if(s)return(s.firstDay+6)%7}catch{}return 0})(this.hass)),l=n.filter(t=>!s.some(e=>e.days.includes(t))),d=ye(new Date,this.hass.config.time_zone),c=je(this.hass.config.time_zone),h=((t,e)=>{const s=Se(t.start),i=Se(t.end);return He(s,i)<=0?He(s,e)<=0&&He(e,i)<=0:He(e,s)>=0||He(e,i)<=0})(e,c);return F`
+    </ha-card>`}_actualTarget(e){const t=this.hass.states[e.entity_id];if(!t)return null;if("off"===t.state)return this.localize("now.off");const s=t.attributes.temperature;return"number"==typeof s?tt(s,this.state.unit,.5,!1,this.hass.locale.language):null}_nextSeason(){const e=Et(jt(this.hass.config.time_zone));let t,s=1/0;for(const i of this.state.seasons){const a=(Et(St(i.start))-e+366)%366;a>0&&a<s&&(t=i,s=a)}return t}_renderPrograms(e){const t=this._season;if(!t)return q;const s=this._programs(e,t.id),i=this.hass.locale.language,a=this.state.unit,o=this.hass.states[e.entity_id],r=Ge(o,a),n=(e=>[...lt.slice(e),...lt.slice(0,e)])((e=>{const t=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],s=e.locale.first_weekday;if(s&&t.includes(s))return t.indexOf(s);try{const t=new Intl.Locale(e.locale.language),s=t.getWeekInfo?.()??t.weekInfo;if(s)return(s.firstDay+6)%7}catch{}return 0})(this.hass)),l=n.filter(e=>!s.some(t=>t.days.includes(e))),d=yt(new Date,this.hass.config.time_zone),c=jt(this.hass.config.time_zone),h=((e,t)=>{const s=St(e.start),i=St(e.end);return Ht(s,i)<=0?Ht(s,t)<=0&&Ht(t,i)<=0:Ht(t,s)>=0||Ht(t,i)<=0})(t,c);return F`
       <div class="section-header">
         <div class="heading">
-          <h2><span class="dot" style="--season-color:${e.color??"#607d8b"}"></span>${this.localize("programs.title",{season:e.name})}</h2>
+          <h2><span class="dot" style="--season-color:${t.color??"#607d8b"}"></span>${this.localize("programs.title",{season:t.name})}</h2>
           <span class="secondary small">${this.localize("programs.hint")}</span>
         </div>
-        ${this._readOnly?q:F`<button class="filled-button small" @click=${()=>this._addProgram(e.id,s)}>
-              <ha-svg-icon .path=${Tt}></ha-svg-icon>${this.localize("programs.new")}
+        ${this._readOnly?q:F`<button class="filled-button small" @click=${()=>this._addProgram(t.id,s)}>
+              <ha-svg-icon .path=${Te}></ha-svg-icon>${this.localize("programs.new")}
             </button>`}
       </div>
       <div class="legend" aria-label=${this.localize("programs.legend")}>
-        ${this._legend(a,i).map(({color:t,label:e})=>F`<span><span class="swatch" style="background:${t}"></span>${e}</span>`)}
+        ${this._legend(a,i).map(({color:e,label:t})=>F`<span><span class="swatch" style="background:${e}"></span>${t}</span>`)}
       </div>
       ${s.length?l.length?F`<div class="warning" role="status">
-              <ha-svg-icon .path=${Et}></ha-svg-icon>${this.localize("programs.uncovered",{days:l.map(t=>xe(i,le.indexOf(t))).join(", ")})}
+              <ha-svg-icon .path=${Ee}></ha-svg-icon>${this.localize("programs.uncovered",{days:l.map(e=>xt(i,lt.indexOf(e))).join(", ")})}
             </div>`:q:F`<div class="warning" role="status">
-            <ha-svg-icon .path=${Et}></ha-svg-icon>${this.localize("programs.empty")}
+            <ha-svg-icon .path=${Ee}></ha-svg-icon>${this.localize("programs.empty")}
           </div>`}
-      ${qt(`${t.entity_id}|${e.id}`,Xt(s,t=>t.id,t=>F`<shs-program-card
-          .program=${t}
-          .others=${s.filter(e=>e.id!==t.id)}
+      ${qe(`${e.entity_id}|${t.id}`,Xe(s,e=>e.id,e=>F`<shs-program-card
+          .program=${e}
+          .others=${s.filter(t=>t.id!==e.id)}
           .days=${n}
           .unit=${a}
           .limits=${r}
-          .canTurnOff=${(t=>!t||(t.attributes.hvac_modes??[]).includes("off"))(o)}
+          .canTurnOff=${(e=>!e||(e.attributes.hvac_modes??[]).includes("off"))(o)}
           .language=${i}
-          .h12=${ge(this.hass)}
+          .h12=${gt(this.hass)}
           .readOnly=${this._readOnly}
-          .now=${h&&t.days.includes(le[d.weekday])?d.minutes:null}
+          .now=${h&&e.days.includes(lt[d.weekday])?d.minutes:null}
           .localize=${this.localize}
-          @day-toggled=${i=>this._toggleDay(e.id,s,t.id,i.detail.day)}
-          @blocks-changed=${i=>this._updateProgram(e.id,s,t.id,{blocks:i.detail.blocks})}
-          @rename=${()=>this._rename={program:t,name:t.name}}
-          @duplicate=${()=>this._duplicate(e.id,s,t)}
-          @delete=${()=>this._deleteProgram=t}
+          @day-toggled=${i=>this._toggleDay(t.id,s,e.id,i.detail.day)}
+          @blocks-changed=${i=>this._updateProgram(t.id,s,e.id,{blocks:i.detail.blocks})}
+          @rename=${()=>this._rename={program:e,name:e.name}}
+          @duplicate=${()=>this._duplicate(t.id,s,e)}
+          @delete=${()=>this._deleteProgram=e}
         ></shs-program-card>`))}
-    `}_legend(t,e){const s=t===Kt,i=i=>ee(s?Math.round(9*i/5+32):i,t,1,!0,e),a=se.map((t,e)=>{const s=se[e-1],a=s?t.upTo===1/0?`≥${i(s.upTo+1)}`:`${i(s.upTo+1).replace("°","")}–${i(t.upTo)}`:`≤${i(t.upTo)}`;return{color:`var(--shs-color-${t.name}, ${t.color})`,label:a}});return[...a,{color:`var(--shs-color-off, ${ie})`,label:this.localize("block.off")}]}_renderDialogs(t){const e=this._season,s=t&&e?this._programs(t,e.id):[],i=new Set(this.state.rooms.map(t=>t.entity_id)),a=t?vt(this.hass,t.entity_id):"";return F`
+    `}_legend(e,t){const s=e===Ke,i=i=>tt(s?Math.round(9*i/5+32):i,e,1,!0,t),a=st.map((e,t)=>{const s=st[t-1],a=s?e.upTo===1/0?`≥${i(s.upTo+1)}`:`${i(s.upTo+1).replace("°","")}–${i(e.upTo)}`:`≤${i(e.upTo)}`;return{color:`var(--shs-color-${e.name}, ${e.color})`,label:a}});return[...a,{color:`var(--shs-color-off, ${it})`,label:this.localize("block.off")}]}_renderDialogs(e){const t=this._season,s=e&&t?this._programs(e,t.id):[],i=new Set(this.state.rooms.map(e=>e.entity_id)),a=e?ve(this.hass,e.entity_id):"";return F`
       <shs-entity-picker-dialog
         .hass=${this.hass}
         .open=${this._addOpen}
         .heading=${this.localize("entity.choose")}
         .emptyText=${this.localize("entity.no_thermostats")}
-        .entityIds=${Object.keys(this.hass.states).filter(t=>t.startsWith("climate.")&&!i.has(t))}
+        .entityIds=${Object.keys(this.hass.states).filter(e=>e.startsWith("climate.")&&!i.has(e))}
         .localize=${this.localize}
         @closed=${()=>this._addOpen=!1}
-        @picked=${t=>this._addRoom(t.detail.entityIds[0])}
+        @picked=${e=>this._addRoom(e.detail.entityIds[0])}
       ></shs-entity-picker-dialog>
 
       <shs-season-dialog
@@ -1361,14 +1361,14 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         .seasons=${this.state.seasons}
         .localize=${this.localize}
         @closed=${()=>this._seasonDialog=null}
-        @save=${t=>this._saveSeason(t.detail.season)}
-        @delete=${t=>{this._seasonDialog=null,this._deleteSeason=t.detail.season}}
+        @save=${e=>this._saveSeason(e.detail.season)}
+        @delete=${e=>{this._seasonDialog=null,this._deleteSeason=e.detail.season}}
       ></shs-season-dialog>
 
       ${this._confirm(this._removeOpen,this.localize("entity.remove"),this.localize("entity.remove_text",{name:a}),this.localize("common.delete"),()=>this._removeRoom(),()=>this._removeOpen=!1)}
-      ${this._confirm(this._resetOpen,this.localize("seasons.reset_title"),this.localize("seasons.reset_text"),this.localize("common.replace"),async()=>{var t;this._resetOpen=!1,await this._call((t=this.hass,t.callWS({type:`${mt}/seasons/reset`})))},()=>this._resetOpen=!1)}
+      ${this._confirm(this._resetOpen,this.localize("seasons.reset_title"),this.localize("seasons.reset_text"),this.localize("common.replace"),async()=>{var e;this._resetOpen=!1,await this._call((e=this.hass,e.callWS({type:`${me}/seasons/reset`})))},()=>this._resetOpen=!1)}
       ${this._confirm(null!==this._deleteSeason,this.localize("season_dialog.delete"),this.localize("season_dialog.delete_text",{name:this._deleteSeason?.name??""}),this.localize("common.delete"),()=>this._removeSeason(this._deleteSeason),()=>this._deleteSeason=null)}
-      ${this._confirm(null!==this._deleteProgram,this.localize("programs.delete",{name:this._deleteProgram?.name??""}),this.localize("programs.delete_text",{name:this._deleteProgram?.name??""}),this.localize("common.delete"),()=>{const t=this._deleteProgram.id;this._deleteProgram=null,e&&this._setPrograms(e.id,s.filter(e=>e.id!==t),0)},()=>this._deleteProgram=null)}
+      ${this._confirm(null!==this._deleteProgram,this.localize("programs.delete",{name:this._deleteProgram?.name??""}),this.localize("programs.delete_text",{name:this._deleteProgram?.name??""}),this.localize("common.delete"),()=>{const e=this._deleteProgram.id;this._deleteProgram=null,t&&this._setPrograms(t.id,s.filter(t=>t.id!==e),0)},()=>this._deleteProgram=null)}
 
       <shs-dialog
         .open=${null!==this._rename}
@@ -1381,7 +1381,7 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
             type="text"
             maxlength="50"
             .value=${this._rename?.name??""}
-            @input=${t=>this._rename&&(this._rename={...this._rename,name:t.target.value})}
+            @input=${e=>this._rename&&(this._rename={...this._rename,name:e.target.value})}
           />
         </label>
         <button slot="actions" class="text-button" @click=${()=>this._rename=null}>
@@ -1391,16 +1391,16 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
           slot="actions"
           class="filled-button"
           ?disabled=${!this._rename?.name.trim()}
-          @click=${()=>{const t=this._rename;this._rename=null,e&&this._updateProgram(e.id,s,t.program.id,{name:t.name.trim()},0)}}
+          @click=${()=>{const e=this._rename;this._rename=null,t&&this._updateProgram(t.id,s,e.program.id,{name:e.name.trim()},0)}}
         >
           ${this.localize("common.save")}
         </button>
       </shs-dialog>
-    `}_confirm(t,e,s,i,a,o){return F`<shs-dialog .open=${t} .heading=${e} @closed=${o}>
+    `}_confirm(e,t,s,i,a,o){return F`<shs-dialog .open=${e} .heading=${t} @closed=${o}>
       <p>${s}</p>
       <button slot="actions" class="text-button" @click=${o}>${this.localize("common.cancel")}</button>
       <button slot="actions" class="filled-button danger" @click=${a}>${i}</button>
-    </shs-dialog>`}static{this.styles=[At,Ct,n`
+    </shs-dialog>`}static{this.styles=[Ae,Ce,n`
       :host {
         display: block;
         font-size: 14px;
@@ -1705,12 +1705,12 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
         font-weight: 600;
         gap: 6px;
       }
-    `]}};t([pt({attribute:!1})],Be.prototype,"hass",void 0),t([pt({attribute:!1})],Be.prototype,"state",void 0),t([pt({type:Boolean})],Be.prototype,"narrow",void 0),t([pt({attribute:!1})],Be.prototype,"localize",void 0),t([ut()],Be.prototype,"_entityId",void 0),t([ut()],Be.prototype,"_seasonId",void 0),t([ut()],Be.prototype,"_drafts",void 0),t([ut()],Be.prototype,"_addOpen",void 0),t([ut()],Be.prototype,"_removeOpen",void 0),t([ut()],Be.prototype,"_resetOpen",void 0),t([ut()],Be.prototype,"_seasonDialog",void 0),t([ut()],Be.prototype,"_deleteSeason",void 0),t([ut()],Be.prototype,"_deleteProgram",void 0),t([ut()],Be.prototype,"_rename",void 0),Be=t([xt("shs-main-view")],Be);let Fe=class extends lt{constructor(){super(...arguments),this.narrow=!1,this._ready=!1}connectedCallback(){super.connectedCallback(),(_t??=(async()=>{if(customElements.get("ha-card")&&customElements.get("ha-switch"))return;const t=window.loadCardHelpers;if(t)try{const e=await t();e.createCardElement({type:"entities",entities:[]}),e.createRowElement?.({entity:"input_boolean.smart_heating_schedule_preload"}),await Promise.race([Promise.all(["ha-card","ha-switch","ha-icon-button"].map(t=>customElements.whenDefined(t))),new Promise(t=>setTimeout(t,3e3))])}catch{}})(),_t).then(()=>this._ready=!0),this.hass&&!this._unsubscribe&&this._subscribe()}disconnectedCallback(){super.disconnectedCallback(),this._unsubscribe?.then(t=>t()).catch(()=>{}),this._unsubscribe=void 0}willUpdate(t){t.has("hass")&&this.hass&&(!this._unsubscribe&&this.isConnected&&this._subscribe(),this.toggleAttribute("dark",Boolean(this.hass.themes?.darkMode)),this.hass.locale.language!==this._language&&(this._language=this.hass.locale.language,this._localize=zt(this._language)))}_subscribe(){var t,e;this._unsubscribe=(t=this.hass,e=t=>{this._state=t,this._error=void 0},t.connection.subscribeMessage(e,{type:`${mt}/subscribe`})),this._unsubscribe.catch(t=>{this._error="not_loaded"===t?.code?this._localize("not_loaded"):t?.message??String(t)})}render(){const t=this._localize??zt("en");return this._error?F`<div class="message"><ha-card class="padded">${this._error}</ha-card></div>`:this._state&&this._ready?F`<shs-main-view
+    `]}};e([pe({attribute:!1})],Bt.prototype,"hass",void 0),e([pe({attribute:!1})],Bt.prototype,"state",void 0),e([pe({type:Boolean})],Bt.prototype,"narrow",void 0),e([pe({attribute:!1})],Bt.prototype,"localize",void 0),e([ue()],Bt.prototype,"_entityId",void 0),e([ue()],Bt.prototype,"_seasonId",void 0),e([ue()],Bt.prototype,"_drafts",void 0),e([ue()],Bt.prototype,"_addOpen",void 0),e([ue()],Bt.prototype,"_removeOpen",void 0),e([ue()],Bt.prototype,"_resetOpen",void 0),e([ue()],Bt.prototype,"_seasonDialog",void 0),e([ue()],Bt.prototype,"_deleteSeason",void 0),e([ue()],Bt.prototype,"_deleteProgram",void 0),e([ue()],Bt.prototype,"_rename",void 0),Bt=e([xe("shs-main-view")],Bt);let Ft=class extends le{constructor(){super(...arguments),this.narrow=!1,this._ready=!1}connectedCallback(){super.connectedCallback(),(_e??=(async()=>{if(customElements.get("ha-card")&&customElements.get("ha-switch"))return;const e=window.loadCardHelpers;if(e)try{const t=await e();t.createCardElement({type:"entities",entities:[]}),t.createRowElement?.({entity:"input_boolean.smart_heating_schedule_preload"}),await Promise.race([Promise.all(["ha-card","ha-switch","ha-icon-button"].map(e=>customElements.whenDefined(e))),new Promise(e=>setTimeout(e,3e3))])}catch{}})(),_e).then(()=>this._ready=!0),this.hass&&!this._unsubscribe&&this._subscribe()}disconnectedCallback(){super.disconnectedCallback(),this._unsubscribe?.then(e=>e()).catch(()=>{}),this._unsubscribe=void 0}willUpdate(e){e.has("hass")&&this.hass&&(!this._unsubscribe&&this.isConnected&&this._subscribe(),this.toggleAttribute("dark",Boolean(this.hass.themes?.darkMode)),this.hass.locale.language!==this._language&&(this._language=this.hass.locale.language,this._localize=ze(this._language)))}_subscribe(){var e,t;this._unsubscribe=(e=this.hass,t=e=>{this._state=e,this._error=void 0},e.connection.subscribeMessage(t,{type:`${me}/subscribe`})),this._unsubscribe.catch(e=>{this._error="not_loaded"===e?.code?this._localize("not_loaded"):e?.message??String(e)})}render(){const e=this._localize??ze("en");return this._error?F`<div class="message"><ha-card class="padded">${this._error}</ha-card></div>`:this._state&&this._ready?F`<shs-main-view
       .hass=${this.hass}
       .state=${this._state}
       .narrow=${this.narrow}
-      .localize=${t}
-    ></shs-main-view>`:F`<div class="message secondary">${t("loading")}</div>`}static{this.styles=[At,n`
+      .localize=${e}
+    ></shs-main-view>`:F`<div class="message secondary">${e("loading")}</div>`}static{this.styles=[Ae,n`
       :host {
         background: var(--primary-background-color);
         display: block;
@@ -1735,4 +1735,4 @@ function t(t,e,s,i){var a,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPro
       .padded {
         padding: 16px;
       }
-    `]}};t([pt({attribute:!1})],Fe.prototype,"hass",void 0),t([pt({type:Boolean,reflect:!0})],Fe.prototype,"narrow",void 0),t([pt({attribute:!1})],Fe.prototype,"route",void 0),t([pt({attribute:!1})],Fe.prototype,"panel",void 0),t([ut()],Fe.prototype,"_state",void 0),t([ut()],Fe.prototype,"_error",void 0),t([ut()],Fe.prototype,"_ready",void 0),Fe=t([xt("smart-heating-schedule-panel")],Fe);export{Fe as SmartHeatingSchedulePanel};
+    `]}};e([pe({attribute:!1})],Ft.prototype,"hass",void 0),e([pe({type:Boolean,reflect:!0})],Ft.prototype,"narrow",void 0),e([pe({attribute:!1})],Ft.prototype,"route",void 0),e([pe({attribute:!1})],Ft.prototype,"panel",void 0),e([ue()],Ft.prototype,"_state",void 0),e([ue()],Ft.prototype,"_error",void 0),e([ue()],Ft.prototype,"_ready",void 0),Ft=e([xe("smart-heating-schedule-panel")],Ft);export{Ft as SmartHeatingSchedulePanel};

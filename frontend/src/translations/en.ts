@@ -63,6 +63,7 @@ export const en = {
     next_season: "Next season",
     none: "None",
     manual: "Scheduled temperature: {scheduled}",
+    manual_off: "The schedule has the heating off now",
     manual_hint: "If you change the temperature by hand, it holds until the next block.",
   },
   programs: {
