@@ -511,6 +511,7 @@ export class MainView extends LitElement {
             .hass=${this.hass}
             .entityId=${room.entity_id}
             .localize=${this.localize}
+            .until=${at(status.end) ?? ""}
           ></shs-resume-row>`
         : nothing}
       ${this.state.away
@@ -522,10 +523,7 @@ export class MainView extends LitElement {
               ${overridden
                 ? html`<span class="value manual">${this._actualTarget(room) ?? temperature}</span>
                     <span class="secondary small"
-                      >${this.localize(status.end ? "now.manual_until" : "now.manual", {
-                        scheduled: temperature,
-                        time: at(status.end) ?? "",
-                      })}</span
+                      >${this.localize("now.manual", { scheduled: temperature })}</span
                     >`
                 : html`<span class="value">${room.enabled ? temperature : "—"}</span>
                     <span class="${statusText.error ? "error" : "secondary"} small">${statusText.text}</span>`}
@@ -556,7 +554,7 @@ export class MainView extends LitElement {
                 </dd>
               </div>
             </dl>`}
-      <span class="secondary small">${this.localize("now.manual_hint")}</span>
+      ${overridden ? nothing : html`<span class="secondary small">${this.localize("now.manual_hint")}</span>`}
     </ha-card>`;
   }
 

@@ -62,8 +62,7 @@ export const en = {
     next: "Next change",
     next_season: "Next season",
     none: "None",
-    manual_until: "Schedule: {scheduled}, resumes at {time}",
-    manual: "Schedule: {scheduled}",
+    manual: "Scheduled temperature: {scheduled}",
     manual_hint: "If you change the temperature by hand, it holds until the next block.",
   },
   programs: {
@@ -117,7 +116,8 @@ export const en = {
   },
   room: {
     overridden: "Manual change",
-    overridden_hint: "The thermostat was set to a different temperature than the schedule.",
+    overridden_until: "It lasts until the next block, at {time}: then the schedule takes over again.",
+    overridden_hint: "It lasts until the next block: then the schedule takes over again.",
     resume: "Back to the schedule",
   },
   common: {

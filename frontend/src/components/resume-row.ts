@@ -17,6 +17,8 @@ export class ResumeRow extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property() entityId = "";
   @property({ attribute: false }) localize!: Localize;
+  /** When the next block starts ("23:00"), or empty when there is none in view. */
+  @property() until = "";
 
   @state() private _busy = false;
 
@@ -39,7 +41,11 @@ export class ResumeRow extends LitElement {
             "room.overridden",
           )}</strong
         >
-        <span class="detail">${this.localize("room.overridden_hint")}</span>
+        <span class="detail"
+          >${this.until
+            ? this.localize("room.overridden_until", { time: this.until })
+            : this.localize("room.overridden_hint")}</span
+        >
       </div>
       <button class="resume" ?disabled=${this._busy} @click=${this._resume}>
         <ha-svg-icon .path=${mdiCalendarSync}></ha-svg-icon>${this.localize("room.resume")}
